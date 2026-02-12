@@ -25,7 +25,7 @@ SQL: SELECT SUM(T1.rating_score) / COUNT(T1.rating_id) FROM ratings AS T1 INNER 
 
 /* Answer the following: How many distinct orders were there in 2003 when the quantity ordered was less than 30? */
 define: "year(orderDate) = '2003'; quantityOrdered < 30;"
-SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND STRFTIME('%Y', T2.orderDate) = '2003'
+SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND EXTRACT(YEAR FROM T2.orderDate) = 2003
 #reason:  The question requires display in order: "How many distinct orders"." in 2003", "less than 30" are filtering conditions.
 #SELECT: COUNT(DISTINCT orderdetails.orderNumber)
 #columns: orderdetails.orderNumber, orderdetails.quantityOrdered, orders.orderDate
@@ -77,7 +77,7 @@ SQL: SELECT SUM(T1.rating_score) / COUNT(T1.rating_id) FROM ratings AS T1 INNER 
 
 /* Answer the following: How many distinct orders were there in 2003 when the quantity ordered was less than 30? */
 define: "year(orderDate) = '2003'; quantityOrdered < 30;"
-SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND STRFTIME('%Y', T2.orderDate) = '2003'
+SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND EXTRACT(YEAR FROM T2.orderDate) = 2003
 #reason:  The question requires display in order: "How many distinct orders"." in 2003", "less than 30" are filtering conditions.
 #Standardization: Show the number of distinct orders, the condition is time in 2003 and quantity ordered was less than 30
 #SELECT: COUNT(DISTINCT orderdetails.orderNumber)
@@ -133,7 +133,7 @@ SQL: SELECT SUM(T1.rating_score) / COUNT(T1.rating_id) FROM ratings AS T1 INNER 
 
 /* Answer the following: How many distinct orders were there in 2003 when the quantity ordered was less than 30? */
 define: "year(orderDate) = '2003'; quantityOrdered < 30;"
-SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND STRFTIME('%Y', T2.orderDate) = '2003'
+SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND EXTRACT(YEAR FROM T2.orderDate) = 2003
 #reason:  The question requires display in order: "How many distinct orders"." in 2003", "less than 30" are filtering conditions.
 #Standardization: Show the number of distinct orders, the condition is time in 2003 and quantity ordered was less than 30
 #SELECT: COUNT(DISTINCT orderdetails.orderNumber)
@@ -212,7 +212,7 @@ SQL: SELECT SUM(T1.rating_score) / COUNT(T1.rating_id) FROM ratings AS T1 INNER 
 
 /* Answer the following: How many distinct orders were there in 2003 when the quantity ordered was less than 30? */
 define: "year(orderDate) = '2003'; quantityOrdered < 30;"
-SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND STRFTIME('%Y', T2.orderDate) = '2003'
+SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND EXTRACT(YEAR FROM T2.orderDate) = 2003
 #reason:  The question requires display in order: "How many distinct orders"." in 2003", "less than 30" are filtering conditions.
 #Standardization: Show the number of distinct orders, the condition is time in 2003 and quantity ordered was less than 30
 #SELECT: COUNT(DISTINCT orderdetails.orderNumber)
@@ -265,7 +265,7 @@ SQL: SELECT SUM(T1.rating_score) / COUNT(T1.rating_id) FROM ratings AS T1 INNER 
 #values: The Fall of Berlin, 2019
 
 /* Answer the following: How many distinct orders were there in 2003 when the quantity ordered was less than 30? "year(orderDate) = '2003'; quantityOrdered < 30;" */
-SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND STRFTIME('%Y', T2.orderDate) = '2003'
+SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND EXTRACT(YEAR FROM T2.orderDate) = 2003
 #reason:  The question requires display in order: "How many distinct orders"." in 2003", "less than 30" are filtering conditions.
 #Standardization: Show the number of distinct orders, the condition is year(orderDate) = '2003'; quantityOrdered < 30;
 #SELECT: COUNT(DISTINCT orderdetails.orderNumber)
@@ -407,7 +407,7 @@ correct_prompt_wo_hint = """You are an expert in SQL. Here are some examples of 
 {db_info}
 {key_col_des}
 
-/* Now Plesease fix the following error SQL */
+/* Now Please fix the following error SQL */
 #question: {q}
 #Error SQL: {result_info}
 {advice}
@@ -426,7 +426,7 @@ define: {hint}
 {key_col_des}
 
 #Based on the database schema and the question, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #candidate values represent the actual values that exist in the database; Give SQL relies on these values. #column represent the candidate columns of SQL.
 3. #SELECT is query result set of SQL SELECT content, do not SELECT other content to SQL
 
@@ -444,7 +444,7 @@ new_prompt1="""{fewshot}
 
 *******
 #Based on the database schema and the question, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #values display some values obtained from querying the database; Please ignore the unnecessary #values.
 3. #SELECT is query result set of SQL SELECT content, please only respond with the required information in this question, without providing explanations or any other non-requested information.
 
@@ -474,7 +474,7 @@ new_prompt2="""{fewshot}
 {key_col_des}
 
 /* Based on the database schema and the question, pay attention to the following */
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #values display the closest values obtained from querying the database, formatted as "Queried Value: similar Value in Database"; Please ignore the unnecessary values.
 3. #SELECT is query result set of SQL SELECT content. please only give SQL with the required information in this question, without providing explanations or any other non-requested information.
 
@@ -509,7 +509,7 @@ new_prompt3="""You are an SQL expert, and now I would like you to write SQL base
 {key_col_des}
 
 /* Based on the database schema and the question, pay attention to the following */
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #values in db display part values from the database. Please ignore the unnecessary values.
 
 Please rewrite the question to SQL-like query in the format: "Show #SELECT (table.column), WHERE condition are xxx (refer to #values), Group by/Order By (refer to columns). Here are 3 example: 
@@ -528,7 +528,7 @@ Please answer the question in the following format without any other content:
 ```
 #reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
 #columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
-#values: the filter in SQL (format: 'filter in question' refer to table.column: value. e.g. 'name is not tom' refer to name <> "tom", 2007 refer to strftime('%Y', Date) = '2007')
+#values: the filter in SQL (format: 'filter in question' refer to table.column: value. e.g. 'name is not tom' refer to name <> "tom", 2007 refer to EXTRACT(YEAR FROM Date) = 2007)
 #SELECT: SELECT content (display in the order asked by the questions, do not display content not specified by the questions).
 #SQL-like: SQL-like statements ignoring Join conditions
 #SQL: SQL
@@ -542,7 +542,7 @@ new_prompt3_wocot="""You are an SQL expert, and now I would like you to write SQ
 {key_col_des}
 
 /* Based on the database schema and the question, pay attention to the following */
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #values in db display part values from the database. Please ignore the unnecessary values.
 
 /* Answer the following: {question} */
@@ -557,13 +557,13 @@ new_prompt_O="""{fewshot}
 {key_col_des}
 
 # Based on the database schema and the examples above, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. "#Values in Database" display part values from the database. Please ignore the unnecessary values.
 3. Please refer to the examples above and answer in the following format without any other content:
 ```
 #reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
 #columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
-#values: the filter in SQL (format: 'filter in question' refer to 'table.column <op> value'. e.g. 'name is not tom' refer to name <> 'tom', 'in 2007' refer to "strftime('%Y', Date) = '2007'")
+#values: the filter in SQL (format: 'filter in question' refer to 'table.column <op> value'. e.g. 'name is not tom' refer to name <> 'tom', 'in 2007' refer to "EXTRACT(YEAR FROM Date) = 2007")
 #SELECT: SELECT content (format like: 'query in question' refer to table.column. The order of columns in the SELECT clause must be the same as the order in the question.)
 #SQL-like: SQL-like statements ignoring Join conditions
 #SQL: SQL
@@ -579,13 +579,13 @@ new_prompt_O1="""{fewshot}
 {key_col_des}
 
 # Based on the database schema and the examples above, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. "#Values in Database" display part values from the database. Please ignore the unnecessary values.
 3. Please refer to the examples above and answer in the following format without any other content:
 ```
 #reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
 #columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
-#values: the filter in SQL (format: 'filter in question' refer to 'table.column <op> value'. e.g. 'name is not tom' refer to name <> 'tom', 'in 2007' refer to "strftime('%Y', Date) = '2007'")
+#values: the filter in SQL (format: 'filter in question' refer to 'table.column <op> value'. e.g. 'name is not tom' refer to name <> 'tom', 'in 2007' refer to "EXTRACT(YEAR FROM Date) = 2007")
 #SELECT: SELECT content (format like: 'query in question' refer to table.column. The order of columns in the SELECT clause must be the same as the order in the question.)
 #SQL-like: SQL-like statements ignoring Join conditions(format like: SELECT table1.a WHERE table1.b = x AND time(table2.c) = X)
 #SQL: SQL
@@ -601,7 +601,7 @@ new_prompt_O_wocot="""{fewshot}
 {key_col_des}
 
 # Based on the database schema and the examples above, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. "#Values in Database" display part values from the database. Please ignore the unnecessary values.
 3. Please refer to the examples above and answer in the following format without any other content:
 ```
@@ -617,7 +617,7 @@ new_prompt_unstruct_cot="""{fewshot}
 {key_col_des}
 
 # Based on the database schema and the examples above, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. "#Values in Database" display part values from the database. Please ignore the unnecessary values.
 3. Please refer to the examples above and answer in the following format without any other content:
 ```
@@ -633,7 +633,7 @@ new_prompt_wo_hint="""{fewshot}
 {db_info}
 
 #Based on the database schema and the question, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #values represent the actual values that exist in the database; Give SQL relies on these values. #column represent the candidate columns of SQL.
 3. #SELECT is query result set of SQL SELECT content, do not SELECT other content to SQL
 4. When ORDER BY COUNT, it is preferable to use COUNT(table.column) to avoid using COUNT(*)
@@ -665,7 +665,7 @@ new_prompt_wo_hint_new_sqllike="""{fewshot}
 {db_info}
 
 #Based on the database schema and the question, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #candidate values represent the actual values that exist in the database; Give SQL relies on these values. #column represent the candidate columns of SQL.
 3. #SELECT is query result set of SQL SELECT content, do not SELECT other content to SQL
 4. When ORDER BY COUNT, it is preferable to use COUNT(table.column) to avoid using COUNT(*)
@@ -693,7 +693,7 @@ Please answer the question in the following format:
 new_prompt_wo_hint_new_sqllike_wodb="""{fewshot}
 
 #Based on the database schema and the question, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #candidate values represent the actual values that exist in the database; Give SQL relies on these values. #column represent the candidate columns of SQL.
 3. #SELECT is query result set of SQL SELECT content, do not SELECT other content to SQL
 4. When USE COUNT, avoid using COUNT(*)
@@ -724,7 +724,7 @@ new_prompt_wo_hint_standQ_newsqllike="""{fewshot}
 {db_info}
 
 #Based on the database schema and the question, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #candidate values represent the actual values that exist in the database; Give SQL relies on these values. #column represent the candidate columns of SQL.
 3. #SELECT is query result set of SQL SELECT content, do not SELECT other content to SQL
 4. When ORDER BY COUNT, it is preferable to use COUNT(table.column) to avoid using COUNT(*)
@@ -759,7 +759,7 @@ new_prompt_wo_hint_standQ="""{fewshot}
 {db_info}
 
 #Based on the database schema and the question, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #candidate values represent the actual values that exist in the database; Give SQL relies on these values. #column represent the candidate columns of SQL.
 3. #SELECT is query result set of SQL SELECT content, do not SELECT other content to SQL
 4. When ORDER BY COUNT, it is preferable to use COUNT(table.column) to avoid using COUNT(*)
@@ -790,7 +790,7 @@ new_prompt_wo_hint_no_sqllike="""{fewshot}
 {db_info}
 
 #Based on the database schema and the question, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #candidate values represent the actual values that exist in the database; Give SQL relies on these values. #column represent the candidate columns of SQL.
 3. #SELECT is query result set of SQL SELECT content, do not SELECT other content to SQL
 4. When ORDER BY COUNT, it is preferable to use COUNT(table.column) to avoid using COUNT(*)
@@ -806,7 +806,7 @@ new_prompt_sql_part="""{fewshot}
 
 *******
 #Based on the database schema and the question, pay attention to the following:
-1. For parts involving division that contain integer types, CAST them to REAL.
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #values display the closest values obtained from querying the database, formatted as "Queried Value: similar Value in Database"; #column represent the candidate columns of SQL. Please ignore the unnecessary #values and #column.
 3. #SELECT is query result set of SQL SELECT content, please only respond with the required information in this question, without providing explanations or any other non-requested information.
 
@@ -838,7 +838,7 @@ noun_prompt="""Please extract all nouns and phrases from the following sentence,
 
 soft_prompt="""Your task is to perform a simple evaluation of the SQL.
 
-The database system is SQLite. The SQL you need to evaluation is:
+The database system is PostgreSQL. The SQL you need to evaluate is:
 #question: {question}
 #SQL: {SQL}
 
@@ -884,7 +884,7 @@ SQL: SELECT SUM(T1.rating_score) / COUNT(T1.rating_id) FROM ratings AS T1 INNER 
 /* extract and rewrite example */
 #question: How many distinct orders were there in 2003 when the quantity ordered was less than 30?
 evidence: "year(orderDate) = '2003'; quantityOrdered < 30;"
-SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND STRFTIME('%Y', T2.orderDate) = '2003'
+SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND EXTRACT(YEAR FROM T2.orderDate) = 2003
 #reason:  The question requires display in order: "How many distinct orders"." in 2003", "less than 30" are filtering conditions.
 #SELECT: COUNT(DISTINCT orderdetails.orderNumber)
 #columns: orderdetails.orderNumber, orderdetails.quantityOrdered, orders.orderDate
@@ -932,7 +932,7 @@ SQL: SELECT SUM(T1.rating_score) / COUNT(T1.rating_id) FROM ratings AS T1 INNER 
 
 /* extract and rewrite example */
 #question: How many distinct orders were there in 2003 when the quantity ordered was less than 30? "year(orderDate) = '2003'; quantityOrdered < 30;"
-SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND STRFTIME('%Y', T2.orderDate) = '2003'
+SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND EXTRACT(YEAR FROM T2.orderDate) = 2003
 #reason:  The question requires display in order: "How many distinct orders". " in 2003", "less than 30" are filtering conditions.
 #columns: orderdetails.orderNumber, orderdetails.quantityOrdered, orders.orderDate
 #SELECT: How many distinct orders refer to COUNT(DISTINCT orderdetails.orderNumber)
@@ -996,7 +996,7 @@ SQL: SELECT SUM(T1.rating_score) / COUNT(T1.rating_id) FROM ratings AS T1 INNER 
 
 /* extract and rewrite example */
 #question: How many distinct orders were there in 2003 when the quantity ordered was less than 30? "year(orderDate) = '2003'; quantityOrdered < 30;"
-SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND STRFTIME('%Y', T2.orderDate) = '2003'
+SQL: SELECT COUNT(DISTINCT T1.orderNumber) FROM orderdetails AS T1 INNER JOIN orders AS T2 ON T1.orderNumber = T2.orderNumber WHERE T1.quantityOrdered < 30 AND EXTRACT(YEAR FROM T2.orderDate) = 2003
 #reason:  The question requires display in order: "How many distinct orders"." in 2003", "less than 30" are filtering conditions.
 #SELECT: COUNT(DISTINCT orderdetails.orderNumber)
 #columns: orderdetails.orderNumber, orderdetails.quantityOrdered, orders.orderDate

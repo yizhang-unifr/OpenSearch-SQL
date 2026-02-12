@@ -1,18 +1,26 @@
+"""Task dataclass adapted for the Meteo dataset.
+
+Original BIRD fields like db_id and evidence are retained for pipeline
+compatibility but assigned sensible defaults when not present.
+"""
+
 from dataclasses import dataclass, field
-from typing import Optional, Any, Dict,List
+from typing import Optional, Any, Dict, List
+
 
 @dataclass
 class Task:
-    """
-    Represents a task with question and database details.
+    """Represents a task (one evaluation question) in the pipeline.
 
     Attributes:
-        question_id (int): The unique identifier for the question.
-        db_id (str): The database identifier.
-        question (str): The question text.
-        evidence (str): Supporting evidence for the question.
-        SQL (Optional[str]): The SQL query associated with the task, if any.
-        difficulty (Optional[str]): The difficulty level of the task, if specified.
+        question_id: Unique identifier for the question.
+        db_id: Database identifier (always 'meteo' for our dataset).
+        question: The full question text (+ evidence if any).
+        evidence: Supporting evidence / hint (empty string if none).
+        SQL: Ground-truth SQL query, if available.
+        difficulty: Difficulty level ('A', 'B', 'C', …).
+        raw_question: The original question text before evidence merging.
+        category: Category label from the Meteo dataset.
     """
     question_id: int = field(init=False)
     db_id: str = field(init=False)
@@ -22,30 +30,33 @@ class Task:
     difficulty: Optional[str] = field(init=False, default=None)
     raw_question: str = field(init=False)
     question_toks: List[str] = field(default_factory=list)
-    query:str = field(init=False)
+    query: str = field(init=False, default="")
+    category: Optional[str] = field(init=False, default=None)
 
     def __init__(self, task_data: Dict[str, Any]):
-        """
-        Initializes a Task instance using data from a dictionary.
+        self.question_id = task_data.get("question_id", 0)
+        # In Meteo all questions share the same database
+        self.db_id = task_data.get("db_id", "meteo")
+        self.category = task_data.get("category") or task_data.get("Category")
 
-        Args:
-            task_data (Dict[str, Any]): A dictionary containing task data.
-        """
-        self.question_id = task_data["question_id"]
-        self.db_id = task_data["db_id"]
-## replace
-        # self.question = task_data["question"]
-        # self.evidence = task_data["evidence"]
-    
-        self.SQL = task_data.get("SQL")
-        self.difficulty = task_data.get("difficulty")
-##
-        # self.raw_question=task_data["raw_question"]
-##
-        self.raw_question=task_data["question"]
-        self.evidence=task_data["evidence"]
-        self.question=(self.raw_question+" "+self.evidence).strip()
-        if self.evidence=="":
-            self.evidence="None"#问题1
-        # self.question_toks=task_data["question_toks"]
-        # self.query=task_data["query"]
+        # Question text
+        raw_q = (
+            task_data.get("question")
+            or task_data.get("Natural language question")
+            or ""
+        )
+        self.raw_question = raw_q.strip()
+
+        # Evidence / hint
+        self.evidence = (task_data.get("evidence") or "").strip()
+        if self.evidence:
+            self.question = f"{self.raw_question} {self.evidence}".strip()
+        else:
+            self.question = self.raw_question
+            self.evidence = "None"
+
+        # Ground-truth SQL
+        self.SQL = task_data.get("SQL") or task_data.get("ground_truth_sql") or task_data.get("SQL query")
+
+        self.difficulty = task_data.get("difficulty") or self.category
+        self.query = self.SQL or ""

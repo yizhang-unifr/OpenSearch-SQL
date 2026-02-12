@@ -1,238 +1,229 @@
-import requests, time
-import dashscope
-import torch
-import json
+"""
+LLM model adapter for OpenSearch-SQL using LLMFactory.
+
+Replaces the original model.py to use the project's LLMFactory (config/llm_factory.py),
+which supports openai, bedrock, scayle, and ollama providers.
+All pipeline nodes continue to use the same interface:
+    chat_model = model_chose(step, engine)
+    response = chat_model.get_ans(prompt, temperature, ...)
+"""
+
+import os
 import re
+import sys
+import time
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Bootstrap: add project root to sys.path so we can import config.llm_factory
+# Must happen BEFORE any project-level imports.
+# ---------------------------------------------------------------------------
+_OPENSEARCH_ROOT = Path(__file__).resolve().parent.parent.parent
+_PROJECT_ROOT = _OPENSEARCH_ROOT.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
+from dotenv import load_dotenv
+
+load_dotenv(_PROJECT_ROOT / ".env")
+
+from config.llm_factory import LLMFactory, _load_yaml
 from runner.logger import Logger
 from llm.prompts import prompts_fewshot_parse
-def model_chose(step,model="gpt-4 32K"):
-    if model.startswith("gpt") or model.startswith("claude35_sonnet") or model.startswith("gemini"):
-        return gpt_req(step,model)
-    if model == "deepseek":
-        return deep_seek(model)
-    if model.startswith("qwen"):
-        return qwenmax(model)
-    if model.startswith("sft"):
-        return sft_req()
 
+# ---------------------------------------------------------------------------
+# Global LLM config path – override via set_llm_config_path() or
+# the LLM_CONFIG_PATH environment variable.
+# ---------------------------------------------------------------------------
+_LLM_CONFIG_PATH: Path = Path(
+    os.environ.get("LLM_CONFIG_PATH", str(_PROJECT_ROOT / "config" / "models.yaml"))
+)
+
+
+def set_llm_config_path(path: str | Path) -> None:
+    """Override the LLM config file path at runtime."""
+    global _LLM_CONFIG_PATH
+    _LLM_CONFIG_PATH = Path(path)
+
+
+def _get_base_config() -> dict:
+    """Load the raw YAML config dict (cached per path)."""
+    return _load_yaml(_LLM_CONFIG_PATH)
+
+
+# ---------------------------------------------------------------------------
+# model_chose – drop-in replacement for the original function.
+# Every pipeline node calls:  chat_model = model_chose(node_name, config["engine"])
+# We ignore the *engine* string and use the YAML-configured provider instead.
+# ---------------------------------------------------------------------------
+
+def model_chose(step: str, model: str = "gpt-4 32K"):
+    """Create an LLM adapter using LLMFactory.
+
+    Args:
+        step:  Pipeline node name (used for logging).
+        model: Engine name from pipeline_setup (ignored – the model is
+               determined by config/models.yaml).
+
+    Returns:
+        An ``LLMFactoryAdapter`` instance with the familiar ``get_ans()`` API.
+    """
+    return LLMFactoryAdapter(step)
+
+
+# ---------------------------------------------------------------------------
+# Base class – keeps fewshot_parse / convert_table / log_record identical
+# to the original so nothing downstream breaks.
+# ---------------------------------------------------------------------------
 
 class req:
+    """Minimal base retained for interface compatibility."""
 
-    def __init__(self,step,model) -> None:
+    def __init__(self, step: str, model: str = "") -> None:
         self.Cost = 0
-        self.model=model
-        self.step=step
+        self.model = model
+        self.step = step
 
-    def log_record(self,prompt_text,output):
-        logger=Logger()
-        logger.log_conversation(prompt_text, "Human", self.step)
-        logger.log_conversation(output, "AI", self.step)
+    def log_record(self, prompt_text, output):
+        try:
+            logger = Logger()
+            logger.log_conversation(prompt_text, "Human", self.step)
+            logger.log_conversation(output, "AI", self.step)
+        except (ValueError, AttributeError):
+            # Logger singleton not yet initialised (standalone usage) – skip
+            pass
 
     def fewshot_parse(self, question, evidence, sql):
-        s = prompts_fewshot_parse().parse_fewshot.format(question=question,sql=sql)
+        s = prompts_fewshot_parse().parse_fewshot.format(question=question, sql=sql)
         ext = self.get_ans(s)
-        ext=ext.replace('```','').strip()
-        ext = ext.split("#SQL:")[0]# 防止没按格式生成 至少保留SQL
+        ext = ext.replace("```", "").strip()
+        ext = ext.split("#SQL:")[0]
         ans = self.convert_table(ext, sql)
         return ans
+
     def convert_table(self, s, sql):
-        l = re.findall(' ([^ ]*) +AS +([^ ]*)', sql)
+        l = re.findall(r" ([^ ]*) +AS +([^ ]*)", sql)
         x, v = s.split("#values:")
         t, s = x.split("#SELECT:")
         for li in l:
             s = s.replace(f"{li[1]}.", f"{li[0]}.")
         return t + "#SELECT:" + s + "#values:" + v
 
-def request(url,model,messages,temperature,top_p,n,key,**k):
-    res = requests.post(
-                url=
-                url,
-                json={
-                    "model":
-                    model,
-                    "messages": [{
-                        "role": "system",
-                        "content":
-                        "You are an SQL expert, skilled in handling various SQL-related issues."
-                    }, {
-                        "role": "user",
-                        "content": messages
-                    }],
-                    "max_tokens":
-                    800,
-                    "temperature":
-                    temperature,
-                    "top_p":top_p,
-                    "n":n,
-                    **k
-                },
-                headers={
-                    "Authorization":
-                    key
-                }).json()
 
-    return res
+# ---------------------------------------------------------------------------
+# The adapter – wraps a LangChain LLM and exposes get_ans()
+# ---------------------------------------------------------------------------
 
-class gpt_req(req):
+class LLMFactoryAdapter(req):
+    """Wraps a LangChain LLM from ``LLMFactory`` so every OpenSearch-SQL
+    pipeline node can call ``get_ans()`` unchanged.
+    """
 
-    def __init__(self, step,model="gpt-4o-0513") -> None:
-        super().__init__(step,model)
+    def __init__(self, step: str) -> None:
+        super().__init__(step, model="llm_factory")
+        self._base_config: dict = _get_base_config()
+        # Cache LLM instances keyed by temperature for reuse
+        self._llm_cache: dict[float, object] = {}
 
-    def get_ans(self, messages, temperature=0.0, top_p=None,n=1,single=True,**k):
-        count = 0
-        while count < 50:
-            # print(messages) #保存prompt和答案
-            try:
-                res = request(
-                url=
-                "",
-                model=self.model,
-                messages= messages,
-                temperature=temperature,
-                top_p=top_p,
-                n=n,key="",
-                    **k)
-                if n==1 and single:
-                    response_clean = res["choices"][0]["message"]["content"]
-                else:
-                    response_clean = res["choices"]
-                # print(self.step)
-                if self.step!="prepare_train_queries":
-                    self.log_record(messages, response_clean)  # 记录对话内容
-                break
+    # -- internal helpers ---------------------------------------------------
 
-            except Exception as e:
-                count += 1
-                time.sleep(2)
-                # print(messages)
-                print(e, count, self.Cost,res)
+    def _get_llm(self, temperature: float | None = None):
+        """Return a (possibly cached) LLM for the given temperature."""
+        config = dict(self._base_config)
+        if temperature is not None:
+            config["temperature"] = temperature
+        temp_key = config.get("temperature", 0.0)
 
-        self.Cost += res["usage"]['prompt_tokens'] / 1000 * 0.042 + res[
-            "usage"]["completion_tokens"] / 1000 * 0.126
-        return response_clean
-    
+        if temp_key not in self._llm_cache:
+            self._llm_cache[temp_key] = LLMFactory.from_config_dict(config)
+        return self._llm_cache[temp_key]
 
+    @staticmethod
+    def _build_messages(prompt_text: str):
+        """Build LangChain message objects from a plain-text prompt."""
+        from langchain_core.messages import HumanMessage, SystemMessage
 
-class deep_seek(req):
-
-    def __init__(self,model) -> None:
-        super().__init__(model)
-    def get_ans(self, messages, temperature=0.0, debug=False):
-        count = 0
-
-        while count < 8:
-            try:
-                url = "https://api.deepseek.com/chat/completions"
-                headers = {
-                    "Content-Type": "application/json",
-                    "Authorization":
-                    ""
-                }
-
-                # 定义请求体
-                jsons = {
-                    "model":
-                    "deepseek-coder",
-                    "temperture":
-                    temperature,
-                    "top_p":
-                    0.9,
-                    "messages": [{
-                        "role": "system",
-                        "content": "You are a helpful assistant."
-                    }, {
-                        "role": "user",
-                        "content": messages
-                    }]
-                }
-
-                # 发送POST请求
-                response = requests.post(url, headers=headers, json=jsons)
-                if debug:
-                    print(response.json)
-                ans = response.json()['choices'][0]['message']['content']
-                break
-            except Exception as e:
-                count += 1
-                time.sleep(2)
-                print(e, count, self.Cost, response.json())
-        return ans
-
-
-class qwenmax(req):
-
-    def __init__(self, model) -> None:
-        super().__init__(model)
-        dashscope.api_key = ""
- 
-
-    def get_ans(self, messages, temperature=0.0, debug=False):
-        count = 0
-
-        while count < 8:
-            try:
-                response = dashscope.Generation.call(model=self.model,
-                                                     temperature=temperature,
-                                                     prompt=messages)
-                self.Cost += response.usage.input_tokens / 1000 * 0.04 + response.usage.output_tokens / 1000 * 0.12
-                return response.output['text']
-            except:
-                count += 1
-                time.sleep(5)
-                print(response.code, response.message)
-
-
-class sft_req(req):
-
-    def __init__(self,model) -> None:
-        super().__init__(model)
-        self.device = "cuda:0"
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            "",
-            trust_remote_code=True,
-            padding_side="right",
-            use_fast=True)
-        self.tokenizer.pad_token = self.tokenizer.eos_token = "<|EOT|>"
-        # drop device_map if running on CPU
-        self.model = AutoModelForCausalLM.from_pretrained(
-            "",
-            torch_dtype=torch.bfloat16,
-            device_map=self.device).eval()
-
-    def get_ans(self, text, temperature=0.0):
-        messages = [{
-            "role":
-            "system",
-            "content":
-            "You are an AI programming assistant, utilizing the DeepSeek Coder model, developed by DeepSeek Company, and you only answer questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will refuse to answer."
-        }, {
-            "role": "user",
-            "content": text
-        }]
-        inputs = self.tokenizer.apply_chat_template(messages,
-                                                    add_generation_prompt=True,
-                                                    tokenize=False)
-        model_inputs = self.tokenizer([inputs],
-                                      return_tensors="pt",
-                                      max_length=8000).to("cuda")
-        # tokenizer.eos_token_id is the id of <|EOT|> token
-        generated_ids = self.model.generate(
-            model_inputs.input_ids,
-            attention_mask=model_inputs["attention_mask"],
-            max_new_tokens=800,
-            do_sample=False,
-            eos_token_id=self.tokenizer.eos_token_id,
-            pad_token_id=self.tokenizer.pad_token_id)
-        generated_ids = [
-            output_ids[len(input_ids):] for input_ids, output_ids in zip(
-                model_inputs.input_ids, generated_ids)
+        return [
+            SystemMessage(
+                content="You are an SQL expert, skilled in handling various SQL-related issues."
+            ),
+            HumanMessage(content=prompt_text),
         ]
 
-        response = self.tokenizer.decode(generated_ids[0][:-1],
-                                         skip_special_tokens=True).strip()
-        return response
+    # -- public API (same signature the rest of the codebase expects) -------
 
+    def get_ans(
+        self,
+        messages: str,
+        temperature: float = 0.0,
+        top_p: float | None = None,
+        n: int = 1,
+        single: bool = True,
+        debug: bool = False,
+        **kwargs,
+    ):
+        """Generate a response from the LLM.
 
+        Args:
+            messages:    Prompt string.
+            temperature: Sampling temperature (per-call override).
+            top_p:       Top-p / nucleus sampling (best-effort, provider-dependent).
+            n:           Number of completions to generate.
+            single:      When *True* (and n==1) return a plain ``str``.
+                         When *False* return ``[{"message": {"content": ...}}, ...]``.
+            debug:       Print the prompt if *True*.
+            **kwargs:    Extra arguments (silently ignored for compatibility).
 
+        Returns:
+            ``str`` when *single* and *n == 1*, otherwise a list of choice dicts.
+        """
+        if debug:
+            print(messages)
 
+        llm = self._get_llm(temperature=temperature)
+        chat_msgs = self._build_messages(messages)
 
+        max_retries = int(os.environ.get("LLM_MAX_RETRIES", "2"))
+        last_error = None
+
+        for attempt in range(1, max_retries + 1):
+            try:
+                if n == 1 or single:
+                    result = llm.invoke(chat_msgs)
+                    response_clean = result.content
+                    if self.step != "prepare_train_queries":
+                        self.log_record(messages, response_clean)
+                    return response_clean
+                else:
+                    # Multiple completions – invoke concurrently for speed
+                    choices = self._generate_n(llm, chat_msgs, n)
+                    if self.step != "prepare_train_queries":
+                        self.log_record(messages, str([c["message"]["content"][:80] for c in choices]))
+                    return choices
+
+            except Exception as e:
+                last_error = e
+                wait = min(2 * attempt, 5)
+                print(f"LLM error (attempt {attempt}/{max_retries}): {e}")
+                time.sleep(wait)
+
+        # Exhausted retries
+        print(f"LLM failed after {max_retries} attempts. Last error: {last_error}")
+        if n == 1 or single:
+            return ""
+        return [{"message": {"content": ""}} for _ in range(n)]
+
+    def _generate_n(self, llm, chat_msgs, n: int):
+        """Generate *n* completions concurrently."""
+
+        def _invoke(_):
+            result = llm.invoke(chat_msgs)
+            return {"message": {"content": result.content}}
+
+        # Use threads for I/O-bound LLM calls
+        workers = min(n, 8)
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            futures = [pool.submit(_invoke, i) for i in range(n)]
+            choices = [f.result() for f in futures]
+        return choices

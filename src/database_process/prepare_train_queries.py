@@ -80,7 +80,7 @@ if __name__ == '__main__':
     parser.add_argument('--db_root_directory',
                         type=str,
                         help='data path',
-                        default="Bird")
+                        default="data")
     parser.add_argument('--model',
                         type=str,
                         help='model',

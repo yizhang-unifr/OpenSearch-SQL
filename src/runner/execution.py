@@ -1,94 +1,123 @@
-import sqlite3
-import random
+"""PostgreSQL execution and comparison utilities.
+
+Replaces the original SQLite-based execution with psycopg2 for PostgreSQL.
+Connection parameters are read from environment variables (DB_HOST, DB_NAME,
+DB_USER, DB_PORT, DB_PASS) loaded by the parent project's .env.
+"""
+
 import logging
-from typing import Any, Union, List, Dict
-from func_timeout import func_timeout, FunctionTimedOut
+import os
+import re
+import time
+from typing import Any, Dict, List, Union
 
-def _clean_sql(sql: str) -> str:
-    """
-    Cleans the SQL query by removing unwanted characters and whitespace.
-    
-    Args:
-        sql (str): The SQL query string.
-        
-    Returns:
-        str: The cleaned SQL query string.
-    """
-    return sql.replace('\n', ' ').replace('"', "'").strip("`.")
+import psycopg2
+from func_timeout import FunctionTimedOut, func_timeout
 
-def execute_sql(db_path: str, sql: str, fetch: Union[str, int] = "all") -> Any:
-    """
-    Executes an SQL query on a database and fetches results.
-    
+
+def _sql_statement_timeout_ms() -> int:
+    """Read SQL_STATEMENT_TIMEOUT from env (seconds) and return milliseconds."""
+    return int(os.environ.get("SQL_STATEMENT_TIMEOUT", "30")) * 1000
+
+
+def _get_pg_connection(statement_timeout_ms: int | None = None):
+    """Create a PostgreSQL connection from environment variables.
+
     Args:
-        db_path (str): The path to the database file.
-        sql (str): The SQL query to execute.
-        fetch (Union[str, int]): How to fetch the results. Options are "all", "one", "random", or an integer.
-        
-    Returns:
-        Any: The fetched results based on the fetch argument.
-    
-    Raises:
-        Exception: If an error occurs during SQL execution.
+        statement_timeout_ms: Per-statement timeout in milliseconds.
+            Defaults to ``SQL_STATEMENT_TIMEOUT`` env var (seconds × 1000).
     """
+    if statement_timeout_ms is None:
+        statement_timeout_ms = _sql_statement_timeout_ms()
+    conn = psycopg2.connect(
+        host=os.environ.get("DB_HOST"),
+        dbname=os.environ.get("DB_NAME"),
+        user=os.environ.get("DB_USER"),
+        port=os.environ.get("DB_PORT"),
+        password=os.environ.get("DB_PASS"),
+        options=f"-c statement_timeout={statement_timeout_ms}",
+    )
+    return conn
+
+
+def _normalize_sql(sql: str) -> str:
+    """Strip schema qualifications so SQL runs against the default search_path.
+
+    Strips any ``<schema>.`` prefix before ``meteo_`` table names.
+    """
+    schema = os.environ.get("DB_SCHEMA", "public")
+    if schema and schema != "public":
+        sql = re.sub(rf"\b{re.escape(schema)}\.", "", sql)
+    # Also strip legacy era5_land2 prefix
+    sql = re.sub(r"\b\w+\.(meteo_)", r"\1", sql)
+    return sql
+
+
+def execute_sql(sql: str, fetch: Union[str, int] = "all", timeout_s: int | None = None) -> Any:
+    """Execute SQL against PostgreSQL and fetch results.
+
+    Args:
+        sql: The SQL query to execute.
+        fetch: How to fetch results - "all", "one", or an integer.
+        timeout_s: Statement timeout in seconds.
+
+    Returns:
+        Fetched results based on the fetch argument.
+    """
+    if timeout_s is None:
+        timeout_s = int(os.environ.get("SQL_STATEMENT_TIMEOUT", "30"))
+    sql = _normalize_sql(sql)
     try:
-        with sqlite3.connect(db_path) as conn:
-            cursor = conn.cursor()
-            cursor.execute(sql)
+        conn = _get_pg_connection()
+        conn.autocommit = True
+        with conn.cursor() as cur:
+            cur.execute(f"SET statement_timeout = '{timeout_s * 1000}';")
+            cur.execute(sql)
             if fetch == "all":
-                return cursor.fetchall()
+                return cur.fetchall()
             elif fetch == "one":
-                return cursor.fetchone()
-            elif fetch == "random":
-                samples = cursor.fetchmany(10)
-                return random.choice(samples) if samples else []
+                return cur.fetchone()
             elif isinstance(fetch, int):
-                return cursor.fetchmany(fetch)
+                return cur.fetchmany(fetch)
             else:
-                raise ValueError("Invalid fetch argument. Must be 'all', 'one', 'random', or an integer.")
+                raise ValueError(f"Invalid fetch argument: {fetch}")
     except Exception as e:
         logging.error(f"Error in execute_sql: {e}\nSQL: {sql}")
-        raise e
+        raise
+    finally:
+        conn.close()
 
-def _compare_sqls_outcomes(db_path: str, predicted_sql: str, ground_truth_sql: str) -> int:
-    """
-    Compares the outcomes of two SQL queries to check for equivalence.
-    
-    Args:
-        db_path (str): The path to the database file.
-        predicted_sql (str): The predicted SQL query.
-        ground_truth_sql (str): The ground truth SQL query.
-        
+
+def _compare_sqls_outcomes(predicted_sql: str, ground_truth_sql: str) -> int:
+    """Compare the outcomes of two SQL queries for equivalence.
+
     Returns:
-        int: 1 if the outcomes are equivalent, 0 otherwise.
-    
-    Raises:
-        Exception: If an error occurs during SQL execution.
+        1 if the result sets are equivalent, 0 otherwise.
     """
     try:
-        predicted_res = execute_sql(db_path, predicted_sql)
-        ground_truth_res = execute_sql(db_path, ground_truth_sql)
+        predicted_res = execute_sql(predicted_sql)
+        ground_truth_res = execute_sql(ground_truth_sql)
         return int(set(predicted_res) == set(ground_truth_res))
     except Exception as e:
         logging.critical(f"Error comparing SQL outcomes: {e}")
-        raise e
+        raise
 
-def compare_sqls(db_path: str, predicted_sql: str, ground_truth_sql: str, meta_time_out: int = 30) -> Dict[str, Union[int, str]]:
-    """
-    Compares predicted SQL with ground truth SQL within a timeout.
-    
+
+def compare_sqls(predicted_sql: str, ground_truth_sql: str, meta_time_out: int | None = None) -> Dict[str, Union[int, str]]:
+    """Compare predicted SQL with ground truth SQL within a timeout.
+
     Args:
-        db_path (str): The path to the database file.
-        predicted_sql (str): The predicted SQL query.
-        ground_truth_sql (str): The ground truth SQL query.
-        meta_time_out (int): The timeout for the comparison.
-        
+        predicted_sql: The predicted SQL query.
+        ground_truth_sql: The ground truth SQL query.
+        meta_time_out: Timeout in seconds for the comparison.
+
     Returns:
-        dict: A dictionary with the comparison result and any error message.
+        Dict with 'exec_res' (1=correct, 0=incorrect) and 'exec_err'.
     """
-    # predicted_sql = _clean_sql(predicted_sql)
+    if meta_time_out is None:
+        meta_time_out = int(os.environ.get("SQL_COMPARE_TIMEOUT", "60"))
     try:
-        res = func_timeout(meta_time_out, _compare_sqls_outcomes, args=(db_path, predicted_sql, ground_truth_sql))
+        res = func_timeout(meta_time_out, _compare_sqls_outcomes, args=(predicted_sql, ground_truth_sql))
         error = "incorrect answer" if res == 0 else "--"
     except FunctionTimedOut:
         logging.warning("Comparison timed out.")
@@ -98,57 +127,58 @@ def compare_sqls(db_path: str, predicted_sql: str, ground_truth_sql: str, meta_t
         logging.error(f"Error in compare_sqls: {e}")
         error = str(e)
         res = 0
-    return {'exec_res': res, 'exec_err': error}
+    return {"exec_res": res, "exec_err": error}
 
-def validate_sql_query(db_path: str, sql: str, max_returned_rows: int = 30) -> Dict[str, Union[str, Any]]:
-    """
-    Validates an SQL query by executing it and returning the result.
-    
-    Args:
-        db_path (str): The path to the database file.
-        sql (str): The SQL query to validate.
-        max_returned_rows (int): The maximum number of rows to return.
-        
+
+def validate_sql_query(sql: str, max_returned_rows: int = 30) -> Dict[str, Any]:
+    """Validate an SQL query by executing it.
+
     Returns:
-        dict: A dictionary with the SQL query, result, and status.
+        Dict with 'SQL', 'RESULT', and 'STATUS'.
     """
     try:
-        result = execute_sql(db_path, sql, fetch=max_returned_rows)
+        result = execute_sql(sql, fetch=max_returned_rows)
         return {"SQL": sql, "RESULT": result, "STATUS": "OK"}
     except Exception as e:
         logging.error(f"Error in validate_sql_query: {e}")
         return {"SQL": sql, "RESULT": str(e), "STATUS": "ERROR"}
 
-def aggregate_sqls(db_path: str, sqls: List[str]) -> str:
-    """
-    Aggregates multiple SQL queries by validating them and clustering based on result sets.
-    
-    Args:
-        db_path (str): The path to the database file.
-        sqls (List[str]): A list of SQL queries to aggregate.
-        
-    Returns:
-        str: The shortest SQL query from the largest cluster of equivalent queries.
-    """
-    results = [validate_sql_query(db_path, sql) for sql in sqls]
-    clusters = {}
 
-    # Group queries by unique result sets
+def aggregate_sqls(sqls: List[str]) -> str:
+    """Aggregate multiple SQL queries by clustering on result sets.
+
+    Picks the shortest SQL from the largest cluster of equivalent queries.
+    """
+    results = [validate_sql_query(sql) for sql in sqls]
+    clusters: Dict[Any, List[str]] = {}
+
     for result in results:
-        if result['STATUS'] == 'OK':
-            # Using a frozenset as the key to handle unhashable types like lists
-            key = frozenset(tuple(row) for row in result['RESULT'])
-            if key in clusters:
-                clusters[key].append(result['SQL'])
-            else:
-                clusters[key] = [result['SQL']]
-    
+        if result["STATUS"] == "OK":
+            key = frozenset(tuple(row) for row in result["RESULT"])
+            clusters.setdefault(key, []).append(result["SQL"])
+
     if clusters:
-        # Find the largest cluster
         largest_cluster = max(clusters.values(), key=len, default=[])
-        # Select the shortest SQL query from the largest cluster
         if largest_cluster:
             return min(largest_cluster, key=len)
-    
+
     logging.warning("No valid SQL clusters found. Returning the first SQL query.")
     return sqls[0]
+
+
+def sql_exec(sql: str) -> tuple:
+    """Execute SQL and return (result_set, time_cost)."""
+    sql = _normalize_sql(sql)
+    conn = _get_pg_connection()
+    conn.autocommit = True
+    try:
+        with conn.cursor() as cur:
+            cur.execute(f"SET statement_timeout = '{_sql_statement_timeout_ms()}';")
+            s = time.time()
+            cur.execute(sql)
+            rows = cur.fetchall()
+            ans = set(tuple(x) for x in rows)
+            time_cost = time.time() - s
+        return ans, time_cost
+    finally:
+        conn.close()

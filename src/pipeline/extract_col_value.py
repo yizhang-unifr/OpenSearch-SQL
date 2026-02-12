@@ -16,18 +16,24 @@ def extract_col_value(task: Any, execution_history: Dict[str, Any]) -> Dict[str,
     fewshot_path=paths.db_fewshot_path
     chat_model = model_chose(node_name,config["engine"])
 
-    with open(fewshot_path) as f:## fewshot
-        df_fewshot = json.load(f)
+    if fewshot_path.exists():
+        with open(fewshot_path) as f:
+            df_fewshot = json.load(f)
+    else:
+        df_fewshot = {"extract": {}}
 
     hint = task.evidence
     if hint == "":
         hint = "None"
-    
 
     all_info = get_last_node_result(execution_history, "generate_db_schema")["db_list"]
+
+    # Access fewshot by string key (question_id)
+    q_id_str = str(task.question_id)
+    extract_fewshot = df_fewshot.get("extract", {}).get(q_id_str, {}).get("prompt", "")
     key_col_des_raw = get_des_ans(chat_model,
                                 db_check_prompts().extract_prompt,
-                                df_fewshot["extract"][task.question_id]['prompt'],
+                                extract_fewshot,
                                 all_info,
                                 task.question,
                                 hint,

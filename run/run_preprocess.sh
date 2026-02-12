@@ -1,32 +1,29 @@
-db_root_directory=Bird #root directory
-dev_json=dev/dev.json
-train_json=train/train.json
-dev_table=dev/dev_tables.json  # 11 dev data
-train_table=train/train_tables.json  # 69 train data
-dev_database=dev/dev_databases #dev database directory
-fewshot_llm=gpt-4o-0513
-DAIL_SQL=Bird/bird_dev.json     #dailsql json file 
-bert_model=bge/ 
+#!/usr/bin/env bash
+# Preprocess the Meteo dataset for the OpenSearch-SQL pipeline.
+#
+# Steps:
+#   1. Generate column-value embeddings from PostgreSQL
+#
+# Prerequisites:
+#   - .env must be configured with DB_HOST, DB_NAME, DB_USER, DB_PORT, DB_PASS
+#   - The eval/OpenSearch-SQL-eval.py script creates data_preprocess/dev.json
+#     and fewshot/questions.json automatically.
+#
+# Usage:
+#   bash run/run_preprocess.sh
 
-python -u src/database_process/data_preprocess.py \
-    --db_root_directory "${db_root_directory}" \
-    --dev_json "${dev_json}" \
-    --train_json "${train_json}" \
-    --dev_table "${dev_table}" \
-    --train_table "${train_table}"
+set -euo pipefail
+cd "$(dirname "$0")/.."
 
+bert_model=${BERT_MODEL:-"all-mpnet-base-v2"}
+data_dir="data"
 
-python -u src/database_process/prepare_train_queries.py \
-    --db_root_directory "${db_root_directory}" \
-    --model "${fewshot_llm}" 
+echo "=== Generating column-value embeddings ==="
+python3 -u src/database_process/make_emb.py \
+    --emb_dir "${data_dir}/emb" \
+    --bert_model "${bert_model}" \
+    --db_name "meteo" \
+    --env_file "$(cd .. && pwd)/.env"
 
-
-python -u src/database_process/generate_question.py \
-    --db_root_directory "${db_root_directory}" \
-    --DAIL_SQL "${DAIL_SQL}" 
-
-
-python -u src/database_process/make_emb.py \
-    --db_root_directory "${db_root_directory}" \
-    --dev_database "${dev_database}" \
-    --bert_model "${bert_model}"
+echo "=== Preprocessing complete ==="
+echo "Embeddings saved to ${data_dir}/emb/"

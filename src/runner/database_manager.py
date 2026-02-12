@@ -1,82 +1,76 @@
-import os
-import pickle
-from threading import Lock
-from pathlib import Path
+"""DatabaseManager singleton for PostgreSQL.
 
-from typing import Callable, Dict, List, Any
+Replaces the original BIRD/SQLite path-based management with PostgreSQL
+connection management using environment variables.
+"""
+
+import os
+from pathlib import Path
+from threading import Lock
+
+import psycopg2
+
 from runner.execution import compare_sqls
 
 
 class DatabaseManager:
-    """
-    A singleton class to manage database operations including schema generation, 
-    querying LSH and vector databases, and managing column profiles.
-    """
+    """Singleton managing PostgreSQL connection and data paths for the Meteo dataset."""
+
     _instance = None
     _lock = Lock()
 
-    def __new__(cls, db_mode=None,db_root_path=None,db_id=None):
-        if (db_mode is not None) and (db_root_path is not None) and(db_id is not None):
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super(DatabaseManager, cls).__new__(cls)
-                    cls._instance._init(db_mode, db_root_path,db_id)
-                elif cls._instance.db_id != db_id:
-                    cls._instance._init(db_mode,db_root_path,db_id)
-                return cls._instance
-        else:
+    def __new__(cls, db_root_path: str | None = None, db_id: str | None = None):
+        with cls._lock:
             if cls._instance is None:
-                raise ValueError("DatabaseManager instance has not been initialized yet.")
+                if db_root_path is None:
+                    raise ValueError("DatabaseManager has not been initialized.")
+                cls._instance = super().__new__(cls)
+                cls._instance._init(db_root_path, db_id or "meteo")
+            elif db_root_path is not None and cls._instance.db_root_path != db_root_path:
+                cls._instance._init(db_root_path, db_id or "meteo")
             return cls._instance
 
-    def _init(self, db_mode: str, db_root_path:str,db_id: str):
-        """
-        Initializes the DatabaseManager instance.
-
-        Args:
-            db_mode (str): The mode of the database (e.g., 'train', 'test').
-            db_id (str): The database identifier.
-        """
-        self.db_mode = db_mode
-        self.db_root_path=db_root_path
+    def _init(self, db_root_path: str, db_id: str):
+        self.db_root_path = db_root_path
         self.db_id = db_id
         self._set_paths()
 
     def _set_paths(self):
-        """Sets the paths for the database files and directories."""
-        self.db_path = Path(self.db_root_path)/f"{self.db_mode}" / f"{self.db_mode}_databases" / self.db_id / f"{self.db_id}.sqlite"
-        self.db_directory_path = Path(self.db_root_path)/f"{self.db_mode}" / f"{self.db_mode}_databases" / self.db_id
-        self.db_json=Path(self.db_root_path)/"data_preprocess"/f"{self.db_mode}.json"
-        self.db_tables=Path(self.db_root_path)/"data_preprocess"/"tables.json"
-        self.db_fewshot_path=Path(self.db_root_path)/"fewshot"/"questions.json"
-        self.db_fewshot2_path=Path(self.db_root_path)/"correct_fewshot2.json"
-        self.emb_dir=Path(self.db_root_path)/"emb"
+        root = Path(self.db_root_path)
+        # Preprocessed data
+        self.db_json = root / "data_preprocess" / "dev.json"
+        self.db_tables = root / "data_preprocess" / "tables.json"
+        # Fewshot
+        self.db_fewshot_path = root / "fewshot" / "questions.json"
+        self.db_fewshot2_path = root / "correct_fewshot2.json"
+        # Embeddings
+        self.emb_dir = root / "emb"
+        # Schema cache
+        self.db_schema_cache = root / "db_schema.json"
+
+    # -- PostgreSQL connection ------------------------------------------------
 
     @staticmethod
-    def with_db_path(func: Callable):
-        """
-        Decorator to inject db_path as the first argument to the function.
-        """
-        def wrapper(self, *args, **kwargs):
-            return func(self.db_path, *args, **kwargs)
-        return wrapper
+    def get_connection():
+        """Return a new psycopg2 connection from env vars."""
+        return psycopg2.connect(
+            host=os.environ.get("DB_HOST"),
+            dbname=os.environ.get("DB_NAME"),
+            user=os.environ.get("DB_USER"),
+            port=os.environ.get("DB_PORT"),
+            password=os.environ.get("DB_PASS"),
+        )
 
-    @classmethod
-    def add_methods_to_class(cls, funcs: List[Callable]):
+    # -- Execution-based comparison -------------------------------------------
+
+    @staticmethod
+    def compare_sqls(predicted_sql: str, ground_truth_sql: str, meta_time_out: int = 180):
+        """Compare predicted vs ground-truth SQL by executing both.
+
+        Delegates to execution.compare_sqls().
         """
-        Adds methods to the class with db_path automatically provided.
-
-        Args:
-            funcs (List[Callable]): List of functions to be added as methods.
-        """
-        for func in funcs:
-            method = cls.with_db_path(func)
-            setattr(cls, func.__name__, method)
-
-# List of functions to be added to the class
-functions_to_add = [
-    compare_sqls
-]
-
-# Adding methods to the class
-DatabaseManager.add_methods_to_class(functions_to_add)
+        return compare_sqls(
+            predicted_sql=predicted_sql,
+            ground_truth_sql=ground_truth_sql,
+            meta_time_out=meta_time_out,
+        )

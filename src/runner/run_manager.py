@@ -55,10 +55,12 @@ class RunManager:
         Args:
             dataset (List[Dict[str, Any]]): The dataset containing task information.
         """
+        if end < 0:
+            end = len(dataset)
         for i, data in enumerate(dataset):
-            if i < start:  # 跳过 start 之前的元素
+            if i < start:
                 continue
-            if i >= end:  # 如果超过 end，停止处理
+            if i >= end:
                 break
             if "question_id" not in data:
                 data = {"question_id": i, **data}
@@ -89,7 +91,7 @@ class RunManager:
             tuple: The state of the task processing and task identifiers.
         """
         # try:
-        database_manager = DatabaseManager(db_mode=self.args.data_mode, db_root_path=self.args.db_root_path, db_id=task.db_id)#单例
+        database_manager = DatabaseManager(db_root_path=self.args.db_root_path, db_id=task.db_id)
         logger = Logger(db_id=task.db_id, question_id=task.question_id, result_directory=self.result_directory)
         logger._set_log_level(self.args.log_level)
         logger.log(f"Processing task: {task.db_id} {task.question_id}", "info")

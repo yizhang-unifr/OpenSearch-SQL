@@ -1,36 +1,44 @@
-import logging,re,json
+"""Column retrieval and info node – PostgreSQL version.
+
+Uses find_foreign_keys_pg() instead of the BIRD tables.json-based
+find_foreign_keys_MYSQL_like(). Column retrieval uses SentenceTransformer
+embeddings over PostgreSQL column metadata.
+"""
+
+import json
+import logging
+import re
 from typing import Any, Dict
 from pathlib import Path
-from pipeline.utils import node_decorator,get_last_node_result
+
+from sentence_transformers import SentenceTransformer
+
+from pipeline.utils import node_decorator, get_last_node_result
 from pipeline.pipeline_manager import PipelineManager
 from runner.database_manager import DatabaseManager
-from sentence_transformers import SentenceTransformer
 from llm.model import model_chose
-from llm.db_conclusion import find_foreign_keys_MYSQL_like
-from llm.prompts import *
+from llm.db_conclusion import find_foreign_keys_pg
+from llm.prompts import db_check_prompts
 from runner.extract import DES_new
 from database_process.make_emb import load_emb
-from runner.column_retrieve import ColumnRetriever
 from runner.column_update import ColumnUpdater
+
 
 @node_decorator(check_schema_status=False)
 def column_retrieve_and_other_info(task: Any, execution_history: Dict[str, Any]) -> Dict[str, Any]:
-    config,node_name=PipelineManager().get_model_para()
-    paths=DatabaseManager()
-    emb_dir=paths.emb_dir
-    tables_info_dir=paths.db_tables
-    chat_model = model_chose(node_name,config["engine"])
+    config, node_name = PipelineManager().get_model_para()
+    paths = DatabaseManager()
+    emb_dir = paths.emb_dir
+    chat_model = model_chose(node_name, config["engine"])
     bert_model = SentenceTransformer(config["bert_model"], device=config["device"])
 
-    all_db_col = get_last_node_result(execution_history, "generate_db_schema")["db_col_dic"]#返回最后面等于 参数名的结果
+    all_db_col = get_last_node_result(execution_history, "generate_db_schema")["db_col_dic"]
     origin_col = get_last_node_result(execution_history, "extract_query_noun")["col"]
     values = get_last_node_result(execution_history, "extract_query_noun")["values"]
 
-    # hint = task.evidence
-    # if hint == "":
-    #     hint = "None"
-    db=task.db_id
+    db = task.db_id
 
+    # Load pre-computed embeddings
     emb_values_dic = {}
     if emb_values_dic.get(db):
         DB_emb, col_values = emb_values_dic[db]
@@ -38,56 +46,107 @@ def column_retrieve_and_other_info(task: Any, execution_history: Dict[str, Any])
         DB_emb, col_values = load_emb(db, emb_dir)
         emb_values_dic[db] = [DB_emb, col_values]
 
-    db_col = {x: all_db_col[x][0] for x in all_db_col }  ## db string
-    db_keys_col=all_db_col.keys()
+    db_col = {x: all_db_col[x][0] for x in all_db_col}
+    db_keys_col = all_db_col.keys()
 
-    col_retrieve = ColumnRetriever(bert_model,tables_info_dir).get_col_retrieve(task.question, db,db_keys_col)
+    # Simplified column retrieval (no tables.json needed for PostgreSQL)
+    col_retrieve = _simple_col_retrieve(bert_model, task.question, db_keys_col)
 
-    foreign_keys, foreign_set = find_foreign_keys_MYSQL_like(tables_info_dir, db)      
-    cols=ColumnUpdater(db_col).col_pre_update(origin_col,col_retrieve,foreign_set)
+    # Foreign keys from PostgreSQL
+    foreign_keys, foreign_set = find_foreign_keys_pg()
 
-    des = DES_new(bert_model, DB_emb, col_values)   
+    cols = ColumnUpdater(db_col).col_pre_update(origin_col, col_retrieve, foreign_set)
 
-    cols_select, L_values = des.get_key_col_des(cols,
-                                    values,
-                                    debug=False,
-                                    topk=config['top_k'],
-                                    shold=0.65)
+    des = DES_new(bert_model, DB_emb, col_values)
+    cols_select, L_values = des.get_key_col_des(
+        cols,
+        values,
+        debug=False,
+        topk=config.get("top_k", 10),
+        shold=0.65,
+    )
 
-    column=ColumnUpdater(db_col).col_suffix(cols_select)
-    # values = [f"{x[0]}: '{x[1]}'" for x in L_values]
-    count=0
-    while count<3:
+    column = ColumnUpdater(db_col).col_suffix(cols_select)
+
+    count = 0
+    q_order = ""
+    while count < 3:
         try:
-            q_order=query_order(task.raw_question,chat_model,db_check_prompts().select_prompt,temperature=config['temperature'])
+            q_order = query_order(
+                task.raw_question,
+                chat_model,
+                db_check_prompts().select_prompt,
+                temperature=config.get("temperature", 0.3),
+            )
             break
-        except:
-            count+=1
-
-    # # q_order = f"The content of the SELECT statement should only include: {q_order}"
-    # q_order=""
+        except Exception:
+            count += 1
 
     response = {
-        # "col_retrieve":list(col_retrieve),
-        # "col_select":list(cols_select),
-        "L_values":L_values,
-        "column":column,
-        "foreign_keys":foreign_keys,
-        "foreign_set":foreign_set,
-        "q_order":q_order
+        "L_values": L_values,
+        "column": column,
+        "foreign_keys": foreign_keys,
+        "foreign_set": list(foreign_set),
+        "q_order": q_order,
     }
-
     return response
 
 
-def query_order(question, chat_model, select_prompt,temperature):
+def _simple_col_retrieve(bert_model, question: str, db_keys_col) -> set:
+    """Simplified column retrieval using embedding similarity.
+
+    Replaces the ColumnRetriever that depended on BIRD tables.json.
+    """
+    import torch
+
+    # Extract n-grams from question
+    q_clean = re.sub(r"[^\s\w]", " ", question)
+    q_clean = re.sub(r"\s+", " ", q_clean)
+    words = q_clean.split(" ")
+    ngrams = set()
+    for k in range(1, min(5, len(words) + 1)):
+        for j in range(len(words) - k + 1):
+            ngrams.add(" ".join(words[j : j + k]))
+
+    # Build column name list (strip table prefix)
+    col_map = {}
+    for full_col in db_keys_col:
+        parts = full_col.split(".")
+        if len(parts) == 2:
+            col_name = parts[1].strip("`\"")
+            col_map.setdefault(col_name, set())
+            col_map[col_name].add(full_col)
+
+    col_names = list(col_map.keys())
+    if not col_names or not ngrams:
+        return set()
+
+    # Encode and find top matches
+    col_embs = bert_model.encode(col_names, convert_to_tensor=True, show_progress_bar=False)
+    ngram_list = list(ngrams)
+    q_embs = bert_model.encode(ngram_list, convert_to_tensor=True, show_progress_bar=False)
+
+    sims = q_embs @ col_embs.T
+    num_pick = min(4, len(col_names))
+    top_indices = set(torch.topk(sims.flatten(), min(num_pick * len(ngram_list), sims.numel())).indices.tolist())
+
+    result = set()
+    for idx in top_indices:
+        col_idx = idx % len(col_names)
+        sim_val = sims.flatten()[idx].item()
+        if sim_val > 0.7:
+            col_name = col_names[col_idx]
+            result.update(col_map[col_name])
+    return result
+
+
+def query_order(question, chat_model, select_prompt, temperature):
     select_prompt = select_prompt.format(question=question)
     ans = chat_model.get_ans(select_prompt, temperature=temperature)
-    ans = re.sub("```json|```", "", ans)
+    ans = re.sub(r"```json|```", "", ans)
     select_json = json.loads(ans)
     res, judge = json_ext(select_json)
     return res
-
 
 
 def json_ext(jsonf):
@@ -96,7 +155,7 @@ def json_ext(jsonf):
     for x in jsonf:
         if x["Type"] == "QIC":
             Q = x["Extract"]["Q"].lower()
-            if Q in ["how many", "how much", "which","how often"]:
+            if Q in ["how many", "how much", "which", "how often"]:
                 for item in x["Extract"]["I"]:
                     ans.append(x["Extract"]["Q"] + " " + item)
             elif Q in ["when", "who", "where"]:
@@ -107,4 +166,3 @@ def json_ext(jsonf):
             ans.append(x["Extract"]["J"])
             judge = True
     return ans, judge
-
