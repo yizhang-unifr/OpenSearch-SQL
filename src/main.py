@@ -14,13 +14,12 @@ from typing import Any, Dict, List
 
 from dotenv import load_dotenv
 
-# Ensure project root is on sys.path
+# Paths
 _SRC_DIR = Path(__file__).resolve().parent
 _OPENSEARCH_ROOT = _SRC_DIR.parent
 _PROJECT_ROOT = _OPENSEARCH_ROOT.parent
 
-if str(_PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(_PROJECT_ROOT))
+# OpenSearch-SQL src dir needs a path entry for local runner/pipeline modules
 if str(_SRC_DIR) not in sys.path:
     sys.path.insert(0, str(_SRC_DIR))
 

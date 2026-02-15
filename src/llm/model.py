@@ -10,19 +10,15 @@ All pipeline nodes continue to use the same interface:
 
 import os
 import re
-import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
-# Bootstrap: add project root to sys.path so we can import config.llm_factory
-# Must happen BEFORE any project-level imports.
+# Paths (for .env loading; project packages are installed via pyproject.toml)
 # ---------------------------------------------------------------------------
 _OPENSEARCH_ROOT = Path(__file__).resolve().parent.parent.parent
 _PROJECT_ROOT = _OPENSEARCH_ROOT.parent
-if str(_PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(_PROJECT_ROOT))
 
 from dotenv import load_dotenv
 
