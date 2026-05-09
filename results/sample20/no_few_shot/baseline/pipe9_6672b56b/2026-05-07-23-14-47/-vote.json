@@ -1,0 +1,12 @@
+{
+    "3": "SELECT NULL;",
+    "6": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1 AND latitude IS NULL",
+    "1": "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = '2018' AND EXTRACT(MONTH FROM meteo_tmean.time) = 7",
+    "4": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE time = '2021-01-15 00:00:00';",
+    "9": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 AND meteo_tmin.latitude BETWEEN 38.5 AND 40.5 AND meteo_tmin.longitude BETWEEN 21.5 AND 23.5 ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+    "7": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = '2020'",
+    "2": "SELECT NULL;",
+    "5": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(WEEK FROM time) = 15 AND EXTRACT(YEAR FROM time) = '2021'",
+    "8": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = '2019'",
+    "0": "SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT(WEEK FROM meteo_tmean.time) = 15 AND EXTRACT(YEAR FROM meteo_tmean.time) = '2018'"
+}

@@ -75,10 +75,14 @@ class DES_new(DES):
         if len(value) == 0:
             return
         col_key_inst = self.get_examples([value], topk)
+        if not col_key_inst:
+            return
 
         val_col = []
         matchs = set()
         col_key_inst = same_str_sort(col_key_inst, self.col_values, value)[:topk]
+        if not col_key_inst:
+            return
         maxm_score = col_key_inst[0][1]
         same = col_key_inst[0][0]
         val_len = len(value)

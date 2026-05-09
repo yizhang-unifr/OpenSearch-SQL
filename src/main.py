@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 # Paths
 _SRC_DIR = Path(__file__).resolve().parent
 _OPENSEARCH_ROOT = _SRC_DIR.parent
-_PROJECT_ROOT = _OPENSEARCH_ROOT.parent
+_PROJECT_ROOT = _OPENSEARCH_ROOT.parent.parent
 
 # OpenSearch-SQL src dir needs a path entry for local runner/pipeline modules
 if str(_SRC_DIR) not in sys.path:
@@ -56,6 +56,8 @@ if __name__ == "__main__":
     args_parser.add_argument("--log_level", type=str, default="warning", help="Logging level")
     args_parser.add_argument("--start", type=int, default=0, help="Start index (inclusive)")
     args_parser.add_argument("--end", type=int, default=-1, help="End index (exclusive, -1=all)")
+    args_parser.add_argument("--ablation_mode", type=str, default="full", help="Ablation mode label for run output grouping")
+    args_parser.add_argument("--fewshot_mode", type=str, default="with_few_shot", help="Few-shot mode label for run output grouping")
     args = args_parser.parse_args()
     args.run_start_time = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 

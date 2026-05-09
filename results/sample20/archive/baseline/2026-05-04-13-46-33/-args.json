@@ -1,0 +1,14 @@
+{
+    "data_mode": "sample20",
+    "db_root_path": "data",
+    "pipeline_nodes": "generate_db_schema+extract_col_value+extract_query_noun+column_retrieve_and_other_info+implicit_context_enhance+candidate_generate+align_correct+vote+evaluation",
+    "pipeline_setup": "{\n    \"generate_db_schema\": {\n        \"engine\": \"llm_factory\",\n        \"bert_model\": \"all-mpnet-base-v2\",\n        \"device\": \"cpu\"\n    },\n    \"extract_col_value\": {\n        \"engine\": \"llm_factory\",\n        \"temperature\": 0.0\n    },\n    \"extract_query_noun\": {\n        \"engine\": \"llm_factory\",\n        \"temperature\": 0.0\n    },\n    \"column_retrieve_and_other_info\": {\n        \"engine\": \"llm_factory\",\n        \"bert_model\": \"all-mpnet-base-v2\",\n        \"device\": \"cpu\",\n        \"temperature\": 0.3,\n        \"top_k\": 10\n    },\n    \"implicit_context_enhance\": {\n        \"enable_geo_context\": \"False\",\n        \"enable_ontology_grounding\": \"False\",\n        \"geo_anchor_mode\": \"points\"\n    },\n    \"candidate_generate\": {\n        \"engine\": \"llm_factory\",\n        \"temperature\": 0.7,\n        \"n\": 5,\n        \"return_question\": \"True\",\n        \"single\": \"False\"\n    },\n    \"align_correct\": {\n        \"engine\": \"llm_factory\",\n        \"n\": 5,\n        \"bert_model\": \"all-mpnet-base-v2\",\n        \"device\": \"cpu\",\n        \"align_methods\": \"style_align+function_align\"\n    }\n}",
+    "use_checkpoint": false,
+    "checkpoint_nodes": null,
+    "checkpoint_dir": null,
+    "log_level": "warning",
+    "start": 0,
+    "end": 2,
+    "ablation_mode": "baseline",
+    "run_start_time": "2026-05-04-13-46-33"
+}

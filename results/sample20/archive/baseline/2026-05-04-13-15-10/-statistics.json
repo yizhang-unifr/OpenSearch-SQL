@@ -1,0 +1,192 @@
+{
+    "counts": {
+        "candidate_generate": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 10,
+            "total": 10
+        },
+        "align_correct": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 10,
+            "total": 10
+        },
+        "vote": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 10,
+            "total": 10
+        }
+    },
+    "ids": {
+        "candidate_generate": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'ValueError'>: <Unsupported provider in fallback LLMFactory: bedrock. Set provider=openai or provide config.llm_factory.>"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    2,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    3,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    4,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    5,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    6,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    7,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    8,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    9,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ]
+            ]
+        },
+        "align_correct": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'RuntimeError'>: <Upstream node 'candidate_generate' failed; cannot run align_correct. upstream_error=<class 'ValueError'>: <Unsupported provider in fallback LLMFactory: bedrock. Set provider=openai or provide config.llm_factory.>>"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    2,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    3,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    4,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    5,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    6,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    7,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    8,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    9,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ]
+            ]
+        },
+        "vote": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    2,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    3,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    4,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    5,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    6,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    7,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    8,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    9,
+                    "<class 'KeyError'>: <'vote'>"
+                ]
+            ]
+        }
+    }
+}

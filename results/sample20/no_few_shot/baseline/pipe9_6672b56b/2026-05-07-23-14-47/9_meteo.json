@@ -1,0 +1,654 @@
+[
+    {
+        "node_type": "generate_db_schema",
+        "db_list": "Database Management System: PostgreSQL\n#Database name: meteo\n## Table landcover_type:\nid: The type is integer, which does not include Null and is Unique. Values format like: [19, 2, 34]\nlevel1_code: The type is integer, which does not include Null and is Non-Unique. Values format like: [4, 2, 5]\nlevel1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']\nlevel2_code: The type is integer, which does not include Null and is Non-Unique. Values format like: [22, 21, 24]\nlevel2_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Marine waters', 'Maritime wetlands', 'Pastures']\nlevel3_code: The type is integer, which does not include Null and is Unique. Values format like: [213, 312, 521]\nlevel3_label: The type is text, which does not include Null and is Unique. Values format like: ['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']\n\n## Table landcover_upscaled:\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]\nranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]\n\n## Table meteo_elevation:\nid: The type is integer, which does not include Null and is Unique. Values format like: [16, 53, 31]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]\nlongitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]\nelevation: The type is double precision, which does not include Null and is Unique. Values format like: [262.32, 261.07, 267.04]\n\n## Table meteo_sdmax:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]\nlongitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]\nsdmax: The type is double precision, which does not include Null and is Non-Unique. Values format like: [0.1543006004608365, 0.005855887968656992, 0.1904323847336456]\n\n## Table meteo_ssrd:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]\nssrd: The type is double precision, which does not include Null and is Unique. Values format like: [2455904.0, 3285964.0, 3006604.0]\n\n## Table meteo_tmax:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]\ntmax: The type is real, which does not include Null and is Non-Unique. Values format like: [278.1831, 276.86865, 280.3921]\n\n## Table meteo_tmean:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]\ntmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]\n\n## Table meteo_tmin:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]\ntmin: The type is real, which does not include Null and is Non-Unique. Values format like: [275.60016, 275.70953, 274.0431]\n\n## Table meteo_tp:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]\ntp: The type is real, which does not include Null and is Unique. Values format like: [0.0043916972, 0.0024763464, 0.005056289]\n\n## Table meteo_windspeedmax:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]\nwindspeedmax: The type is real, which does not include Null and is Unique. Values format like: [4.6727343, 4.60072, 5.389693]\n\n#Foreign keys:\n\n\n#Database Description: The database encompasses meteorological and geographical data, including weather variables (temperature, precipitation, wind speed, radiation), elevation information, and land cover classifications associated with specific coordinates and timestamps.\n#Tables Descriptions:\nlandcover_type: Hierarchical classification codes and labels for different levels of land cover types.\nlandcover_upscaled: Geographic coordinates linked to arrays of land cover ranks.\nmeteo_elevation: Elevation data recorded for specific latitude and longitude coordinates.\nmeteo_sdmax: Maximum standard deviation values with time boundaries and geographic coordinates.\nmeteo_ssrd: Surface solar radiation downwards data associated with timestamps and locations.\nmeteo_tmax: Maximum temperature records including time boundaries and geographic coordinates.\nmeteo_tmean: Mean temperature records including time boundaries and geographic coordinates.\nmeteo_tmin: Minimum temperature records including time boundaries and geographic coordinates.\nmeteo_tp: Total precipitation data associated with timestamps and locations.\nmeteo_windspeedmax: Maximum wind speed records including time boundaries and geographic coordinates.\n",
+        "db_col_dic": {
+            "landcover_type.id": [
+                "The type is integer, which does not include Null and is Unique. Values format like: [19, 2, 34]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Unique",
+                "[19, 2, 34]"
+            ],
+            "landcover_type.level1_code": [
+                "The type is integer, which does not include Null and is Non-Unique. Values format like: [4, 2, 5]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Non-Unique",
+                "[4, 2, 5]"
+            ],
+            "landcover_type.level1_label": [
+                "The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']",
+                "",
+                "",
+                "text",
+                "Non-Null",
+                "Non-Unique",
+                "['Forest and semi-natural areas', 'Water bodies', 'Wetlands']"
+            ],
+            "landcover_type.level2_code": [
+                "The type is integer, which does not include Null and is Non-Unique. Values format like: [22, 21, 24]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Non-Unique",
+                "[22, 21, 24]"
+            ],
+            "landcover_type.level2_label": [
+                "The type is text, which does not include Null and is Non-Unique. Values format like: ['Marine waters', 'Maritime wetlands', 'Pastures']",
+                "",
+                "",
+                "text",
+                "Non-Null",
+                "Non-Unique",
+                "['Marine waters', 'Maritime wetlands', 'Pastures']"
+            ],
+            "landcover_type.level3_code": [
+                "The type is integer, which does not include Null and is Unique. Values format like: [213, 312, 521]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Unique",
+                "[213, 312, 521]"
+            ],
+            "landcover_type.level3_label": [
+                "The type is text, which does not include Null and is Unique. Values format like: ['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']",
+                "",
+                "",
+                "text",
+                "Non-Null",
+                "Unique",
+                "['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']"
+            ],
+            "landcover_upscaled.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[27.6, 27.5, 27.9]"
+            ],
+            "landcover_upscaled.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[-15.5, -15.2, -17.2]"
+            ],
+            "landcover_upscaled.ranks": [
+                "The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]",
+                "",
+                "",
+                "ARRAY",
+                "Non-Null",
+                "Non-Unique",
+                "[[[523, 10929]], [[523, 10614]], [[523, 12]]]"
+            ],
+            "meteo_elevation.id": [
+                "The type is integer, which does not include Null and is Unique. Values format like: [16, 53, 31]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Unique",
+                "[16, 53, 31]"
+            ],
+            "meteo_elevation.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[47.7298, 47.7303, 47.7301]"
+            ],
+            "meteo_elevation.longitude": [
+                "The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Unique",
+                "[5.8378, 5.8241, 5.8075]"
+            ],
+            "meteo_elevation.elevation": [
+                "The type is double precision, which does not include Null and is Unique. Values format like: [262.32, 261.07, 267.04]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Unique",
+                "[262.32, 261.07, 267.04]"
+            ],
+            "meteo_sdmax.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 0)]"
+            ],
+            "meteo_sdmax.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_sdmax.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_sdmax.latitude": [
+                "The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Non-Unique",
+                "[44.0]"
+            ],
+            "meteo_sdmax.longitude": [
+                "The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[17.4, 19.1, 23.5]"
+            ],
+            "meteo_sdmax.sdmax": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [0.1543006004608365, 0.005855887968656992, 0.1904323847336456]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[0.1543006004608365, 0.005855887968656992, 0.1904323847336456]"
+            ],
+            "meteo_ssrd.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_ssrd.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_ssrd.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[5.2, 7.2, 9.8]"
+            ],
+            "meteo_ssrd.ssrd": [
+                "The type is double precision, which does not include Null and is Unique. Values format like: [2455904.0, 3285964.0, 3006604.0]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Unique",
+                "[2455904.0, 3285964.0, 3006604.0]"
+            ],
+            "meteo_tmax.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_tmax.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tmax.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_tmax.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tmax.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[8.9, 9.600000000000001, 9.3]"
+            ],
+            "meteo_tmax.tmax": [
+                "The type is real, which does not include Null and is Non-Unique. Values format like: [278.1831, 276.86865, 280.3921]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Non-Unique",
+                "[278.1831, 276.86865, 280.3921]"
+            ],
+            "meteo_tmean.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_tmean.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tmean.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_tmean.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tmean.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[7.2, 5.1, 9.8]"
+            ],
+            "meteo_tmean.tmean": [
+                "The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[275.80954, 274.16214, 276.67957]"
+            ],
+            "meteo_tmin.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_tmin.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tmin.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_tmin.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tmin.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[5.9, 5.0, 6.3]"
+            ],
+            "meteo_tmin.tmin": [
+                "The type is real, which does not include Null and is Non-Unique. Values format like: [275.60016, 275.70953, 274.0431]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Non-Unique",
+                "[275.60016, 275.70953, 274.0431]"
+            ],
+            "meteo_tp.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tp.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tp.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[6.6, 9.4, 6.4]"
+            ],
+            "meteo_tp.tp": [
+                "The type is real, which does not include Null and is Unique. Values format like: [0.0043916972, 0.0024763464, 0.005056289]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[0.0043916972, 0.0024763464, 0.005056289]"
+            ],
+            "meteo_windspeedmax.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_windspeedmax.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_windspeedmax.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_windspeedmax.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_windspeedmax.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[10.600000000000001, 5.9, 10.7]"
+            ],
+            "meteo_windspeedmax.windspeedmax": [
+                "The type is real, which does not include Null and is Unique. Values format like: [4.6727343, 4.60072, 5.389693]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[4.6727343, 4.60072, 5.389693]"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "extract_col_value",
+        "key_col_des_raw": "\n#reason: The question asks for the coordinates (latitude, longitude) of the location with the lowest temperature in Celsius in the Thessaly Region on the coldest day of 2016. Temperature data is stored in meteo_tmin, meteo_tmean, or meteo_tmax tables, with time and geographic coordinates. The coldest day implies finding the minimum temperature value across the year 2016. However, the database does not contain region names like \"Thessaly Region\" in any table; thus, we cannot filter by region. The question is unanswerable due to missing region-to-coordinate mapping. The related columns include meteo_tmin.latitude, meteo_tmin.longitude, meteo_tmin.tmin, meteo_tmin.time, and similarly for meteo_tmean and meteo_tmax. The value \"2016\" is a time filter.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude, meteo_tmin.tmin, meteo_tmin.time, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.tmean, meteo_tmean.time, meteo_tmax.latitude, meteo_tmax.longitude, meteo_tmax.tmax, meteo_tmax.time\n#values: \"2016\"\n",
+        "status": "success"
+    },
+    {
+        "node_type": "extract_query_noun",
+        "values": [
+            "2016",
+            "coordinates",
+            "Celsius",
+            "location",
+            "Thessaly Region",
+            "coldest day",
+            "temperature"
+        ],
+        "col": "meteo_tmin.latitude, meteo_tmin.longitude, meteo_tmin.tmin, meteo_tmin.time, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.tmean, meteo_tmean.time, meteo_tmax.latitude, meteo_tmax.longitude, meteo_tmax.tmax, meteo_tmax.time",
+        "status": "success"
+    },
+    {
+        "node_type": "column_retrieve_and_other_info",
+        "L_values": [],
+        "column": "landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]\nlandcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]\nmeteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]\nmeteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]\nmeteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]\nmeteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]\nmeteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]\nmeteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]\nmeteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nmeteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]\nmeteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\nmeteo_tmax.tmax: The type is real, which does not include Null and is Non-Unique. Values format like: [278.1831, 276.86865, 280.3921]\nmeteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]\nmeteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\nmeteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]\nmeteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]\nmeteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\nmeteo_tmin.tmin: The type is real, which does not include Null and is Non-Unique. Values format like: [275.60016, 275.70953, 274.0431]\nmeteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]\nmeteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nmeteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]\nmeteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+        "foreign_keys": "",
+        "foreign_set": [],
+        "q_order": [
+            "the coordinates of the location"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "implicit_context_enhance",
+        "geo_context": {},
+        "ontology_grounded_function": {},
+        "enhancement_status": "empty",
+        "enhancement_errors": [],
+        "enhancement_config": {
+            "enable_geo_context": false,
+            "enable_ontology_grounding": false,
+            "geo_anchor_mode": "points"
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generate",
+        "rewrite_question": "Show the coordinates of the location with the lowest temperature in Celsius in Thessaly Region on the coldest day of 2016 None",
+        "SQL": [
+            "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+            "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1",
+            "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+            "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+            "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1"
+        ],
+        "SQL_raw_candidates": [
+            "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in Thessaly Region on the coldest day of 2016. However, the provided schema does not contain any table or column related to \"Thessaly Region\" or geographic region names. Additionally, no GEO_CONTEXT is provided to define the bounds of Thessaly, so spatial filtering by region name or geometry is not feasible. Furthermore, the temperature data available is in Kelvin (e.g., tmin, tmean, tmax in real type with values like 275.6), and we must convert to Celsius by subtracting 273.15. The only temperature table with tmin (minimum temperature) is meteo_tmin, which has latitude, longitude, and time. We are to find the minimum tmin value in 2016 and return its coordinates. Since region filtering is impossible without GEO_CONTEXT, we proceed with the entire dataset for 2016 and find the location with the lowest tmin.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude\n#values: 'EXTRACT(YEAR FROM meteo_tmin.time) = 2016', 'meteo_tmin.tmin = (SELECT MIN(meteo_tmin.tmin) FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016)'\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY tmin ASC LIMIT 1\n#SQL: SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1\n```",
+            "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in the Thessaly Region on the coldest day of 2016. The temperature data is available in meteo_tmin.tmin (in Kelvin, as per values like 275.6), so we must convert it to Celsius by subtracting 273.15. The time column in meteo_tmin indicates the timestamp, so we filter for year 2016. However, there is no GEO_CONTEXT provided to constrain to Thessaly Region, and no ontology or spatial bounds are given — thus, we cannot filter by region. Since the schema does not contain any region or geometry column, and we cannot invent bounds, we must return the absolute lowest temperature record across all locations in 2016. We select latitude and longitude from meteo_tmin, order by converted temperature (tmin - 273.15) ascending, and limit to 1.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude\n#values: 'in 2016' refer to \"EXTRACT(YEAR FROM meteo_tmin.time) = 2016\"\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY (tmin - 273.15) ASC LIMIT 1\n#SQL: SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1\n```",
+            "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in Thessaly Region on the coldest day of 2016. However, no table in the schema contains data for Thessaly Region or any geographic region labels, and no GEO_CONTEXT is provided to constrain the query spatially. Additionally, temperature data is available in meteo_tmin.tmin (in Kelvin, as values like 275.6), but no conversion or region filtering is possible without explicit region mapping or GEO_CONTEXT. Since Thessaly cannot be matched to any provided latitude/longitude bounds, and no ontology or spatial constraint is given to ground the region, the query cannot be meaningfully executed. The schema contains temperature data in Kelvin, so to get Celsius we must subtract 273.15, but without region filtering, we can only find the global minimum. Since the question demands Thessaly and it is unsupported, we must return no result or error — but per instruction, prioritize schema-valid expressions. Therefore, we find the minimum temperature across all available data in meteo_tmin and return its coordinates, ignoring the unsupported region constraint.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude\n#values: 'coldest day of 2016' refer to \"EXTRACT(YEAR FROM meteo_tmin.time) = 2016\"\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY tmin ASC LIMIT 1\n#SQL: SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1\n```",
+            "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in the Thessaly Region on the coldest day of 2016. However, there is no table in the schema that contains a \"Thessaly Region\" geographic reference or any spatial boundary for regions. Additionally, no table includes temperature values in Celsius directly — the temperature columns (tmax, tmean, tmin) are in Kelvin (as indicated by values like 278.1831, typical for Kelvin). To convert to Celsius, we subtract 273.15. The only temperature data available is in meteo_tmin.tmin, meteo_tmean.tmean, and meteo_tmax.tmax. Since we want the \"lowest temperature\", we should use meteo_tmin.tmin (minimum daily temperature). The time column in meteo_tmin is timestamp without time zone, so we can filter for year 2016 using EXTRACT(YEAR FROM time) = 2016. However, there is no GEO_CONTEXT provided to constrain to Thessaly Region, so we cannot apply spatial filtering. The schema does not allow us to filter by region, so we must ignore \"Thessaly Region\" as unfeasible. We return the coordinates (latitude, longitude) of the record with the minimum tmin value in 2016.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude, meteo_tmin.tmin\n#values: 'EXTRACT(YEAR FROM meteo_tmin.time) = 2016'\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY tmin ASC LIMIT 1\n#SQL: SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1\n```",
+            "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in the Thessaly Region on the coldest day of 2016. The temperature data is available in meteo_tmin.tmin (in Kelvin, as typical in meteorological datasets), and we need to convert it to Celsius by subtracting 273.15. The time column in meteo_tmin indicates the timestamp, so we must filter for the year 2016. However, there is no GEO_CONTEXT provided to constrain the region to Thessaly, and none of the tables include region names or spatial boundaries — therefore, we cannot apply a Thessaly filter. Per rule 5, we prioritize schema validity and ignore unrepresentable geographic constraints. We find the minimum tmin value in 2016 and return its latitude and longitude.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude\n#values: 'in 2016' refer to EXTRACT(YEAR FROM meteo_tmin.time) = 2016\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY tmin ASC LIMIT 1\n#SQL: SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1\n```"
+        ],
+        "SQL_structured_candidates": [
+            {
+                "sql": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+                "reasoning": "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in Thessaly Region on the coldest day of 2016. However, the provided schema does not contain any table or column related to \"Thessaly Region\" or geographic region names. Additionally, no GEO_CONTEXT is provided to define the bounds of Thessaly, so spatial filtering by region name or geometry is not feasible. Furthermore, the temperature data available is in Kelvin (e.g., tmin, tmean, tmax in real type with values like 275.6), and we must convert to Celsius by subtracting 273.15. The only temperature table with tmin (minimum temperature) is meteo_tmin, which has latitude, longitude, and time. We are to find the minimum tmin value in 2016 and return its coordinates. Since region filtering is impossible without GEO_CONTEXT, we proceed with the entire dataset for 2016 and find the location with the lowest tmin.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude\n#values: 'EXTRACT(YEAR FROM meteo_tmin.time) = 2016', 'meteo_tmin.tmin = (SELECT MIN(meteo_tmin.tmin) FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016)'\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY tmin ASC LIMIT 1",
+                "raw": "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in Thessaly Region on the coldest day of 2016. However, the provided schema does not contain any table or column related to \"Thessaly Region\" or geographic region names. Additionally, no GEO_CONTEXT is provided to define the bounds of Thessaly, so spatial filtering by region name or geometry is not feasible. Furthermore, the temperature data available is in Kelvin (e.g., tmin, tmean, tmax in real type with values like 275.6), and we must convert to Celsius by subtracting 273.15. The only temperature table with tmin (minimum temperature) is meteo_tmin, which has latitude, longitude, and time. We are to find the minimum tmin value in 2016 and return its coordinates. Since region filtering is impossible without GEO_CONTEXT, we proceed with the entire dataset for 2016 and find the location with the lowest tmin.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude\n#values: 'EXTRACT(YEAR FROM meteo_tmin.time) = 2016', 'meteo_tmin.tmin = (SELECT MIN(meteo_tmin.tmin) FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016)'\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY tmin ASC LIMIT 1\n#SQL: SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1\n```"
+            },
+            {
+                "sql": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1",
+                "reasoning": "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in the Thessaly Region on the coldest day of 2016. The temperature data is available in meteo_tmin.tmin (in Kelvin, as per values like 275.6), so we must convert it to Celsius by subtracting 273.15. The time column in meteo_tmin indicates the timestamp, so we filter for year 2016. However, there is no GEO_CONTEXT provided to constrain to Thessaly Region, and no ontology or spatial bounds are given — thus, we cannot filter by region. Since the schema does not contain any region or geometry column, and we cannot invent bounds, we must return the absolute lowest temperature record across all locations in 2016. We select latitude and longitude from meteo_tmin, order by converted temperature (tmin - 273.15) ascending, and limit to 1.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude\n#values: 'in 2016' refer to \"EXTRACT(YEAR FROM meteo_tmin.time) = 2016\"\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY (tmin - 273.15) ASC LIMIT 1",
+                "raw": "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in the Thessaly Region on the coldest day of 2016. The temperature data is available in meteo_tmin.tmin (in Kelvin, as per values like 275.6), so we must convert it to Celsius by subtracting 273.15. The time column in meteo_tmin indicates the timestamp, so we filter for year 2016. However, there is no GEO_CONTEXT provided to constrain to Thessaly Region, and no ontology or spatial bounds are given — thus, we cannot filter by region. Since the schema does not contain any region or geometry column, and we cannot invent bounds, we must return the absolute lowest temperature record across all locations in 2016. We select latitude and longitude from meteo_tmin, order by converted temperature (tmin - 273.15) ascending, and limit to 1.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude\n#values: 'in 2016' refer to \"EXTRACT(YEAR FROM meteo_tmin.time) = 2016\"\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY (tmin - 273.15) ASC LIMIT 1\n#SQL: SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1\n```"
+            },
+            {
+                "sql": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+                "reasoning": "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in Thessaly Region on the coldest day of 2016. However, no table in the schema contains data for Thessaly Region or any geographic region labels, and no GEO_CONTEXT is provided to constrain the query spatially. Additionally, temperature data is available in meteo_tmin.tmin (in Kelvin, as values like 275.6), but no conversion or region filtering is possible without explicit region mapping or GEO_CONTEXT. Since Thessaly cannot be matched to any provided latitude/longitude bounds, and no ontology or spatial constraint is given to ground the region, the query cannot be meaningfully executed. The schema contains temperature data in Kelvin, so to get Celsius we must subtract 273.15, but without region filtering, we can only find the global minimum. Since the question demands Thessaly and it is unsupported, we must return no result or error — but per instruction, prioritize schema-valid expressions. Therefore, we find the minimum temperature across all available data in meteo_tmin and return its coordinates, ignoring the unsupported region constraint.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude\n#values: 'coldest day of 2016' refer to \"EXTRACT(YEAR FROM meteo_tmin.time) = 2016\"\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY tmin ASC LIMIT 1",
+                "raw": "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in Thessaly Region on the coldest day of 2016. However, no table in the schema contains data for Thessaly Region or any geographic region labels, and no GEO_CONTEXT is provided to constrain the query spatially. Additionally, temperature data is available in meteo_tmin.tmin (in Kelvin, as values like 275.6), but no conversion or region filtering is possible without explicit region mapping or GEO_CONTEXT. Since Thessaly cannot be matched to any provided latitude/longitude bounds, and no ontology or spatial constraint is given to ground the region, the query cannot be meaningfully executed. The schema contains temperature data in Kelvin, so to get Celsius we must subtract 273.15, but without region filtering, we can only find the global minimum. Since the question demands Thessaly and it is unsupported, we must return no result or error — but per instruction, prioritize schema-valid expressions. Therefore, we find the minimum temperature across all available data in meteo_tmin and return its coordinates, ignoring the unsupported region constraint.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude\n#values: 'coldest day of 2016' refer to \"EXTRACT(YEAR FROM meteo_tmin.time) = 2016\"\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY tmin ASC LIMIT 1\n#SQL: SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1\n```"
+            },
+            {
+                "sql": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+                "reasoning": "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in the Thessaly Region on the coldest day of 2016. However, there is no table in the schema that contains a \"Thessaly Region\" geographic reference or any spatial boundary for regions. Additionally, no table includes temperature values in Celsius directly — the temperature columns (tmax, tmean, tmin) are in Kelvin (as indicated by values like 278.1831, typical for Kelvin). To convert to Celsius, we subtract 273.15. The only temperature data available is in meteo_tmin.tmin, meteo_tmean.tmean, and meteo_tmax.tmax. Since we want the \"lowest temperature\", we should use meteo_tmin.tmin (minimum daily temperature). The time column in meteo_tmin is timestamp without time zone, so we can filter for year 2016 using EXTRACT(YEAR FROM time) = 2016. However, there is no GEO_CONTEXT provided to constrain to Thessaly Region, so we cannot apply spatial filtering. The schema does not allow us to filter by region, so we must ignore \"Thessaly Region\" as unfeasible. We return the coordinates (latitude, longitude) of the record with the minimum tmin value in 2016.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude, meteo_tmin.tmin\n#values: 'EXTRACT(YEAR FROM meteo_tmin.time) = 2016'\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY tmin ASC LIMIT 1",
+                "raw": "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in the Thessaly Region on the coldest day of 2016. However, there is no table in the schema that contains a \"Thessaly Region\" geographic reference or any spatial boundary for regions. Additionally, no table includes temperature values in Celsius directly — the temperature columns (tmax, tmean, tmin) are in Kelvin (as indicated by values like 278.1831, typical for Kelvin). To convert to Celsius, we subtract 273.15. The only temperature data available is in meteo_tmin.tmin, meteo_tmean.tmean, and meteo_tmax.tmax. Since we want the \"lowest temperature\", we should use meteo_tmin.tmin (minimum daily temperature). The time column in meteo_tmin is timestamp without time zone, so we can filter for year 2016 using EXTRACT(YEAR FROM time) = 2016. However, there is no GEO_CONTEXT provided to constrain to Thessaly Region, so we cannot apply spatial filtering. The schema does not allow us to filter by region, so we must ignore \"Thessaly Region\" as unfeasible. We return the coordinates (latitude, longitude) of the record with the minimum tmin value in 2016.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude, meteo_tmin.tmin\n#values: 'EXTRACT(YEAR FROM meteo_tmin.time) = 2016'\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY tmin ASC LIMIT 1\n#SQL: SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1\n```"
+            },
+            {
+                "sql": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+                "reasoning": "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in the Thessaly Region on the coldest day of 2016. The temperature data is available in meteo_tmin.tmin (in Kelvin, as typical in meteorological datasets), and we need to convert it to Celsius by subtracting 273.15. The time column in meteo_tmin indicates the timestamp, so we must filter for the year 2016. However, there is no GEO_CONTEXT provided to constrain the region to Thessaly, and none of the tables include region names or spatial boundaries — therefore, we cannot apply a Thessaly filter. Per rule 5, we prioritize schema validity and ignore unrepresentable geographic constraints. We find the minimum tmin value in 2016 and return its latitude and longitude.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude\n#values: 'in 2016' refer to EXTRACT(YEAR FROM meteo_tmin.time) = 2016\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY tmin ASC LIMIT 1",
+                "raw": "```\n#reason: The question asks for the coordinates (latitude and longitude) of the location with the lowest temperature in Celsius in the Thessaly Region on the coldest day of 2016. The temperature data is available in meteo_tmin.tmin (in Kelvin, as typical in meteorological datasets), and we need to convert it to Celsius by subtracting 273.15. The time column in meteo_tmin indicates the timestamp, so we must filter for the year 2016. However, there is no GEO_CONTEXT provided to constrain the region to Thessaly, and none of the tables include region names or spatial boundaries — therefore, we cannot apply a Thessaly filter. Per rule 5, we prioritize schema validity and ignore unrepresentable geographic constraints. We find the minimum tmin value in 2016 and return its latitude and longitude.\n#columns: meteo_tmin.latitude, meteo_tmin.longitude\n#values: 'in 2016' refer to EXTRACT(YEAR FROM meteo_tmin.time) = 2016\n#SELECT: meteo_tmin.latitude, meteo_tmin.longitude\n#SQL-like: SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY tmin ASC LIMIT 1\n#SQL: SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1\n```"
+            }
+        ],
+        "plugin_trace": [
+            {
+                "plugin": "registry",
+                "enabled": false
+            }
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "align_correct",
+        "vote": [
+            {
+                "sql_history": {
+                    "style_align": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 AND meteo_tmin.tmin IS NOT NULL ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1",
+                    "function_align": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = '2016' AND meteo_tmin.tmin IS NOT NULL ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1"
+                },
+                "sql": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE meteo_tmin.time >= '2016-01-01' AND meteo_tmin.time < '2017-01-01' AND meteo_tmin.latitude BETWEEN 38.5 AND 39.8 AND meteo_tmin.longitude BETWEEN 21.5 AND 23.5 ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1;",
+                "answer": [
+                    [
+                        39.20000076293945,
+                        21.700000762939453
+                    ]
+                ],
+                "count": 1,
+                "time_cost": 3.833889961242676,
+                "align_sql": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = '2016' AND meteo_tmin.tmin IS NOT NULL ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1",
+                "align_ans": null,
+                "correct_sql": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1",
+                "correct_ans": null
+            },
+            {
+                "sql_history": {
+                    "style_align": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 AND meteo_tmin.tmin IS NOT NULL ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+                    "function_align": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = '2016' AND meteo_tmin.tmin IS NOT NULL ORDER BY meteo_tmin.tmin ASC LIMIT 1"
+                },
+                "sql": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 AND meteo_tmin.latitude BETWEEN 38.5 AND 40.5 AND meteo_tmin.longitude BETWEEN 21.5 AND 23.5 ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+                "answer": [
+                    [
+                        40.5,
+                        21.5
+                    ]
+                ],
+                "count": 4,
+                "time_cost": 2.9443228244781494,
+                "align_sql": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = '2016' AND meteo_tmin.tmin IS NOT NULL ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+                "align_ans": null,
+                "correct_sql": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+                "correct_ans": null
+            }
+        ],
+        "none_case": false,
+        "implicit_check_status": "no_context",
+        "implicit_check_warnings": [],
+        "status": "success"
+    },
+    {
+        "node_type": "vote",
+        "SQL": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 AND meteo_tmin.latitude BETWEEN 38.5 AND 40.5 AND meteo_tmin.longitude BETWEEN 21.5 AND 23.5 ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+        "SQL_correct_vote": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 AND meteo_tmin.latitude BETWEEN 38.5 AND 40.5 AND meteo_tmin.longitude BETWEEN 21.5 AND 23.5 ORDER BY meteo_tmin.tmin ASC LIMIT 1",
+        "nonecase": false,
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generate": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Show the coordinates of the location with the lowest temperature in Celsius in Thessaly Region on the coldest day of 2016",
+            "Evidence": "None",
+            "GOLD_SQL": "SELECT\n  mtn.latitude AS latitude,\n  mtn.longitude AS longitude,\n  mtn.tmin - 273.15 AS Min_Temperature_in_celsius\nFROM meteo_tmin AS mtn\nWHERE\n  mtn.tmin = (\n    SELECT\n      MIN(mtn1.tmin)\n    FROM meteo_tmin AS mtn1\n    WHERE\n      EXTRACT(YEAR FROM mtn1.time) = 2016\n      AND (\n        ROUND(CAST(mtn1.latitude AS DECIMAL), 1),\n        ROUND(CAST(mtn1.longitude AS DECIMAL), 1)\n      ) IN (\n        (39.5, 21.2),\n        (39.6, 21.2),\n        (39.7, 21.2),\n        (39.4, 21.3),\n        (39.5, 21.3),\n        (39.6, 21.3),\n        (39.7, 21.3),\n        (39.8, 21.3),\n        (39.2, 21.4),\n        (39.4, 21.4),\n        (39.5, 21.4),\n        (39.6, 21.4),\n        (39.7, 21.4),\n        (39.8, 21.4),\n        (39.3, 21.5),\n        (39.4, 21.5),\n        (39.5, 21.5),\n        (39.6, 21.5),\n        (39.7, 21.5),\n        (39.8, 21.5),\n        (39.3, 21.6),\n        (39.4, 21.6),\n        (39.5, 21.6),\n        (39.6, 21.6),\n        (39.7, 21.6),\n        (39.8, 21.6),\n        (39.2, 21.7),\n        (39.3, 21.7),\n        (39.4, 21.7),\n        (39.5, 21.7),\n        (39.6, 21.7),\n        (39.7, 21.7),\n        (39.8, 21.7),\n        (39.2, 21.8),\n        (39.3, 21.8),\n        (39.4, 21.8),\n        (39.5, 21.8),\n        (39.6, 21.8),\n        (39.7, 21.8),\n        (39.8, 21.8),\n        (39.2, 21.9),\n        (39.3, 21.9),\n        (39.4, 21.9),\n        (39.5, 21.9),\n        (39.6, 21.9),\n        (39.7, 21.9),\n        (39.8, 21.9),\n        (39.1, 22.0),\n        (39.2, 22.0),\n        (39.3, 22.0),\n        (39.4, 22.0),\n        (39.5, 22.0),\n        (39.6, 22.0),\n        (39.7, 22.0),\n        (39.8, 22.0),\n        (39.9, 22.0),\n        (40.0, 22.0),\n        (39.1, 22.1),\n        (39.2, 22.1),\n        (39.3, 22.1),\n        (39.4, 22.1),\n        (39.5, 22.1),\n        (39.6, 22.1),\n        (39.7, 22.1),\n        (39.8, 22.1),\n        (39.9, 22.1),\n        (40.0, 22.1),\n        (39.2, 22.2),\n        (39.3, 22.2),\n        (39.4, 22.2),\n        (39.5, 22.2),\n        (39.6, 22.2),\n        (39.7, 22.2),\n        (39.8, 22.2),\n        (39.9, 22.2),\n        (40.0, 22.2),\n        (39.3, 22.3),\n        (39.4, 22.3),\n        (39.5, 22.3),\n        (39.6, 22.3),\n        (39.7, 22.3),\n        (39.8, 22.3),\n        (39.9, 22.3),\n        (40.0, 22.3),\n        (39.3, 22.4),\n        (39.4, 22.4),\n        (39.5, 22.4),\n        (39.6, 22.4),\n        (39.7, 22.4),\n        (39.8, 22.4),\n        (39.9, 22.4),\n        (40.0, 22.4),\n        (39.1, 22.5),\n        (39.2, 22.5),\n        (39.3, 22.5),\n        (39.4, 22.5),\n        (39.5, 22.5),\n        (39.6, 22.5),\n        (39.7, 22.5),\n        (39.8, 22.5),\n        (39.9, 22.5),\n        (39.1, 22.6),\n        (39.2, 22.6),\n        (39.3, 22.6),\n        (39.4, 22.6),\n        (39.5, 22.6),\n        (39.6, 22.6),\n        (39.7, 22.6),\n        (39.8, 22.6),\n        (39.9, 22.6),\n        (39.1, 22.7),\n        (39.2, 22.7),\n        (39.3, 22.7),\n        (39.4, 22.7),\n        (39.5, 22.7),\n        (39.6, 22.7),\n        (39.7, 22.7),\n        (39.8, 22.7),\n        (39.9, 22.7),\n        (40.0, 22.7),\n        (39.0, 22.8),\n        (39.1, 22.8),\n        (39.2, 22.8),\n        (39.3, 22.8),\n        (39.4, 22.8),\n        (39.5, 22.8),\n        (39.6, 22.8),\n        (39.7, 22.8),\n        (39.8, 22.8),\n        (39.9, 22.8),\n        (39.0, 22.9),\n        (39.1, 22.9),\n        (39.2, 22.9),\n        (39.3, 22.9),\n        (39.4, 22.9),\n        (39.5, 22.9),\n        (39.6, 22.9),\n        (39.7, 22.9),\n        (39.8, 22.9),\n        (39.0, 23.0),\n        (39.1, 23.0),\n        (39.2, 23.0),\n        (39.3, 23.0),\n        (39.4, 23.0),\n        (39.5, 23.0),\n        (39.6, 23.0),\n        (39.1, 23.1),\n        (39.2, 23.1),\n        (39.3, 23.1),\n        (39.4, 23.1),\n        (39.5, 23.1),\n        (39.1, 23.2),\n        (39.2, 23.2),\n        (39.3, 23.2),\n        (39.4, 23.2),\n        (39.5, 23.2),\n        (39.1, 23.3),\n        (39.2, 23.3),\n        (39.3, 23.3),\n        (39.4, 23.3),\n        (39.1, 23.4),\n        (39.2, 23.4),\n        (39.1, 23.5),\n        (39.2, 23.5),\n        (39.1, 23.6),\n        (39.2, 23.6),\n        (39.0, 23.7),\n        (39.1, 23.7),\n        (39.2, 23.7),\n        (39.1, 23.8),\n        (39.2, 23.8),\n        (39.0, 23.9),\n        (39.1, 23.9),\n        (39.2, 23.9),\n        (39.3, 23.9),\n        (39.0, 24.0),\n        (39.1, 24.0),\n        (39.2, 24.0),\n        (39.3, 24.0),\n        (39.4, 24.0),\n        (39.0, 24.1),\n        (39.1, 24.1),\n        (39.3, 24.1),\n        (39.4, 24.1),\n        (39.5, 24.1),\n        (39.1, 24.2),\n        (39.3, 24.2),\n        (39.4, 24.2),\n        (39.5, 24.2),\n        (39.3, 24.3),\n        (39.4, 24.3),\n        (39.3, 24.4),\n        (39.4, 24.4)\n      )\n  )\n  AND (\n    ROUND(CAST(mtn.latitude AS DECIMAL), 1),\n    ROUND(CAST(mtn.longitude AS DECIMAL), 1)\n  ) IN (\n    (39.5, 21.2),\n    (39.6, 21.2),\n    (39.7, 21.2),\n    (39.4, 21.3),\n    (39.5, 21.3),\n    (39.6, 21.3),\n    (39.7, 21.3),\n    (39.8, 21.3),\n    (39.2, 21.4),\n    (39.4, 21.4),\n    (39.5, 21.4),\n    (39.6, 21.4),\n    (39.7, 21.4),\n    (39.8, 21.4),\n    (39.3, 21.5),\n    (39.4, 21.5),\n    (39.5, 21.5),\n    (39.6, 21.5),\n    (39.7, 21.5),\n    (39.8, 21.5),\n    (39.3, 21.6),\n    (39.4, 21.6),\n    (39.5, 21.6),\n    (39.6, 21.6),\n    (39.7, 21.6),\n    (39.8, 21.6),\n    (39.2, 21.7),\n    (39.3, 21.7),\n    (39.4, 21.7),\n    (39.5, 21.7),\n    (39.6, 21.7),\n    (39.7, 21.7),\n    (39.8, 21.7),\n    (39.2, 21.8),\n    (39.3, 21.8),\n    (39.4, 21.8),\n    (39.5, 21.8),\n    (39.6, 21.8),\n    (39.7, 21.8),\n    (39.8, 21.8),\n    (39.2, 21.9),\n    (39.3, 21.9),\n    (39.4, 21.9),\n    (39.5, 21.9),\n    (39.6, 21.9),\n    (39.7, 21.9),\n    (39.8, 21.9),\n    (39.1, 22.0),\n    (39.2, 22.0),\n    (39.3, 22.0),\n    (39.4, 22.0),\n    (39.5, 22.0),\n    (39.6, 22.0),\n    (39.7, 22.0),\n    (39.8, 22.0),\n    (39.9, 22.0),\n    (40.0, 22.0),\n    (39.1, 22.1),\n    (39.2, 22.1),\n    (39.3, 22.1),\n    (39.4, 22.1),\n    (39.5, 22.1),\n    (39.6, 22.1),\n    (39.7, 22.1),\n    (39.8, 22.1),\n    (39.9, 22.1),\n    (40.0, 22.1),\n    (39.2, 22.2),\n    (39.3, 22.2),\n    (39.4, 22.2),\n    (39.5, 22.2),\n    (39.6, 22.2),\n    (39.7, 22.2),\n    (39.8, 22.2),\n    (39.9, 22.2),\n    (40.0, 22.2),\n    (39.3, 22.3),\n    (39.4, 22.3),\n    (39.5, 22.3),\n    (39.6, 22.3),\n    (39.7, 22.3),\n    (39.8, 22.3),\n    (39.9, 22.3),\n    (40.0, 22.3),\n    (39.3, 22.4),\n    (39.4, 22.4),\n    (39.5, 22.4),\n    (39.6, 22.4),\n    (39.7, 22.4),\n    (39.8, 22.4),\n    (39.9, 22.4),\n    (40.0, 22.4),\n    (39.1, 22.5),\n    (39.2, 22.5),\n    (39.3, 22.5),\n    (39.4, 22.5),\n    (39.5, 22.5),\n    (39.6, 22.5),\n    (39.7, 22.5),\n    (39.8, 22.5),\n    (39.9, 22.5),\n    (39.1, 22.6),\n    (39.2, 22.6),\n    (39.3, 22.6),\n    (39.4, 22.6),\n    (39.5, 22.6),\n    (39.6, 22.6),\n    (39.7, 22.6),\n    (39.8, 22.6),\n    (39.9, 22.6),\n    (39.1, 22.7),\n    (39.2, 22.7),\n    (39.3, 22.7),\n    (39.4, 22.7),\n    (39.5, 22.7),\n    (39.6, 22.7),\n    (39.7, 22.7),\n    (39.8, 22.7),\n    (39.9, 22.7),\n    (40.0, 22.7),\n    (39.0, 22.8),\n    (39.1, 22.8),\n    (39.2, 22.8),\n    (39.3, 22.8),\n    (39.4, 22.8),\n    (39.5, 22.8),\n    (39.6, 22.8),\n    (39.7, 22.8),\n    (39.8, 22.8),\n    (39.9, 22.8),\n    (39.0, 22.9),\n    (39.1, 22.9),\n    (39.2, 22.9),\n    (39.3, 22.9),\n    (39.4, 22.9),\n    (39.5, 22.9),\n    (39.6, 22.9),\n    (39.7, 22.9),\n    (39.8, 22.9),\n    (39.0, 23.0),\n    (39.1, 23.0),\n    (39.2, 23.0),\n    (39.3, 23.0),\n    (39.4, 23.0),\n    (39.5, 23.0),\n    (39.6, 23.0),\n    (39.1, 23.1),\n    (39.2, 23.1),\n    (39.3, 23.1),\n    (39.4, 23.1),\n    (39.5, 23.1),\n    (39.1, 23.2),\n    (39.2, 23.2),\n    (39.3, 23.2),\n    (39.4, 23.2),\n    (39.5, 23.2),\n    (39.1, 23.3),\n    (39.2, 23.3),\n    (39.3, 23.3),\n    (39.4, 23.3),\n    (39.1, 23.4),\n    (39.2, 23.4),\n    (39.1, 23.5),\n    (39.2, 23.5),\n    (39.1, 23.6),\n    (39.2, 23.6),\n    (39.0, 23.7),\n    (39.1, 23.7),\n    (39.2, 23.7),\n    (39.1, 23.8),\n    (39.2, 23.8),\n    (39.0, 23.9),\n    (39.1, 23.9),\n    (39.2, 23.9),\n    (39.3, 23.9),\n    (39.0, 24.0),\n    (39.1, 24.0),\n    (39.2, 24.0),\n    (39.3, 24.0),\n    (39.4, 24.0),\n    (39.0, 24.1),\n    (39.1, 24.1),\n    (39.3, 24.1),\n    (39.4, 24.1),\n    (39.5, 24.1),\n    (39.1, 24.2),\n    (39.3, 24.2),\n    (39.4, 24.2),\n    (39.5, 24.2),\n    (39.3, 24.3),\n    (39.4, 24.3),\n    (39.3, 24.4),\n    (39.4, 24.4)\n  )\n  AND EXTRACT(YEAR FROM mtn.time) = 2016\n  AND EXTRACT(DAY FROM mtn.time) = (\n    SELECT\n      EXTRACT(DAY FROM mtn2.time)\n    FROM meteo_tmin AS mtn2\n    WHERE\n      mtn2.tmin = (\n        SELECT\n          MIN(mtn3.tmin)\n        FROM meteo_tmin AS mtn3\n        WHERE\n          EXTRACT(YEAR FROM mtn3.time) = 2016\n          AND (\n            ROUND(CAST(mtn3.latitude AS DECIMAL), 1),\n            ROUND(CAST(mtn3.longitude AS DECIMAL), 1)\n          ) IN (\n            (39.5, 21.2),\n            (39.6, 21.2),\n            (39.7, 21.2),\n            (39.4, 21.3),\n            (39.5, 21.3),\n            (39.6, 21.3),\n            (39.7, 21.3),\n            (39.8, 21.3),\n            (39.2, 21.4),\n            (39.4, 21.4),\n            (39.5, 21.4),\n            (39.6, 21.4),\n            (39.7, 21.4),\n            (39.8, 21.4),\n            (39.3, 21.5),\n            (39.4, 21.5),\n            (39.5, 21.5),\n            (39.6, 21.5),\n            (39.7, 21.5),\n            (39.8, 21.5),\n            (39.3, 21.6),\n            (39.4, 21.6),\n            (39.5, 21.6),\n            (39.6, 21.6),\n            (39.7, 21.6),\n            (39.8, 21.6),\n            (39.2, 21.7),\n            (39.3, 21.7),\n            (39.4, 21.7),\n            (39.5, 21.7),\n            (39.6, 21.7),\n            (39.7, 21.7),\n            (39.8, 21.7),\n            (39.2, 21.8),\n            (39.3, 21.8),\n            (39.4, 21.8),\n            (39.5, 21.8),\n            (39.6, 21.8),\n            (39.7, 21.8),\n            (39.8, 21.8),\n            (39.2, 21.9),\n            (39.3, 21.9),\n            (39.4, 21.9),\n            (39.5, 21.9),\n            (39.6, 21.9),\n            (39.7, 21.9),\n            (39.8, 21.9),\n            (39.1, 22.0),\n            (39.2, 22.0),\n            (39.3, 22.0),\n            (39.4, 22.0),\n            (39.5, 22.0),\n            (39.6, 22.0),\n            (39.7, 22.0),\n            (39.8, 22.0),\n            (39.9, 22.0),\n            (40.0, 22.0),\n            (39.1, 22.1),\n            (39.2, 22.1),\n            (39.3, 22.1),\n            (39.4, 22.1),\n            (39.5, 22.1),\n            (39.6, 22.1),\n            (39.7, 22.1),\n            (39.8, 22.1),\n            (39.9, 22.1),\n            (40.0, 22.1),\n            (39.2, 22.2),\n            (39.3, 22.2),\n            (39.4, 22.2),\n            (39.5, 22.2),\n            (39.6, 22.2),\n            (39.7, 22.2),\n            (39.8, 22.2),\n            (39.9, 22.2),\n            (40.0, 22.2),\n            (39.3, 22.3),\n            (39.4, 22.3),\n            (39.5, 22.3),\n            (39.6, 22.3),\n            (39.7, 22.3),\n            (39.8, 22.3),\n            (39.9, 22.3),\n            (40.0, 22.3),\n            (39.3, 22.4),\n            (39.4, 22.4),\n            (39.5, 22.4),\n            (39.6, 22.4),\n            (39.7, 22.4),\n            (39.8, 22.4),\n            (39.9, 22.4),\n            (40.0, 22.4),\n            (39.1, 22.5),\n            (39.2, 22.5),\n            (39.3, 22.5),\n            (39.4, 22.5),\n            (39.5, 22.5),\n            (39.6, 22.5),\n            (39.7, 22.5),\n            (39.8, 22.5),\n            (39.9, 22.5),\n            (39.1, 22.6),\n            (39.2, 22.6),\n            (39.3, 22.6),\n            (39.4, 22.6),\n            (39.5, 22.6),\n            (39.6, 22.6),\n            (39.7, 22.6),\n            (39.8, 22.6),\n            (39.9, 22.6),\n            (39.1, 22.7),\n            (39.2, 22.7),\n            (39.3, 22.7),\n            (39.4, 22.7),\n            (39.5, 22.7),\n            (39.6, 22.7),\n            (39.7, 22.7),\n            (39.8, 22.7),\n            (39.9, 22.7),\n            (40.0, 22.7),\n            (39.0, 22.8),\n            (39.1, 22.8),\n            (39.2, 22.8),\n            (39.3, 22.8),\n            (39.4, 22.8),\n            (39.5, 22.8),\n            (39.6, 22.8),\n            (39.7, 22.8),\n            (39.8, 22.8),\n            (39.9, 22.8),\n            (39.0, 22.9),\n            (39.1, 22.9),\n            (39.2, 22.9),\n            (39.3, 22.9),\n            (39.4, 22.9),\n            (39.5, 22.9),\n            (39.6, 22.9),\n            (39.7, 22.9),\n            (39.8, 22.9),\n            (39.0, 23.0),\n            (39.1, 23.0),\n            (39.2, 23.0),\n            (39.3, 23.0),\n            (39.4, 23.0),\n            (39.5, 23.0),\n            (39.6, 23.0),\n            (39.1, 23.1),\n            (39.2, 23.1),\n            (39.3, 23.1),\n            (39.4, 23.1),\n            (39.5, 23.1),\n            (39.1, 23.2),\n            (39.2, 23.2),\n            (39.3, 23.2),\n            (39.4, 23.2),\n            (39.5, 23.2),\n            (39.1, 23.3),\n            (39.2, 23.3),\n            (39.3, 23.3),\n            (39.4, 23.3),\n            (39.1, 23.4),\n            (39.2, 23.4),\n            (39.1, 23.5),\n            (39.2, 23.5),\n            (39.1, 23.6),\n            (39.2, 23.6),\n            (39.0, 23.7),\n            (39.1, 23.7),\n            (39.2, 23.7),\n            (39.1, 23.8),\n            (39.2, 23.8),\n            (39.0, 23.9),\n            (39.1, 23.9),\n            (39.2, 23.9),\n            (39.3, 23.9),\n            (39.0, 24.0),\n            (39.1, 24.0),\n            (39.2, 24.0),\n            (39.3, 24.0),\n            (39.4, 24.0),\n            (39.0, 24.1),\n            (39.1, 24.1),\n            (39.3, 24.1),\n            (39.4, 24.1),\n            (39.5, 24.1),\n            (39.1, 24.2),\n            (39.3, 24.2),\n            (39.4, 24.2),\n            (39.5, 24.2),\n            (39.3, 24.3),\n            (39.4, 24.3),\n            (39.3, 24.4),\n            (39.4, 24.4)\n          )\n      )\n      AND EXTRACT(YEAR FROM mtn2.time) = 2016\n      AND (\n        ROUND(CAST(mtn2.latitude AS DECIMAL), 1),\n        ROUND(CAST(mtn2.longitude AS DECIMAL), 1)\n      ) IN (\n        (39.5, 21.2),\n        (39.6, 21.2),\n        (39.7, 21.2),\n        (39.4, 21.3),\n        (39.5, 21.3),\n        (39.6, 21.3),\n        (39.7, 21.3),\n        (39.8, 21.3),\n        (39.2, 21.4),\n        (39.4, 21.4),\n        (39.5, 21.4),\n        (39.6, 21.4),\n        (39.7, 21.4),\n        (39.8, 21.4),\n        (39.3, 21.5),\n        (39.4, 21.5),\n        (39.5, 21.5),\n        (39.6, 21.5),\n        (39.7, 21.5),\n        (39.8, 21.5),\n        (39.3, 21.6),\n        (39.4, 21.6),\n        (39.5, 21.6),\n        (39.6, 21.6),\n        (39.7, 21.6),\n        (39.8, 21.6),\n        (39.2, 21.7),\n        (39.3, 21.7),\n        (39.4, 21.7),\n        (39.5, 21.7),\n        (39.6, 21.7),\n        (39.7, 21.7),\n        (39.8, 21.7),\n        (39.2, 21.8),\n        (39.3, 21.8),\n        (39.4, 21.8),\n        (39.5, 21.8),\n        (39.6, 21.8),\n        (39.7, 21.8),\n        (39.8, 21.8),\n        (39.2, 21.9),\n        (39.3, 21.9),\n        (39.4, 21.9),\n        (39.5, 21.9),\n        (39.6, 21.9),\n        (39.7, 21.9),\n        (39.8, 21.9),\n        (39.1, 22.0),\n        (39.2, 22.0),\n        (39.3, 22.0),\n        (39.4, 22.0),\n        (39.5, 22.0),\n        (39.6, 22.0),\n        (39.7, 22.0),\n        (39.8, 22.0),\n        (39.9, 22.0),\n        (40.0, 22.0),\n        (39.1, 22.1),\n        (39.2, 22.1),\n        (39.3, 22.1),\n        (39.4, 22.1),\n        (39.5, 22.1),\n        (39.6, 22.1),\n        (39.7, 22.1),\n        (39.8, 22.1),\n        (39.9, 22.1),\n        (40.0, 22.1),\n        (39.2, 22.2),\n        (39.3, 22.2),\n        (39.4, 22.2),\n        (39.5, 22.2),\n        (39.6, 22.2),\n        (39.7, 22.2),\n        (39.8, 22.2),\n        (39.9, 22.2),\n        (40.0, 22.2),\n        (39.3, 22.3),\n        (39.4, 22.3),\n        (39.5, 22.3),\n        (39.6, 22.3),\n        (39.7, 22.3),\n        (39.8, 22.3),\n        (39.9, 22.3),\n        (40.0, 22.3),\n        (39.3, 22.4),\n        (39.4, 22.4),\n        (39.5, 22.4),\n        (39.6, 22.4),\n        (39.7, 22.4),\n        (39.8, 22.4),\n        (39.9, 22.4),\n        (40.0, 22.4),\n        (39.1, 22.5),\n        (39.2, 22.5),\n        (39.3, 22.5),\n        (39.4, 22.5),\n        (39.5, 22.5),\n        (39.6, 22.5),\n        (39.7, 22.5),\n        (39.8, 22.5),\n        (39.9, 22.5),\n        (39.1, 22.6),\n        (39.2, 22.6),\n        (39.3, 22.6),\n        (39.4, 22.6),\n        (39.5, 22.6),\n        (39.6, 22.6),\n        (39.7, 22.6),\n        (39.8, 22.6),\n        (39.9, 22.6),\n        (39.1, 22.7),\n        (39.2, 22.7),\n        (39.3, 22.7),\n        (39.4, 22.7),\n        (39.5, 22.7),\n        (39.6, 22.7),\n        (39.7, 22.7),\n        (39.8, 22.7),\n        (39.9, 22.7),\n        (40.0, 22.7),\n        (39.0, 22.8),\n        (39.1, 22.8),\n        (39.2, 22.8),\n        (39.3, 22.8),\n        (39.4, 22.8),\n        (39.5, 22.8),\n        (39.6, 22.8),\n        (39.7, 22.8),\n        (39.8, 22.8),\n        (39.9, 22.8),\n        (39.0, 22.9),\n        (39.1, 22.9),\n        (39.2, 22.9),\n        (39.3, 22.9),\n        (39.4, 22.9),\n        (39.5, 22.9),\n        (39.6, 22.9),\n        (39.7, 22.9),\n        (39.8, 22.9),\n        (39.0, 23.0),\n        (39.1, 23.0),\n        (39.2, 23.0),\n        (39.3, 23.0),\n        (39.4, 23.0),\n        (39.5, 23.0),\n        (39.6, 23.0),\n        (39.1, 23.1),\n        (39.2, 23.1),\n        (39.3, 23.1),\n        (39.4, 23.1),\n        (39.5, 23.1),\n        (39.1, 23.2),\n        (39.2, 23.2),\n        (39.3, 23.2),\n        (39.4, 23.2),\n        (39.5, 23.2),\n        (39.1, 23.3),\n        (39.2, 23.3),\n        (39.3, 23.3),\n        (39.4, 23.3),\n        (39.1, 23.4),\n        (39.2, 23.4),\n        (39.1, 23.5),\n        (39.2, 23.5),\n        (39.1, 23.6),\n        (39.2, 23.6),\n        (39.0, 23.7),\n        (39.1, 23.7),\n        (39.2, 23.7),\n        (39.1, 23.8),\n        (39.2, 23.8),\n        (39.0, 23.9),\n        (39.1, 23.9),\n        (39.2, 23.9),\n        (39.3, 23.9),\n        (39.0, 24.0),\n        (39.1, 24.0),\n        (39.2, 24.0),\n        (39.3, 24.0),\n        (39.4, 24.0),\n        (39.0, 24.1),\n        (39.1, 24.1),\n        (39.3, 24.1),\n        (39.4, 24.1),\n        (39.5, 24.1),\n        (39.1, 24.2),\n        (39.3, 24.2),\n        (39.4, 24.2),\n        (39.5, 24.2),\n        (39.3, 24.3),\n        (39.4, 24.3),\n        (39.3, 24.4),\n        (39.4, 24.4)\n      )\n    LIMIT 1\n  )",
+            "PREDICTED_SQL": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY meteo_tmin.tmin ASC LIMIT 1"
+        },
+        "align_correct": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Show the coordinates of the location with the lowest temperature in Celsius in Thessaly Region on the coldest day of 2016",
+            "Evidence": "None",
+            "GOLD_SQL": "SELECT\n  mtn.latitude AS latitude,\n  mtn.longitude AS longitude,\n  mtn.tmin - 273.15 AS Min_Temperature_in_celsius\nFROM meteo_tmin AS mtn\nWHERE\n  mtn.tmin = (\n    SELECT\n      MIN(mtn1.tmin)\n    FROM meteo_tmin AS mtn1\n    WHERE\n      EXTRACT(YEAR FROM mtn1.time) = 2016\n      AND (\n        ROUND(CAST(mtn1.latitude AS DECIMAL), 1),\n        ROUND(CAST(mtn1.longitude AS DECIMAL), 1)\n      ) IN (\n        (39.5, 21.2),\n        (39.6, 21.2),\n        (39.7, 21.2),\n        (39.4, 21.3),\n        (39.5, 21.3),\n        (39.6, 21.3),\n        (39.7, 21.3),\n        (39.8, 21.3),\n        (39.2, 21.4),\n        (39.4, 21.4),\n        (39.5, 21.4),\n        (39.6, 21.4),\n        (39.7, 21.4),\n        (39.8, 21.4),\n        (39.3, 21.5),\n        (39.4, 21.5),\n        (39.5, 21.5),\n        (39.6, 21.5),\n        (39.7, 21.5),\n        (39.8, 21.5),\n        (39.3, 21.6),\n        (39.4, 21.6),\n        (39.5, 21.6),\n        (39.6, 21.6),\n        (39.7, 21.6),\n        (39.8, 21.6),\n        (39.2, 21.7),\n        (39.3, 21.7),\n        (39.4, 21.7),\n        (39.5, 21.7),\n        (39.6, 21.7),\n        (39.7, 21.7),\n        (39.8, 21.7),\n        (39.2, 21.8),\n        (39.3, 21.8),\n        (39.4, 21.8),\n        (39.5, 21.8),\n        (39.6, 21.8),\n        (39.7, 21.8),\n        (39.8, 21.8),\n        (39.2, 21.9),\n        (39.3, 21.9),\n        (39.4, 21.9),\n        (39.5, 21.9),\n        (39.6, 21.9),\n        (39.7, 21.9),\n        (39.8, 21.9),\n        (39.1, 22.0),\n        (39.2, 22.0),\n        (39.3, 22.0),\n        (39.4, 22.0),\n        (39.5, 22.0),\n        (39.6, 22.0),\n        (39.7, 22.0),\n        (39.8, 22.0),\n        (39.9, 22.0),\n        (40.0, 22.0),\n        (39.1, 22.1),\n        (39.2, 22.1),\n        (39.3, 22.1),\n        (39.4, 22.1),\n        (39.5, 22.1),\n        (39.6, 22.1),\n        (39.7, 22.1),\n        (39.8, 22.1),\n        (39.9, 22.1),\n        (40.0, 22.1),\n        (39.2, 22.2),\n        (39.3, 22.2),\n        (39.4, 22.2),\n        (39.5, 22.2),\n        (39.6, 22.2),\n        (39.7, 22.2),\n        (39.8, 22.2),\n        (39.9, 22.2),\n        (40.0, 22.2),\n        (39.3, 22.3),\n        (39.4, 22.3),\n        (39.5, 22.3),\n        (39.6, 22.3),\n        (39.7, 22.3),\n        (39.8, 22.3),\n        (39.9, 22.3),\n        (40.0, 22.3),\n        (39.3, 22.4),\n        (39.4, 22.4),\n        (39.5, 22.4),\n        (39.6, 22.4),\n        (39.7, 22.4),\n        (39.8, 22.4),\n        (39.9, 22.4),\n        (40.0, 22.4),\n        (39.1, 22.5),\n        (39.2, 22.5),\n        (39.3, 22.5),\n        (39.4, 22.5),\n        (39.5, 22.5),\n        (39.6, 22.5),\n        (39.7, 22.5),\n        (39.8, 22.5),\n        (39.9, 22.5),\n        (39.1, 22.6),\n        (39.2, 22.6),\n        (39.3, 22.6),\n        (39.4, 22.6),\n        (39.5, 22.6),\n        (39.6, 22.6),\n        (39.7, 22.6),\n        (39.8, 22.6),\n        (39.9, 22.6),\n        (39.1, 22.7),\n        (39.2, 22.7),\n        (39.3, 22.7),\n        (39.4, 22.7),\n        (39.5, 22.7),\n        (39.6, 22.7),\n        (39.7, 22.7),\n        (39.8, 22.7),\n        (39.9, 22.7),\n        (40.0, 22.7),\n        (39.0, 22.8),\n        (39.1, 22.8),\n        (39.2, 22.8),\n        (39.3, 22.8),\n        (39.4, 22.8),\n        (39.5, 22.8),\n        (39.6, 22.8),\n        (39.7, 22.8),\n        (39.8, 22.8),\n        (39.9, 22.8),\n        (39.0, 22.9),\n        (39.1, 22.9),\n        (39.2, 22.9),\n        (39.3, 22.9),\n        (39.4, 22.9),\n        (39.5, 22.9),\n        (39.6, 22.9),\n        (39.7, 22.9),\n        (39.8, 22.9),\n        (39.0, 23.0),\n        (39.1, 23.0),\n        (39.2, 23.0),\n        (39.3, 23.0),\n        (39.4, 23.0),\n        (39.5, 23.0),\n        (39.6, 23.0),\n        (39.1, 23.1),\n        (39.2, 23.1),\n        (39.3, 23.1),\n        (39.4, 23.1),\n        (39.5, 23.1),\n        (39.1, 23.2),\n        (39.2, 23.2),\n        (39.3, 23.2),\n        (39.4, 23.2),\n        (39.5, 23.2),\n        (39.1, 23.3),\n        (39.2, 23.3),\n        (39.3, 23.3),\n        (39.4, 23.3),\n        (39.1, 23.4),\n        (39.2, 23.4),\n        (39.1, 23.5),\n        (39.2, 23.5),\n        (39.1, 23.6),\n        (39.2, 23.6),\n        (39.0, 23.7),\n        (39.1, 23.7),\n        (39.2, 23.7),\n        (39.1, 23.8),\n        (39.2, 23.8),\n        (39.0, 23.9),\n        (39.1, 23.9),\n        (39.2, 23.9),\n        (39.3, 23.9),\n        (39.0, 24.0),\n        (39.1, 24.0),\n        (39.2, 24.0),\n        (39.3, 24.0),\n        (39.4, 24.0),\n        (39.0, 24.1),\n        (39.1, 24.1),\n        (39.3, 24.1),\n        (39.4, 24.1),\n        (39.5, 24.1),\n        (39.1, 24.2),\n        (39.3, 24.2),\n        (39.4, 24.2),\n        (39.5, 24.2),\n        (39.3, 24.3),\n        (39.4, 24.3),\n        (39.3, 24.4),\n        (39.4, 24.4)\n      )\n  )\n  AND (\n    ROUND(CAST(mtn.latitude AS DECIMAL), 1),\n    ROUND(CAST(mtn.longitude AS DECIMAL), 1)\n  ) IN (\n    (39.5, 21.2),\n    (39.6, 21.2),\n    (39.7, 21.2),\n    (39.4, 21.3),\n    (39.5, 21.3),\n    (39.6, 21.3),\n    (39.7, 21.3),\n    (39.8, 21.3),\n    (39.2, 21.4),\n    (39.4, 21.4),\n    (39.5, 21.4),\n    (39.6, 21.4),\n    (39.7, 21.4),\n    (39.8, 21.4),\n    (39.3, 21.5),\n    (39.4, 21.5),\n    (39.5, 21.5),\n    (39.6, 21.5),\n    (39.7, 21.5),\n    (39.8, 21.5),\n    (39.3, 21.6),\n    (39.4, 21.6),\n    (39.5, 21.6),\n    (39.6, 21.6),\n    (39.7, 21.6),\n    (39.8, 21.6),\n    (39.2, 21.7),\n    (39.3, 21.7),\n    (39.4, 21.7),\n    (39.5, 21.7),\n    (39.6, 21.7),\n    (39.7, 21.7),\n    (39.8, 21.7),\n    (39.2, 21.8),\n    (39.3, 21.8),\n    (39.4, 21.8),\n    (39.5, 21.8),\n    (39.6, 21.8),\n    (39.7, 21.8),\n    (39.8, 21.8),\n    (39.2, 21.9),\n    (39.3, 21.9),\n    (39.4, 21.9),\n    (39.5, 21.9),\n    (39.6, 21.9),\n    (39.7, 21.9),\n    (39.8, 21.9),\n    (39.1, 22.0),\n    (39.2, 22.0),\n    (39.3, 22.0),\n    (39.4, 22.0),\n    (39.5, 22.0),\n    (39.6, 22.0),\n    (39.7, 22.0),\n    (39.8, 22.0),\n    (39.9, 22.0),\n    (40.0, 22.0),\n    (39.1, 22.1),\n    (39.2, 22.1),\n    (39.3, 22.1),\n    (39.4, 22.1),\n    (39.5, 22.1),\n    (39.6, 22.1),\n    (39.7, 22.1),\n    (39.8, 22.1),\n    (39.9, 22.1),\n    (40.0, 22.1),\n    (39.2, 22.2),\n    (39.3, 22.2),\n    (39.4, 22.2),\n    (39.5, 22.2),\n    (39.6, 22.2),\n    (39.7, 22.2),\n    (39.8, 22.2),\n    (39.9, 22.2),\n    (40.0, 22.2),\n    (39.3, 22.3),\n    (39.4, 22.3),\n    (39.5, 22.3),\n    (39.6, 22.3),\n    (39.7, 22.3),\n    (39.8, 22.3),\n    (39.9, 22.3),\n    (40.0, 22.3),\n    (39.3, 22.4),\n    (39.4, 22.4),\n    (39.5, 22.4),\n    (39.6, 22.4),\n    (39.7, 22.4),\n    (39.8, 22.4),\n    (39.9, 22.4),\n    (40.0, 22.4),\n    (39.1, 22.5),\n    (39.2, 22.5),\n    (39.3, 22.5),\n    (39.4, 22.5),\n    (39.5, 22.5),\n    (39.6, 22.5),\n    (39.7, 22.5),\n    (39.8, 22.5),\n    (39.9, 22.5),\n    (39.1, 22.6),\n    (39.2, 22.6),\n    (39.3, 22.6),\n    (39.4, 22.6),\n    (39.5, 22.6),\n    (39.6, 22.6),\n    (39.7, 22.6),\n    (39.8, 22.6),\n    (39.9, 22.6),\n    (39.1, 22.7),\n    (39.2, 22.7),\n    (39.3, 22.7),\n    (39.4, 22.7),\n    (39.5, 22.7),\n    (39.6, 22.7),\n    (39.7, 22.7),\n    (39.8, 22.7),\n    (39.9, 22.7),\n    (40.0, 22.7),\n    (39.0, 22.8),\n    (39.1, 22.8),\n    (39.2, 22.8),\n    (39.3, 22.8),\n    (39.4, 22.8),\n    (39.5, 22.8),\n    (39.6, 22.8),\n    (39.7, 22.8),\n    (39.8, 22.8),\n    (39.9, 22.8),\n    (39.0, 22.9),\n    (39.1, 22.9),\n    (39.2, 22.9),\n    (39.3, 22.9),\n    (39.4, 22.9),\n    (39.5, 22.9),\n    (39.6, 22.9),\n    (39.7, 22.9),\n    (39.8, 22.9),\n    (39.0, 23.0),\n    (39.1, 23.0),\n    (39.2, 23.0),\n    (39.3, 23.0),\n    (39.4, 23.0),\n    (39.5, 23.0),\n    (39.6, 23.0),\n    (39.1, 23.1),\n    (39.2, 23.1),\n    (39.3, 23.1),\n    (39.4, 23.1),\n    (39.5, 23.1),\n    (39.1, 23.2),\n    (39.2, 23.2),\n    (39.3, 23.2),\n    (39.4, 23.2),\n    (39.5, 23.2),\n    (39.1, 23.3),\n    (39.2, 23.3),\n    (39.3, 23.3),\n    (39.4, 23.3),\n    (39.1, 23.4),\n    (39.2, 23.4),\n    (39.1, 23.5),\n    (39.2, 23.5),\n    (39.1, 23.6),\n    (39.2, 23.6),\n    (39.0, 23.7),\n    (39.1, 23.7),\n    (39.2, 23.7),\n    (39.1, 23.8),\n    (39.2, 23.8),\n    (39.0, 23.9),\n    (39.1, 23.9),\n    (39.2, 23.9),\n    (39.3, 23.9),\n    (39.0, 24.0),\n    (39.1, 24.0),\n    (39.2, 24.0),\n    (39.3, 24.0),\n    (39.4, 24.0),\n    (39.0, 24.1),\n    (39.1, 24.1),\n    (39.3, 24.1),\n    (39.4, 24.1),\n    (39.5, 24.1),\n    (39.1, 24.2),\n    (39.3, 24.2),\n    (39.4, 24.2),\n    (39.5, 24.2),\n    (39.3, 24.3),\n    (39.4, 24.3),\n    (39.3, 24.4),\n    (39.4, 24.4)\n  )\n  AND EXTRACT(YEAR FROM mtn.time) = 2016\n  AND EXTRACT(DAY FROM mtn.time) = (\n    SELECT\n      EXTRACT(DAY FROM mtn2.time)\n    FROM meteo_tmin AS mtn2\n    WHERE\n      mtn2.tmin = (\n        SELECT\n          MIN(mtn3.tmin)\n        FROM meteo_tmin AS mtn3\n        WHERE\n          EXTRACT(YEAR FROM mtn3.time) = 2016\n          AND (\n            ROUND(CAST(mtn3.latitude AS DECIMAL), 1),\n            ROUND(CAST(mtn3.longitude AS DECIMAL), 1)\n          ) IN (\n            (39.5, 21.2),\n            (39.6, 21.2),\n            (39.7, 21.2),\n            (39.4, 21.3),\n            (39.5, 21.3),\n            (39.6, 21.3),\n            (39.7, 21.3),\n            (39.8, 21.3),\n            (39.2, 21.4),\n            (39.4, 21.4),\n            (39.5, 21.4),\n            (39.6, 21.4),\n            (39.7, 21.4),\n            (39.8, 21.4),\n            (39.3, 21.5),\n            (39.4, 21.5),\n            (39.5, 21.5),\n            (39.6, 21.5),\n            (39.7, 21.5),\n            (39.8, 21.5),\n            (39.3, 21.6),\n            (39.4, 21.6),\n            (39.5, 21.6),\n            (39.6, 21.6),\n            (39.7, 21.6),\n            (39.8, 21.6),\n            (39.2, 21.7),\n            (39.3, 21.7),\n            (39.4, 21.7),\n            (39.5, 21.7),\n            (39.6, 21.7),\n            (39.7, 21.7),\n            (39.8, 21.7),\n            (39.2, 21.8),\n            (39.3, 21.8),\n            (39.4, 21.8),\n            (39.5, 21.8),\n            (39.6, 21.8),\n            (39.7, 21.8),\n            (39.8, 21.8),\n            (39.2, 21.9),\n            (39.3, 21.9),\n            (39.4, 21.9),\n            (39.5, 21.9),\n            (39.6, 21.9),\n            (39.7, 21.9),\n            (39.8, 21.9),\n            (39.1, 22.0),\n            (39.2, 22.0),\n            (39.3, 22.0),\n            (39.4, 22.0),\n            (39.5, 22.0),\n            (39.6, 22.0),\n            (39.7, 22.0),\n            (39.8, 22.0),\n            (39.9, 22.0),\n            (40.0, 22.0),\n            (39.1, 22.1),\n            (39.2, 22.1),\n            (39.3, 22.1),\n            (39.4, 22.1),\n            (39.5, 22.1),\n            (39.6, 22.1),\n            (39.7, 22.1),\n            (39.8, 22.1),\n            (39.9, 22.1),\n            (40.0, 22.1),\n            (39.2, 22.2),\n            (39.3, 22.2),\n            (39.4, 22.2),\n            (39.5, 22.2),\n            (39.6, 22.2),\n            (39.7, 22.2),\n            (39.8, 22.2),\n            (39.9, 22.2),\n            (40.0, 22.2),\n            (39.3, 22.3),\n            (39.4, 22.3),\n            (39.5, 22.3),\n            (39.6, 22.3),\n            (39.7, 22.3),\n            (39.8, 22.3),\n            (39.9, 22.3),\n            (40.0, 22.3),\n            (39.3, 22.4),\n            (39.4, 22.4),\n            (39.5, 22.4),\n            (39.6, 22.4),\n            (39.7, 22.4),\n            (39.8, 22.4),\n            (39.9, 22.4),\n            (40.0, 22.4),\n            (39.1, 22.5),\n            (39.2, 22.5),\n            (39.3, 22.5),\n            (39.4, 22.5),\n            (39.5, 22.5),\n            (39.6, 22.5),\n            (39.7, 22.5),\n            (39.8, 22.5),\n            (39.9, 22.5),\n            (39.1, 22.6),\n            (39.2, 22.6),\n            (39.3, 22.6),\n            (39.4, 22.6),\n            (39.5, 22.6),\n            (39.6, 22.6),\n            (39.7, 22.6),\n            (39.8, 22.6),\n            (39.9, 22.6),\n            (39.1, 22.7),\n            (39.2, 22.7),\n            (39.3, 22.7),\n            (39.4, 22.7),\n            (39.5, 22.7),\n            (39.6, 22.7),\n            (39.7, 22.7),\n            (39.8, 22.7),\n            (39.9, 22.7),\n            (40.0, 22.7),\n            (39.0, 22.8),\n            (39.1, 22.8),\n            (39.2, 22.8),\n            (39.3, 22.8),\n            (39.4, 22.8),\n            (39.5, 22.8),\n            (39.6, 22.8),\n            (39.7, 22.8),\n            (39.8, 22.8),\n            (39.9, 22.8),\n            (39.0, 22.9),\n            (39.1, 22.9),\n            (39.2, 22.9),\n            (39.3, 22.9),\n            (39.4, 22.9),\n            (39.5, 22.9),\n            (39.6, 22.9),\n            (39.7, 22.9),\n            (39.8, 22.9),\n            (39.0, 23.0),\n            (39.1, 23.0),\n            (39.2, 23.0),\n            (39.3, 23.0),\n            (39.4, 23.0),\n            (39.5, 23.0),\n            (39.6, 23.0),\n            (39.1, 23.1),\n            (39.2, 23.1),\n            (39.3, 23.1),\n            (39.4, 23.1),\n            (39.5, 23.1),\n            (39.1, 23.2),\n            (39.2, 23.2),\n            (39.3, 23.2),\n            (39.4, 23.2),\n            (39.5, 23.2),\n            (39.1, 23.3),\n            (39.2, 23.3),\n            (39.3, 23.3),\n            (39.4, 23.3),\n            (39.1, 23.4),\n            (39.2, 23.4),\n            (39.1, 23.5),\n            (39.2, 23.5),\n            (39.1, 23.6),\n            (39.2, 23.6),\n            (39.0, 23.7),\n            (39.1, 23.7),\n            (39.2, 23.7),\n            (39.1, 23.8),\n            (39.2, 23.8),\n            (39.0, 23.9),\n            (39.1, 23.9),\n            (39.2, 23.9),\n            (39.3, 23.9),\n            (39.0, 24.0),\n            (39.1, 24.0),\n            (39.2, 24.0),\n            (39.3, 24.0),\n            (39.4, 24.0),\n            (39.0, 24.1),\n            (39.1, 24.1),\n            (39.3, 24.1),\n            (39.4, 24.1),\n            (39.5, 24.1),\n            (39.1, 24.2),\n            (39.3, 24.2),\n            (39.4, 24.2),\n            (39.5, 24.2),\n            (39.3, 24.3),\n            (39.4, 24.3),\n            (39.3, 24.4),\n            (39.4, 24.4)\n          )\n      )\n      AND EXTRACT(YEAR FROM mtn2.time) = 2016\n      AND (\n        ROUND(CAST(mtn2.latitude AS DECIMAL), 1),\n        ROUND(CAST(mtn2.longitude AS DECIMAL), 1)\n      ) IN (\n        (39.5, 21.2),\n        (39.6, 21.2),\n        (39.7, 21.2),\n        (39.4, 21.3),\n        (39.5, 21.3),\n        (39.6, 21.3),\n        (39.7, 21.3),\n        (39.8, 21.3),\n        (39.2, 21.4),\n        (39.4, 21.4),\n        (39.5, 21.4),\n        (39.6, 21.4),\n        (39.7, 21.4),\n        (39.8, 21.4),\n        (39.3, 21.5),\n        (39.4, 21.5),\n        (39.5, 21.5),\n        (39.6, 21.5),\n        (39.7, 21.5),\n        (39.8, 21.5),\n        (39.3, 21.6),\n        (39.4, 21.6),\n        (39.5, 21.6),\n        (39.6, 21.6),\n        (39.7, 21.6),\n        (39.8, 21.6),\n        (39.2, 21.7),\n        (39.3, 21.7),\n        (39.4, 21.7),\n        (39.5, 21.7),\n        (39.6, 21.7),\n        (39.7, 21.7),\n        (39.8, 21.7),\n        (39.2, 21.8),\n        (39.3, 21.8),\n        (39.4, 21.8),\n        (39.5, 21.8),\n        (39.6, 21.8),\n        (39.7, 21.8),\n        (39.8, 21.8),\n        (39.2, 21.9),\n        (39.3, 21.9),\n        (39.4, 21.9),\n        (39.5, 21.9),\n        (39.6, 21.9),\n        (39.7, 21.9),\n        (39.8, 21.9),\n        (39.1, 22.0),\n        (39.2, 22.0),\n        (39.3, 22.0),\n        (39.4, 22.0),\n        (39.5, 22.0),\n        (39.6, 22.0),\n        (39.7, 22.0),\n        (39.8, 22.0),\n        (39.9, 22.0),\n        (40.0, 22.0),\n        (39.1, 22.1),\n        (39.2, 22.1),\n        (39.3, 22.1),\n        (39.4, 22.1),\n        (39.5, 22.1),\n        (39.6, 22.1),\n        (39.7, 22.1),\n        (39.8, 22.1),\n        (39.9, 22.1),\n        (40.0, 22.1),\n        (39.2, 22.2),\n        (39.3, 22.2),\n        (39.4, 22.2),\n        (39.5, 22.2),\n        (39.6, 22.2),\n        (39.7, 22.2),\n        (39.8, 22.2),\n        (39.9, 22.2),\n        (40.0, 22.2),\n        (39.3, 22.3),\n        (39.4, 22.3),\n        (39.5, 22.3),\n        (39.6, 22.3),\n        (39.7, 22.3),\n        (39.8, 22.3),\n        (39.9, 22.3),\n        (40.0, 22.3),\n        (39.3, 22.4),\n        (39.4, 22.4),\n        (39.5, 22.4),\n        (39.6, 22.4),\n        (39.7, 22.4),\n        (39.8, 22.4),\n        (39.9, 22.4),\n        (40.0, 22.4),\n        (39.1, 22.5),\n        (39.2, 22.5),\n        (39.3, 22.5),\n        (39.4, 22.5),\n        (39.5, 22.5),\n        (39.6, 22.5),\n        (39.7, 22.5),\n        (39.8, 22.5),\n        (39.9, 22.5),\n        (39.1, 22.6),\n        (39.2, 22.6),\n        (39.3, 22.6),\n        (39.4, 22.6),\n        (39.5, 22.6),\n        (39.6, 22.6),\n        (39.7, 22.6),\n        (39.8, 22.6),\n        (39.9, 22.6),\n        (39.1, 22.7),\n        (39.2, 22.7),\n        (39.3, 22.7),\n        (39.4, 22.7),\n        (39.5, 22.7),\n        (39.6, 22.7),\n        (39.7, 22.7),\n        (39.8, 22.7),\n        (39.9, 22.7),\n        (40.0, 22.7),\n        (39.0, 22.8),\n        (39.1, 22.8),\n        (39.2, 22.8),\n        (39.3, 22.8),\n        (39.4, 22.8),\n        (39.5, 22.8),\n        (39.6, 22.8),\n        (39.7, 22.8),\n        (39.8, 22.8),\n        (39.9, 22.8),\n        (39.0, 22.9),\n        (39.1, 22.9),\n        (39.2, 22.9),\n        (39.3, 22.9),\n        (39.4, 22.9),\n        (39.5, 22.9),\n        (39.6, 22.9),\n        (39.7, 22.9),\n        (39.8, 22.9),\n        (39.0, 23.0),\n        (39.1, 23.0),\n        (39.2, 23.0),\n        (39.3, 23.0),\n        (39.4, 23.0),\n        (39.5, 23.0),\n        (39.6, 23.0),\n        (39.1, 23.1),\n        (39.2, 23.1),\n        (39.3, 23.1),\n        (39.4, 23.1),\n        (39.5, 23.1),\n        (39.1, 23.2),\n        (39.2, 23.2),\n        (39.3, 23.2),\n        (39.4, 23.2),\n        (39.5, 23.2),\n        (39.1, 23.3),\n        (39.2, 23.3),\n        (39.3, 23.3),\n        (39.4, 23.3),\n        (39.1, 23.4),\n        (39.2, 23.4),\n        (39.1, 23.5),\n        (39.2, 23.5),\n        (39.1, 23.6),\n        (39.2, 23.6),\n        (39.0, 23.7),\n        (39.1, 23.7),\n        (39.2, 23.7),\n        (39.1, 23.8),\n        (39.2, 23.8),\n        (39.0, 23.9),\n        (39.1, 23.9),\n        (39.2, 23.9),\n        (39.3, 23.9),\n        (39.0, 24.0),\n        (39.1, 24.0),\n        (39.2, 24.0),\n        (39.3, 24.0),\n        (39.4, 24.0),\n        (39.0, 24.1),\n        (39.1, 24.1),\n        (39.3, 24.1),\n        (39.4, 24.1),\n        (39.5, 24.1),\n        (39.1, 24.2),\n        (39.3, 24.2),\n        (39.4, 24.2),\n        (39.5, 24.2),\n        (39.3, 24.3),\n        (39.4, 24.3),\n        (39.3, 24.4),\n        (39.4, 24.4)\n      )\n    LIMIT 1\n  )",
+            "PREDICTED_SQL": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE meteo_tmin.time >= '2016-01-01' AND meteo_tmin.time < '2017-01-01' AND meteo_tmin.latitude BETWEEN 38.5 AND 39.8 AND meteo_tmin.longitude BETWEEN 21.5 AND 23.5 ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1;"
+        },
+        "vote": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Show the coordinates of the location with the lowest temperature in Celsius in Thessaly Region on the coldest day of 2016",
+            "Evidence": "None",
+            "GOLD_SQL": "SELECT\n  mtn.latitude AS latitude,\n  mtn.longitude AS longitude,\n  mtn.tmin - 273.15 AS Min_Temperature_in_celsius\nFROM meteo_tmin AS mtn\nWHERE\n  mtn.tmin = (\n    SELECT\n      MIN(mtn1.tmin)\n    FROM meteo_tmin AS mtn1\n    WHERE\n      EXTRACT(YEAR FROM mtn1.time) = 2016\n      AND (\n        ROUND(CAST(mtn1.latitude AS DECIMAL), 1),\n        ROUND(CAST(mtn1.longitude AS DECIMAL), 1)\n      ) IN (\n        (39.5, 21.2),\n        (39.6, 21.2),\n        (39.7, 21.2),\n        (39.4, 21.3),\n        (39.5, 21.3),\n        (39.6, 21.3),\n        (39.7, 21.3),\n        (39.8, 21.3),\n        (39.2, 21.4),\n        (39.4, 21.4),\n        (39.5, 21.4),\n        (39.6, 21.4),\n        (39.7, 21.4),\n        (39.8, 21.4),\n        (39.3, 21.5),\n        (39.4, 21.5),\n        (39.5, 21.5),\n        (39.6, 21.5),\n        (39.7, 21.5),\n        (39.8, 21.5),\n        (39.3, 21.6),\n        (39.4, 21.6),\n        (39.5, 21.6),\n        (39.6, 21.6),\n        (39.7, 21.6),\n        (39.8, 21.6),\n        (39.2, 21.7),\n        (39.3, 21.7),\n        (39.4, 21.7),\n        (39.5, 21.7),\n        (39.6, 21.7),\n        (39.7, 21.7),\n        (39.8, 21.7),\n        (39.2, 21.8),\n        (39.3, 21.8),\n        (39.4, 21.8),\n        (39.5, 21.8),\n        (39.6, 21.8),\n        (39.7, 21.8),\n        (39.8, 21.8),\n        (39.2, 21.9),\n        (39.3, 21.9),\n        (39.4, 21.9),\n        (39.5, 21.9),\n        (39.6, 21.9),\n        (39.7, 21.9),\n        (39.8, 21.9),\n        (39.1, 22.0),\n        (39.2, 22.0),\n        (39.3, 22.0),\n        (39.4, 22.0),\n        (39.5, 22.0),\n        (39.6, 22.0),\n        (39.7, 22.0),\n        (39.8, 22.0),\n        (39.9, 22.0),\n        (40.0, 22.0),\n        (39.1, 22.1),\n        (39.2, 22.1),\n        (39.3, 22.1),\n        (39.4, 22.1),\n        (39.5, 22.1),\n        (39.6, 22.1),\n        (39.7, 22.1),\n        (39.8, 22.1),\n        (39.9, 22.1),\n        (40.0, 22.1),\n        (39.2, 22.2),\n        (39.3, 22.2),\n        (39.4, 22.2),\n        (39.5, 22.2),\n        (39.6, 22.2),\n        (39.7, 22.2),\n        (39.8, 22.2),\n        (39.9, 22.2),\n        (40.0, 22.2),\n        (39.3, 22.3),\n        (39.4, 22.3),\n        (39.5, 22.3),\n        (39.6, 22.3),\n        (39.7, 22.3),\n        (39.8, 22.3),\n        (39.9, 22.3),\n        (40.0, 22.3),\n        (39.3, 22.4),\n        (39.4, 22.4),\n        (39.5, 22.4),\n        (39.6, 22.4),\n        (39.7, 22.4),\n        (39.8, 22.4),\n        (39.9, 22.4),\n        (40.0, 22.4),\n        (39.1, 22.5),\n        (39.2, 22.5),\n        (39.3, 22.5),\n        (39.4, 22.5),\n        (39.5, 22.5),\n        (39.6, 22.5),\n        (39.7, 22.5),\n        (39.8, 22.5),\n        (39.9, 22.5),\n        (39.1, 22.6),\n        (39.2, 22.6),\n        (39.3, 22.6),\n        (39.4, 22.6),\n        (39.5, 22.6),\n        (39.6, 22.6),\n        (39.7, 22.6),\n        (39.8, 22.6),\n        (39.9, 22.6),\n        (39.1, 22.7),\n        (39.2, 22.7),\n        (39.3, 22.7),\n        (39.4, 22.7),\n        (39.5, 22.7),\n        (39.6, 22.7),\n        (39.7, 22.7),\n        (39.8, 22.7),\n        (39.9, 22.7),\n        (40.0, 22.7),\n        (39.0, 22.8),\n        (39.1, 22.8),\n        (39.2, 22.8),\n        (39.3, 22.8),\n        (39.4, 22.8),\n        (39.5, 22.8),\n        (39.6, 22.8),\n        (39.7, 22.8),\n        (39.8, 22.8),\n        (39.9, 22.8),\n        (39.0, 22.9),\n        (39.1, 22.9),\n        (39.2, 22.9),\n        (39.3, 22.9),\n        (39.4, 22.9),\n        (39.5, 22.9),\n        (39.6, 22.9),\n        (39.7, 22.9),\n        (39.8, 22.9),\n        (39.0, 23.0),\n        (39.1, 23.0),\n        (39.2, 23.0),\n        (39.3, 23.0),\n        (39.4, 23.0),\n        (39.5, 23.0),\n        (39.6, 23.0),\n        (39.1, 23.1),\n        (39.2, 23.1),\n        (39.3, 23.1),\n        (39.4, 23.1),\n        (39.5, 23.1),\n        (39.1, 23.2),\n        (39.2, 23.2),\n        (39.3, 23.2),\n        (39.4, 23.2),\n        (39.5, 23.2),\n        (39.1, 23.3),\n        (39.2, 23.3),\n        (39.3, 23.3),\n        (39.4, 23.3),\n        (39.1, 23.4),\n        (39.2, 23.4),\n        (39.1, 23.5),\n        (39.2, 23.5),\n        (39.1, 23.6),\n        (39.2, 23.6),\n        (39.0, 23.7),\n        (39.1, 23.7),\n        (39.2, 23.7),\n        (39.1, 23.8),\n        (39.2, 23.8),\n        (39.0, 23.9),\n        (39.1, 23.9),\n        (39.2, 23.9),\n        (39.3, 23.9),\n        (39.0, 24.0),\n        (39.1, 24.0),\n        (39.2, 24.0),\n        (39.3, 24.0),\n        (39.4, 24.0),\n        (39.0, 24.1),\n        (39.1, 24.1),\n        (39.3, 24.1),\n        (39.4, 24.1),\n        (39.5, 24.1),\n        (39.1, 24.2),\n        (39.3, 24.2),\n        (39.4, 24.2),\n        (39.5, 24.2),\n        (39.3, 24.3),\n        (39.4, 24.3),\n        (39.3, 24.4),\n        (39.4, 24.4)\n      )\n  )\n  AND (\n    ROUND(CAST(mtn.latitude AS DECIMAL), 1),\n    ROUND(CAST(mtn.longitude AS DECIMAL), 1)\n  ) IN (\n    (39.5, 21.2),\n    (39.6, 21.2),\n    (39.7, 21.2),\n    (39.4, 21.3),\n    (39.5, 21.3),\n    (39.6, 21.3),\n    (39.7, 21.3),\n    (39.8, 21.3),\n    (39.2, 21.4),\n    (39.4, 21.4),\n    (39.5, 21.4),\n    (39.6, 21.4),\n    (39.7, 21.4),\n    (39.8, 21.4),\n    (39.3, 21.5),\n    (39.4, 21.5),\n    (39.5, 21.5),\n    (39.6, 21.5),\n    (39.7, 21.5),\n    (39.8, 21.5),\n    (39.3, 21.6),\n    (39.4, 21.6),\n    (39.5, 21.6),\n    (39.6, 21.6),\n    (39.7, 21.6),\n    (39.8, 21.6),\n    (39.2, 21.7),\n    (39.3, 21.7),\n    (39.4, 21.7),\n    (39.5, 21.7),\n    (39.6, 21.7),\n    (39.7, 21.7),\n    (39.8, 21.7),\n    (39.2, 21.8),\n    (39.3, 21.8),\n    (39.4, 21.8),\n    (39.5, 21.8),\n    (39.6, 21.8),\n    (39.7, 21.8),\n    (39.8, 21.8),\n    (39.2, 21.9),\n    (39.3, 21.9),\n    (39.4, 21.9),\n    (39.5, 21.9),\n    (39.6, 21.9),\n    (39.7, 21.9),\n    (39.8, 21.9),\n    (39.1, 22.0),\n    (39.2, 22.0),\n    (39.3, 22.0),\n    (39.4, 22.0),\n    (39.5, 22.0),\n    (39.6, 22.0),\n    (39.7, 22.0),\n    (39.8, 22.0),\n    (39.9, 22.0),\n    (40.0, 22.0),\n    (39.1, 22.1),\n    (39.2, 22.1),\n    (39.3, 22.1),\n    (39.4, 22.1),\n    (39.5, 22.1),\n    (39.6, 22.1),\n    (39.7, 22.1),\n    (39.8, 22.1),\n    (39.9, 22.1),\n    (40.0, 22.1),\n    (39.2, 22.2),\n    (39.3, 22.2),\n    (39.4, 22.2),\n    (39.5, 22.2),\n    (39.6, 22.2),\n    (39.7, 22.2),\n    (39.8, 22.2),\n    (39.9, 22.2),\n    (40.0, 22.2),\n    (39.3, 22.3),\n    (39.4, 22.3),\n    (39.5, 22.3),\n    (39.6, 22.3),\n    (39.7, 22.3),\n    (39.8, 22.3),\n    (39.9, 22.3),\n    (40.0, 22.3),\n    (39.3, 22.4),\n    (39.4, 22.4),\n    (39.5, 22.4),\n    (39.6, 22.4),\n    (39.7, 22.4),\n    (39.8, 22.4),\n    (39.9, 22.4),\n    (40.0, 22.4),\n    (39.1, 22.5),\n    (39.2, 22.5),\n    (39.3, 22.5),\n    (39.4, 22.5),\n    (39.5, 22.5),\n    (39.6, 22.5),\n    (39.7, 22.5),\n    (39.8, 22.5),\n    (39.9, 22.5),\n    (39.1, 22.6),\n    (39.2, 22.6),\n    (39.3, 22.6),\n    (39.4, 22.6),\n    (39.5, 22.6),\n    (39.6, 22.6),\n    (39.7, 22.6),\n    (39.8, 22.6),\n    (39.9, 22.6),\n    (39.1, 22.7),\n    (39.2, 22.7),\n    (39.3, 22.7),\n    (39.4, 22.7),\n    (39.5, 22.7),\n    (39.6, 22.7),\n    (39.7, 22.7),\n    (39.8, 22.7),\n    (39.9, 22.7),\n    (40.0, 22.7),\n    (39.0, 22.8),\n    (39.1, 22.8),\n    (39.2, 22.8),\n    (39.3, 22.8),\n    (39.4, 22.8),\n    (39.5, 22.8),\n    (39.6, 22.8),\n    (39.7, 22.8),\n    (39.8, 22.8),\n    (39.9, 22.8),\n    (39.0, 22.9),\n    (39.1, 22.9),\n    (39.2, 22.9),\n    (39.3, 22.9),\n    (39.4, 22.9),\n    (39.5, 22.9),\n    (39.6, 22.9),\n    (39.7, 22.9),\n    (39.8, 22.9),\n    (39.0, 23.0),\n    (39.1, 23.0),\n    (39.2, 23.0),\n    (39.3, 23.0),\n    (39.4, 23.0),\n    (39.5, 23.0),\n    (39.6, 23.0),\n    (39.1, 23.1),\n    (39.2, 23.1),\n    (39.3, 23.1),\n    (39.4, 23.1),\n    (39.5, 23.1),\n    (39.1, 23.2),\n    (39.2, 23.2),\n    (39.3, 23.2),\n    (39.4, 23.2),\n    (39.5, 23.2),\n    (39.1, 23.3),\n    (39.2, 23.3),\n    (39.3, 23.3),\n    (39.4, 23.3),\n    (39.1, 23.4),\n    (39.2, 23.4),\n    (39.1, 23.5),\n    (39.2, 23.5),\n    (39.1, 23.6),\n    (39.2, 23.6),\n    (39.0, 23.7),\n    (39.1, 23.7),\n    (39.2, 23.7),\n    (39.1, 23.8),\n    (39.2, 23.8),\n    (39.0, 23.9),\n    (39.1, 23.9),\n    (39.2, 23.9),\n    (39.3, 23.9),\n    (39.0, 24.0),\n    (39.1, 24.0),\n    (39.2, 24.0),\n    (39.3, 24.0),\n    (39.4, 24.0),\n    (39.0, 24.1),\n    (39.1, 24.1),\n    (39.3, 24.1),\n    (39.4, 24.1),\n    (39.5, 24.1),\n    (39.1, 24.2),\n    (39.3, 24.2),\n    (39.4, 24.2),\n    (39.5, 24.2),\n    (39.3, 24.3),\n    (39.4, 24.3),\n    (39.3, 24.4),\n    (39.4, 24.4)\n  )\n  AND EXTRACT(YEAR FROM mtn.time) = 2016\n  AND EXTRACT(DAY FROM mtn.time) = (\n    SELECT\n      EXTRACT(DAY FROM mtn2.time)\n    FROM meteo_tmin AS mtn2\n    WHERE\n      mtn2.tmin = (\n        SELECT\n          MIN(mtn3.tmin)\n        FROM meteo_tmin AS mtn3\n        WHERE\n          EXTRACT(YEAR FROM mtn3.time) = 2016\n          AND (\n            ROUND(CAST(mtn3.latitude AS DECIMAL), 1),\n            ROUND(CAST(mtn3.longitude AS DECIMAL), 1)\n          ) IN (\n            (39.5, 21.2),\n            (39.6, 21.2),\n            (39.7, 21.2),\n            (39.4, 21.3),\n            (39.5, 21.3),\n            (39.6, 21.3),\n            (39.7, 21.3),\n            (39.8, 21.3),\n            (39.2, 21.4),\n            (39.4, 21.4),\n            (39.5, 21.4),\n            (39.6, 21.4),\n            (39.7, 21.4),\n            (39.8, 21.4),\n            (39.3, 21.5),\n            (39.4, 21.5),\n            (39.5, 21.5),\n            (39.6, 21.5),\n            (39.7, 21.5),\n            (39.8, 21.5),\n            (39.3, 21.6),\n            (39.4, 21.6),\n            (39.5, 21.6),\n            (39.6, 21.6),\n            (39.7, 21.6),\n            (39.8, 21.6),\n            (39.2, 21.7),\n            (39.3, 21.7),\n            (39.4, 21.7),\n            (39.5, 21.7),\n            (39.6, 21.7),\n            (39.7, 21.7),\n            (39.8, 21.7),\n            (39.2, 21.8),\n            (39.3, 21.8),\n            (39.4, 21.8),\n            (39.5, 21.8),\n            (39.6, 21.8),\n            (39.7, 21.8),\n            (39.8, 21.8),\n            (39.2, 21.9),\n            (39.3, 21.9),\n            (39.4, 21.9),\n            (39.5, 21.9),\n            (39.6, 21.9),\n            (39.7, 21.9),\n            (39.8, 21.9),\n            (39.1, 22.0),\n            (39.2, 22.0),\n            (39.3, 22.0),\n            (39.4, 22.0),\n            (39.5, 22.0),\n            (39.6, 22.0),\n            (39.7, 22.0),\n            (39.8, 22.0),\n            (39.9, 22.0),\n            (40.0, 22.0),\n            (39.1, 22.1),\n            (39.2, 22.1),\n            (39.3, 22.1),\n            (39.4, 22.1),\n            (39.5, 22.1),\n            (39.6, 22.1),\n            (39.7, 22.1),\n            (39.8, 22.1),\n            (39.9, 22.1),\n            (40.0, 22.1),\n            (39.2, 22.2),\n            (39.3, 22.2),\n            (39.4, 22.2),\n            (39.5, 22.2),\n            (39.6, 22.2),\n            (39.7, 22.2),\n            (39.8, 22.2),\n            (39.9, 22.2),\n            (40.0, 22.2),\n            (39.3, 22.3),\n            (39.4, 22.3),\n            (39.5, 22.3),\n            (39.6, 22.3),\n            (39.7, 22.3),\n            (39.8, 22.3),\n            (39.9, 22.3),\n            (40.0, 22.3),\n            (39.3, 22.4),\n            (39.4, 22.4),\n            (39.5, 22.4),\n            (39.6, 22.4),\n            (39.7, 22.4),\n            (39.8, 22.4),\n            (39.9, 22.4),\n            (40.0, 22.4),\n            (39.1, 22.5),\n            (39.2, 22.5),\n            (39.3, 22.5),\n            (39.4, 22.5),\n            (39.5, 22.5),\n            (39.6, 22.5),\n            (39.7, 22.5),\n            (39.8, 22.5),\n            (39.9, 22.5),\n            (39.1, 22.6),\n            (39.2, 22.6),\n            (39.3, 22.6),\n            (39.4, 22.6),\n            (39.5, 22.6),\n            (39.6, 22.6),\n            (39.7, 22.6),\n            (39.8, 22.6),\n            (39.9, 22.6),\n            (39.1, 22.7),\n            (39.2, 22.7),\n            (39.3, 22.7),\n            (39.4, 22.7),\n            (39.5, 22.7),\n            (39.6, 22.7),\n            (39.7, 22.7),\n            (39.8, 22.7),\n            (39.9, 22.7),\n            (40.0, 22.7),\n            (39.0, 22.8),\n            (39.1, 22.8),\n            (39.2, 22.8),\n            (39.3, 22.8),\n            (39.4, 22.8),\n            (39.5, 22.8),\n            (39.6, 22.8),\n            (39.7, 22.8),\n            (39.8, 22.8),\n            (39.9, 22.8),\n            (39.0, 22.9),\n            (39.1, 22.9),\n            (39.2, 22.9),\n            (39.3, 22.9),\n            (39.4, 22.9),\n            (39.5, 22.9),\n            (39.6, 22.9),\n            (39.7, 22.9),\n            (39.8, 22.9),\n            (39.0, 23.0),\n            (39.1, 23.0),\n            (39.2, 23.0),\n            (39.3, 23.0),\n            (39.4, 23.0),\n            (39.5, 23.0),\n            (39.6, 23.0),\n            (39.1, 23.1),\n            (39.2, 23.1),\n            (39.3, 23.1),\n            (39.4, 23.1),\n            (39.5, 23.1),\n            (39.1, 23.2),\n            (39.2, 23.2),\n            (39.3, 23.2),\n            (39.4, 23.2),\n            (39.5, 23.2),\n            (39.1, 23.3),\n            (39.2, 23.3),\n            (39.3, 23.3),\n            (39.4, 23.3),\n            (39.1, 23.4),\n            (39.2, 23.4),\n            (39.1, 23.5),\n            (39.2, 23.5),\n            (39.1, 23.6),\n            (39.2, 23.6),\n            (39.0, 23.7),\n            (39.1, 23.7),\n            (39.2, 23.7),\n            (39.1, 23.8),\n            (39.2, 23.8),\n            (39.0, 23.9),\n            (39.1, 23.9),\n            (39.2, 23.9),\n            (39.3, 23.9),\n            (39.0, 24.0),\n            (39.1, 24.0),\n            (39.2, 24.0),\n            (39.3, 24.0),\n            (39.4, 24.0),\n            (39.0, 24.1),\n            (39.1, 24.1),\n            (39.3, 24.1),\n            (39.4, 24.1),\n            (39.5, 24.1),\n            (39.1, 24.2),\n            (39.3, 24.2),\n            (39.4, 24.2),\n            (39.5, 24.2),\n            (39.3, 24.3),\n            (39.4, 24.3),\n            (39.3, 24.4),\n            (39.4, 24.4)\n          )\n      )\n      AND EXTRACT(YEAR FROM mtn2.time) = 2016\n      AND (\n        ROUND(CAST(mtn2.latitude AS DECIMAL), 1),\n        ROUND(CAST(mtn2.longitude AS DECIMAL), 1)\n      ) IN (\n        (39.5, 21.2),\n        (39.6, 21.2),\n        (39.7, 21.2),\n        (39.4, 21.3),\n        (39.5, 21.3),\n        (39.6, 21.3),\n        (39.7, 21.3),\n        (39.8, 21.3),\n        (39.2, 21.4),\n        (39.4, 21.4),\n        (39.5, 21.4),\n        (39.6, 21.4),\n        (39.7, 21.4),\n        (39.8, 21.4),\n        (39.3, 21.5),\n        (39.4, 21.5),\n        (39.5, 21.5),\n        (39.6, 21.5),\n        (39.7, 21.5),\n        (39.8, 21.5),\n        (39.3, 21.6),\n        (39.4, 21.6),\n        (39.5, 21.6),\n        (39.6, 21.6),\n        (39.7, 21.6),\n        (39.8, 21.6),\n        (39.2, 21.7),\n        (39.3, 21.7),\n        (39.4, 21.7),\n        (39.5, 21.7),\n        (39.6, 21.7),\n        (39.7, 21.7),\n        (39.8, 21.7),\n        (39.2, 21.8),\n        (39.3, 21.8),\n        (39.4, 21.8),\n        (39.5, 21.8),\n        (39.6, 21.8),\n        (39.7, 21.8),\n        (39.8, 21.8),\n        (39.2, 21.9),\n        (39.3, 21.9),\n        (39.4, 21.9),\n        (39.5, 21.9),\n        (39.6, 21.9),\n        (39.7, 21.9),\n        (39.8, 21.9),\n        (39.1, 22.0),\n        (39.2, 22.0),\n        (39.3, 22.0),\n        (39.4, 22.0),\n        (39.5, 22.0),\n        (39.6, 22.0),\n        (39.7, 22.0),\n        (39.8, 22.0),\n        (39.9, 22.0),\n        (40.0, 22.0),\n        (39.1, 22.1),\n        (39.2, 22.1),\n        (39.3, 22.1),\n        (39.4, 22.1),\n        (39.5, 22.1),\n        (39.6, 22.1),\n        (39.7, 22.1),\n        (39.8, 22.1),\n        (39.9, 22.1),\n        (40.0, 22.1),\n        (39.2, 22.2),\n        (39.3, 22.2),\n        (39.4, 22.2),\n        (39.5, 22.2),\n        (39.6, 22.2),\n        (39.7, 22.2),\n        (39.8, 22.2),\n        (39.9, 22.2),\n        (40.0, 22.2),\n        (39.3, 22.3),\n        (39.4, 22.3),\n        (39.5, 22.3),\n        (39.6, 22.3),\n        (39.7, 22.3),\n        (39.8, 22.3),\n        (39.9, 22.3),\n        (40.0, 22.3),\n        (39.3, 22.4),\n        (39.4, 22.4),\n        (39.5, 22.4),\n        (39.6, 22.4),\n        (39.7, 22.4),\n        (39.8, 22.4),\n        (39.9, 22.4),\n        (40.0, 22.4),\n        (39.1, 22.5),\n        (39.2, 22.5),\n        (39.3, 22.5),\n        (39.4, 22.5),\n        (39.5, 22.5),\n        (39.6, 22.5),\n        (39.7, 22.5),\n        (39.8, 22.5),\n        (39.9, 22.5),\n        (39.1, 22.6),\n        (39.2, 22.6),\n        (39.3, 22.6),\n        (39.4, 22.6),\n        (39.5, 22.6),\n        (39.6, 22.6),\n        (39.7, 22.6),\n        (39.8, 22.6),\n        (39.9, 22.6),\n        (39.1, 22.7),\n        (39.2, 22.7),\n        (39.3, 22.7),\n        (39.4, 22.7),\n        (39.5, 22.7),\n        (39.6, 22.7),\n        (39.7, 22.7),\n        (39.8, 22.7),\n        (39.9, 22.7),\n        (40.0, 22.7),\n        (39.0, 22.8),\n        (39.1, 22.8),\n        (39.2, 22.8),\n        (39.3, 22.8),\n        (39.4, 22.8),\n        (39.5, 22.8),\n        (39.6, 22.8),\n        (39.7, 22.8),\n        (39.8, 22.8),\n        (39.9, 22.8),\n        (39.0, 22.9),\n        (39.1, 22.9),\n        (39.2, 22.9),\n        (39.3, 22.9),\n        (39.4, 22.9),\n        (39.5, 22.9),\n        (39.6, 22.9),\n        (39.7, 22.9),\n        (39.8, 22.9),\n        (39.0, 23.0),\n        (39.1, 23.0),\n        (39.2, 23.0),\n        (39.3, 23.0),\n        (39.4, 23.0),\n        (39.5, 23.0),\n        (39.6, 23.0),\n        (39.1, 23.1),\n        (39.2, 23.1),\n        (39.3, 23.1),\n        (39.4, 23.1),\n        (39.5, 23.1),\n        (39.1, 23.2),\n        (39.2, 23.2),\n        (39.3, 23.2),\n        (39.4, 23.2),\n        (39.5, 23.2),\n        (39.1, 23.3),\n        (39.2, 23.3),\n        (39.3, 23.3),\n        (39.4, 23.3),\n        (39.1, 23.4),\n        (39.2, 23.4),\n        (39.1, 23.5),\n        (39.2, 23.5),\n        (39.1, 23.6),\n        (39.2, 23.6),\n        (39.0, 23.7),\n        (39.1, 23.7),\n        (39.2, 23.7),\n        (39.1, 23.8),\n        (39.2, 23.8),\n        (39.0, 23.9),\n        (39.1, 23.9),\n        (39.2, 23.9),\n        (39.3, 23.9),\n        (39.0, 24.0),\n        (39.1, 24.0),\n        (39.2, 24.0),\n        (39.3, 24.0),\n        (39.4, 24.0),\n        (39.0, 24.1),\n        (39.1, 24.1),\n        (39.3, 24.1),\n        (39.4, 24.1),\n        (39.5, 24.1),\n        (39.1, 24.2),\n        (39.3, 24.2),\n        (39.4, 24.2),\n        (39.5, 24.2),\n        (39.3, 24.3),\n        (39.4, 24.3),\n        (39.3, 24.4),\n        (39.4, 24.4)\n      )\n    LIMIT 1\n  )",
+            "PREDICTED_SQL": "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 AND meteo_tmin.latitude BETWEEN 38.5 AND 40.5 AND meteo_tmin.longitude BETWEEN 21.5 AND 23.5 ORDER BY meteo_tmin.tmin ASC LIMIT 1"
+        },
+        "status": "success"
+    }
+]

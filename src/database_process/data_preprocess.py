@@ -14,6 +14,10 @@ from pathlib import Path
 
 import psycopg2
 from dotenv import load_dotenv
+try:
+    from database_process.table_whitelist import filter_allowed_tables, is_table_allowed
+except ModuleNotFoundError:  # script entrypoint fallback
+    from table_whitelist import filter_allowed_tables, is_table_allowed
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
@@ -52,7 +56,7 @@ def generate_tables_json(output_dir: Path, schema: str = "public"):
         """,
         (schema,),
     )
-    tables = [row[0] for row in cur.fetchall()]
+    tables = filter_allowed_tables([row[0] for row in cur.fetchall()])
 
     table_names_original = tables
     column_names_original = [[-1, "*"]]  # First entry is always [-1, "*"]
@@ -94,6 +98,8 @@ def generate_tables_json(output_dir: Path, schema: str = "public"):
     )
     foreign_keys = []
     for from_table, from_col, to_table, to_col in cur.fetchall():
+        if not is_table_allowed(from_table) or not is_table_allowed(to_table):
+            continue
         from_idx = col_index_map.get((from_table, from_col))
         to_idx = col_index_map.get((to_table, to_col))
         if from_idx is not None and to_idx is not None:

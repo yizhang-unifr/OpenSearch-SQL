@@ -1,0 +1,147 @@
+{
+    "counts": {
+        "candidate_generate": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 7,
+            "total": 7
+        },
+        "align_correct": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 7,
+            "total": 7
+        },
+        "vote": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 7,
+            "total": 7
+        }
+    },
+    "ids": {
+        "candidate_generate": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    2,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    3,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    4,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    5,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    6,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot generate candidate SQL. upstream_error=<class 'KeyError'>: <'col'>>"
+                ]
+            ]
+        },
+        "align_correct": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    2,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    3,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    4,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    5,
+                    "<class 'RuntimeError'>: <Upstream node 'column_retrieve_and_other_info' failed; cannot run align_correct. upstream_error=<class 'KeyError'>: <'col'>>"
+                ],
+                [
+                    "meteo",
+                    6,
+                    "<class 'BrokenPipeError'>: <[Errno 32] Broken pipe>"
+                ]
+            ]
+        },
+        "vote": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    2,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    3,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    4,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    5,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    6,
+                    "<class 'KeyError'>: <'vote'>"
+                ]
+            ]
+        }
+    }
+}

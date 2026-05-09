@@ -1,0 +1,1505 @@
+[
+    {
+        "node_type": "generate_db_schema",
+        "db_list": "Database Management System: PostgreSQL\n#Database name: meteo\n## Table landcover_type:\nid: The type is integer, which does not include Null and is Unique. Values format like: [19, 2, 34]\nlevel1_code: The type is integer, which does not include Null and is Non-Unique. Values format like: [4, 2, 5]\nlevel1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']\nlevel2_code: The type is integer, which does not include Null and is Non-Unique. Values format like: [22, 21, 24]\nlevel2_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Marine waters', 'Maritime wetlands', 'Pastures']\nlevel3_code: The type is integer, which does not include Null and is Unique. Values format like: [213, 312, 521]\nlevel3_label: The type is text, which does not include Null and is Unique. Values format like: ['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']\n\n## Table landcover_upscaled:\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]\nranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]\n\n## Table meteo_elevation:\nid: The type is integer, which does not include Null and is Unique. Values format like: [16, 53, 31]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]\nlongitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]\nelevation: The type is double precision, which does not include Null and is Unique. Values format like: [262.32, 261.07, 267.04]\n\n## Table meteo_sdmax:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]\nlongitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]\nsdmax: The type is double precision, which does not include Null and is Non-Unique. Values format like: [0.1543006004608365, 0.005855887968656992, 0.1904323847336456]\n\n## Table meteo_ssrd:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]\nssrd: The type is double precision, which does not include Null and is Unique. Values format like: [2455904.0, 3285964.0, 3006604.0]\n\n## Table meteo_tmax:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]\ntmax: The type is real, which does not include Null and is Non-Unique. Values format like: [278.1831, 276.86865, 280.3921]\n\n## Table meteo_tmean:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]\ntmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]\n\n## Table meteo_tmin:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]\ntmin: The type is real, which does not include Null and is Non-Unique. Values format like: [275.60016, 275.70953, 274.0431]\n\n## Table meteo_tp:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]\ntp: The type is real, which does not include Null and is Unique. Values format like: [0.0043916972, 0.0024763464, 0.005056289]\n\n## Table meteo_windspeedmax:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]\nwindspeedmax: The type is real, which does not include Null and is Unique. Values format like: [4.6727343, 4.60072, 5.389693]\n\n#Foreign keys:\n\n\n#Database Description: The database encompasses meteorological and geographical data, including weather variables (temperature, precipitation, wind speed, radiation), elevation information, and land cover classifications associated with specific coordinates and timestamps.\n#Tables Descriptions:\nlandcover_type: Hierarchical classification codes and labels for different levels of land cover types.\nlandcover_upscaled: Geographic coordinates linked to arrays of land cover ranks.\nmeteo_elevation: Elevation data recorded for specific latitude and longitude coordinates.\nmeteo_sdmax: Maximum standard deviation values with time boundaries and geographic coordinates.\nmeteo_ssrd: Surface solar radiation downwards data associated with timestamps and locations.\nmeteo_tmax: Maximum temperature records including time boundaries and geographic coordinates.\nmeteo_tmean: Mean temperature records including time boundaries and geographic coordinates.\nmeteo_tmin: Minimum temperature records including time boundaries and geographic coordinates.\nmeteo_tp: Total precipitation data associated with timestamps and locations.\nmeteo_windspeedmax: Maximum wind speed records including time boundaries and geographic coordinates.\n",
+        "db_col_dic": {
+            "landcover_type.id": [
+                "The type is integer, which does not include Null and is Unique. Values format like: [19, 2, 34]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Unique",
+                "[19, 2, 34]"
+            ],
+            "landcover_type.level1_code": [
+                "The type is integer, which does not include Null and is Non-Unique. Values format like: [4, 2, 5]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Non-Unique",
+                "[4, 2, 5]"
+            ],
+            "landcover_type.level1_label": [
+                "The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']",
+                "",
+                "",
+                "text",
+                "Non-Null",
+                "Non-Unique",
+                "['Forest and semi-natural areas', 'Water bodies', 'Wetlands']"
+            ],
+            "landcover_type.level2_code": [
+                "The type is integer, which does not include Null and is Non-Unique. Values format like: [22, 21, 24]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Non-Unique",
+                "[22, 21, 24]"
+            ],
+            "landcover_type.level2_label": [
+                "The type is text, which does not include Null and is Non-Unique. Values format like: ['Marine waters', 'Maritime wetlands', 'Pastures']",
+                "",
+                "",
+                "text",
+                "Non-Null",
+                "Non-Unique",
+                "['Marine waters', 'Maritime wetlands', 'Pastures']"
+            ],
+            "landcover_type.level3_code": [
+                "The type is integer, which does not include Null and is Unique. Values format like: [213, 312, 521]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Unique",
+                "[213, 312, 521]"
+            ],
+            "landcover_type.level3_label": [
+                "The type is text, which does not include Null and is Unique. Values format like: ['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']",
+                "",
+                "",
+                "text",
+                "Non-Null",
+                "Unique",
+                "['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']"
+            ],
+            "landcover_upscaled.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[27.6, 27.5, 27.9]"
+            ],
+            "landcover_upscaled.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[-15.5, -15.2, -17.2]"
+            ],
+            "landcover_upscaled.ranks": [
+                "The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]",
+                "",
+                "",
+                "ARRAY",
+                "Non-Null",
+                "Non-Unique",
+                "[[[523, 10929]], [[523, 10614]], [[523, 12]]]"
+            ],
+            "meteo_elevation.id": [
+                "The type is integer, which does not include Null and is Unique. Values format like: [16, 53, 31]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Unique",
+                "[16, 53, 31]"
+            ],
+            "meteo_elevation.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[47.7298, 47.7303, 47.7301]"
+            ],
+            "meteo_elevation.longitude": [
+                "The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Unique",
+                "[5.8378, 5.8241, 5.8075]"
+            ],
+            "meteo_elevation.elevation": [
+                "The type is double precision, which does not include Null and is Unique. Values format like: [262.32, 261.07, 267.04]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Unique",
+                "[262.32, 261.07, 267.04]"
+            ],
+            "meteo_sdmax.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 0)]"
+            ],
+            "meteo_sdmax.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_sdmax.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_sdmax.latitude": [
+                "The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Non-Unique",
+                "[44.0]"
+            ],
+            "meteo_sdmax.longitude": [
+                "The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[17.4, 19.1, 23.5]"
+            ],
+            "meteo_sdmax.sdmax": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [0.1543006004608365, 0.005855887968656992, 0.1904323847336456]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[0.1543006004608365, 0.005855887968656992, 0.1904323847336456]"
+            ],
+            "meteo_ssrd.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_ssrd.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_ssrd.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[5.2, 7.2, 9.8]"
+            ],
+            "meteo_ssrd.ssrd": [
+                "The type is double precision, which does not include Null and is Unique. Values format like: [2455904.0, 3285964.0, 3006604.0]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Unique",
+                "[2455904.0, 3285964.0, 3006604.0]"
+            ],
+            "meteo_tmax.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_tmax.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tmax.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_tmax.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tmax.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[8.9, 9.600000000000001, 9.3]"
+            ],
+            "meteo_tmax.tmax": [
+                "The type is real, which does not include Null and is Non-Unique. Values format like: [278.1831, 276.86865, 280.3921]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Non-Unique",
+                "[278.1831, 276.86865, 280.3921]"
+            ],
+            "meteo_tmean.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_tmean.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tmean.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_tmean.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tmean.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[7.2, 5.1, 9.8]"
+            ],
+            "meteo_tmean.tmean": [
+                "The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[275.80954, 274.16214, 276.67957]"
+            ],
+            "meteo_tmin.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_tmin.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tmin.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_tmin.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tmin.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[5.9, 5.0, 6.3]"
+            ],
+            "meteo_tmin.tmin": [
+                "The type is real, which does not include Null and is Non-Unique. Values format like: [275.60016, 275.70953, 274.0431]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Non-Unique",
+                "[275.60016, 275.70953, 274.0431]"
+            ],
+            "meteo_tp.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tp.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tp.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[6.6, 9.4, 6.4]"
+            ],
+            "meteo_tp.tp": [
+                "The type is real, which does not include Null and is Unique. Values format like: [0.0043916972, 0.0024763464, 0.005056289]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[0.0043916972, 0.0024763464, 0.005056289]"
+            ],
+            "meteo_windspeedmax.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_windspeedmax.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_windspeedmax.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_windspeedmax.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_windspeedmax.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[10.600000000000001, 5.9, 10.7]"
+            ],
+            "meteo_windspeedmax.windspeedmax": [
+                "The type is real, which does not include Null and is Unique. Values format like: [4.6727343, 4.60072, 5.389693]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[4.6727343, 4.60072, 5.389693]"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "extract_col_value",
+        "key_col_des_raw": "\n#reason: The question queries for the minimum wind speed in the Thessaly Region in January 2021. However, none of the provided tables contain information about geographic regions like \"Thessaly Region\" or any column that can be used to filter by region name. Additionally, while meteorological tables (e.g., meteo_windspeedmax) have time and location (latitude, longitude) data, there is no mapping from latitude/longitude to region names (e.g., Thessaly) in the schema. Thus, it is impossible to filter by \"Thessaly Region\" or confirm January 2021 without region-to-coordinate mapping. The required data cannot be retrieved with the given schema.\n#columns: meteo_windspeedmax.time, meteo_windspeedmax.longitude, meteo_windspeedmax.latitude, meteo_windspeedmax.windspeedmax\n#values: \"2021-01\"\n",
+        "status": "success"
+    },
+    {
+        "node_type": "extract_query_noun",
+        "values": [
+            "wind speed",
+            "January 2021",
+            "2021-01",
+            "Thessaly Region"
+        ],
+        "col": "meteo_windspeedmax.time, meteo_windspeedmax.longitude, meteo_windspeedmax.latitude, meteo_windspeedmax.windspeedmax",
+        "status": "success"
+    },
+    {
+        "node_type": "column_retrieve_and_other_info",
+        "L_values": [],
+        "column": "landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]\nlandcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]\nmeteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]\nmeteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]\nmeteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]\nmeteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]\nmeteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]\nmeteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]\nmeteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nmeteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]\nmeteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\nmeteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]\nmeteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\nmeteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]\nmeteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\nmeteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]\nmeteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nmeteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]\nmeteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\nmeteo_windspeedmax.windspeedmax: The type is real, which does not include Null and is Unique. Values format like: [4.6727343, 4.60072, 5.389693]",
+        "foreign_keys": "",
+        "foreign_set": [],
+        "q_order": [
+            "minimum wind speed"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "implicit_context_enhance",
+        "geo_context": {
+            "place": "Thessaly Region",
+            "points": [
+                {
+                    "lon": "21.2",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "21.2",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "21.2",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "21.3",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "21.3",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "21.3",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "21.3",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "21.3",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "21.4",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "21.4",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "21.4",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "21.4",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "21.4",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "21.4",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "21.5",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "21.5",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "21.5",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "21.5",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "21.5",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "21.5",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "21.6",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "21.6",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "21.6",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "21.6",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "21.6",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "21.6",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "21.7",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "21.7",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "21.7",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "21.7",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "21.7",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "21.7",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "21.7",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "21.8",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "21.8",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "21.8",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "21.8",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "21.8",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "21.8",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "21.8",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "21.9",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "21.9",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "21.9",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "21.9",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "21.9",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "21.9",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "21.9",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "22.0",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "22.0",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "22.0",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "22.0",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "22.0",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "22.0",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "22.0",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "22.0",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "22.0",
+                    "lat": "39.9"
+                },
+                {
+                    "lon": "22.0",
+                    "lat": "40.0"
+                },
+                {
+                    "lon": "22.1",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "22.1",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "22.1",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "22.1",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "22.1",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "22.1",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "22.1",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "22.1",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "22.1",
+                    "lat": "39.9"
+                },
+                {
+                    "lon": "22.1",
+                    "lat": "40.0"
+                },
+                {
+                    "lon": "22.2",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "22.2",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "22.2",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "22.2",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "22.2",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "22.2",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "22.2",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "22.2",
+                    "lat": "39.9"
+                },
+                {
+                    "lon": "22.2",
+                    "lat": "40.0"
+                },
+                {
+                    "lon": "22.3",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "22.3",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "22.3",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "22.3",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "22.3",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "22.3",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "22.3",
+                    "lat": "39.9"
+                },
+                {
+                    "lon": "22.3",
+                    "lat": "40.0"
+                },
+                {
+                    "lon": "22.4",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "22.4",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "22.4",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "22.4",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "22.4",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "22.4",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "22.4",
+                    "lat": "39.9"
+                },
+                {
+                    "lon": "22.4",
+                    "lat": "40.0"
+                },
+                {
+                    "lon": "22.5",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "22.5",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "22.5",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "22.5",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "22.5",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "22.5",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "22.5",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "22.5",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "22.5",
+                    "lat": "39.9"
+                },
+                {
+                    "lon": "22.6",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "22.6",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "22.6",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "22.6",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "22.6",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "22.6",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "22.6",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "22.6",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "22.6",
+                    "lat": "39.9"
+                },
+                {
+                    "lon": "22.7",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "22.7",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "22.7",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "22.7",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "22.7",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "22.7",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "22.7",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "22.7",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "22.7",
+                    "lat": "39.9"
+                },
+                {
+                    "lon": "22.7",
+                    "lat": "40.0"
+                },
+                {
+                    "lon": "22.8",
+                    "lat": "39.0"
+                },
+                {
+                    "lon": "22.8",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "22.8",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "22.8",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "22.8",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "22.8",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "22.8",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "22.8",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "22.8",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "22.8",
+                    "lat": "39.9"
+                },
+                {
+                    "lon": "22.9",
+                    "lat": "39.0"
+                },
+                {
+                    "lon": "22.9",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "22.9",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "22.9",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "22.9",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "22.9",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "22.9",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "22.9",
+                    "lat": "39.7"
+                },
+                {
+                    "lon": "22.9",
+                    "lat": "39.8"
+                },
+                {
+                    "lon": "23.0",
+                    "lat": "39.0"
+                },
+                {
+                    "lon": "23.0",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "23.0",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "23.0",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "23.0",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "23.0",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "23.0",
+                    "lat": "39.6"
+                },
+                {
+                    "lon": "23.1",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "23.1",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "23.1",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "23.1",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "23.1",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "23.2",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "23.2",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "23.2",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "23.2",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "23.2",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "23.3",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "23.3",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "23.3",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "23.3",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "23.4",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "23.4",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "23.5",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "23.5",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "23.6",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "23.6",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "23.7",
+                    "lat": "39.0"
+                },
+                {
+                    "lon": "23.7",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "23.7",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "23.8",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "23.8",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "23.9",
+                    "lat": "39.0"
+                },
+                {
+                    "lon": "23.9",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "23.9",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "23.9",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "24.0",
+                    "lat": "39.0"
+                },
+                {
+                    "lon": "24.0",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "24.0",
+                    "lat": "39.2"
+                },
+                {
+                    "lon": "24.0",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "24.0",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "24.1",
+                    "lat": "39.0"
+                },
+                {
+                    "lon": "24.1",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "24.1",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "24.1",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "24.1",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "24.2",
+                    "lat": "39.1"
+                },
+                {
+                    "lon": "24.2",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "24.2",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "24.2",
+                    "lat": "39.5"
+                },
+                {
+                    "lon": "24.3",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "24.3",
+                    "lat": "39.4"
+                },
+                {
+                    "lon": "24.4",
+                    "lat": "39.3"
+                },
+                {
+                    "lon": "24.4",
+                    "lat": "39.4"
+                }
+            ],
+            "resolution": "places_dict"
+        },
+        "ontology_grounded_function": {
+            "schema_version": "ontology_grounded_function.v1",
+            "question": "What is the minimum wind speed in Thessaly Region in January 2021? None",
+            "anchor": "MaximumWindSpeed",
+            "target_variable": "",
+            "hops": null,
+            "semantic_chain": [],
+            "function_specs": [
+                {
+                    "name": "Threshold",
+                    "inputs": [
+                        "Variable"
+                    ],
+                    "semantics": "Apply explicit operator from ontology threshold config.",
+                    "pseudo_code_template": "ThresholdMatch := (Variable >= threshold_value)"
+                }
+            ],
+            "composition_order": [
+                "Threshold"
+            ],
+            "constraints": [
+                "operator sourced from hasOperator",
+                "threshold unit sourced from hasThresholdUnit",
+                "duration sourced from hasDuration"
+            ]
+        },
+        "enhancement_status": "success",
+        "enhancement_errors": [],
+        "enhancement_config": {
+            "enable_geo_context": true,
+            "enable_ontology_grounding": true,
+            "geo_anchor_mode": "points"
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generate",
+        "rewrite_question": "What is the minimum wind speed in Thessaly Region in January 2021? None",
+        "SQL": [
+            "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;",
+            "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude BETWEEN 39.0 AND 40.0 AND longitude BETWEEN 21.2 AND 24.4 AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1",
+            "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;",
+            "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1 AND (meteo_windspeedmax.longitude, meteo_windspeedmax.latitude) IN (('21.2','39.5'), ('21.2','39.6'), ('21.2','39.7'), ('21.3','39.4'), ('21.3','39.5'), ('21.3','39.6'), ('21.3','39.7'), ('21.3','39.8'), ('21.4','39.2'), ('21.4','39.4'), ('21.4','39.5'), ('21.4','39.6'), ('21.4','39.7'), ('21.4','39.8'), ('21.5','39.3'), ('21.5','39.4'), ('21.5','39.5'), ('21.5','39.6'), ('21.5','39.7'), ('21.5','39.8'), ('21.6','39.3'), ('21.6','39.4'), ('21.6','39.5'), ('21.6','39.6'), ('21.6','39.7'), ('21.6','39.8'), ('21.7','39.2'), ('21.7','39.3'), ('21.7','39.4'), ('21.7','39.5'), ('21.7','39.6'), ('21.7','39.7'), ('21.7','39.8'), ('21.8','39.2'), ('21.8','39.3'), ('21.8','39.4'), ('21.8','39.5'), ('21.8','39.6'), ('21.8','39.7'), ('21.8','39.8'), ('21.9','39.2'), ('21.9','39.3'), ('21.9','39.4'), ('21.9','39.5'), ('21.9','39.6'), ('21.9','39.7'), ('21.9','39.8'), ('22.0','39.1'), ('22.0','39.2'), ('22.0','39.3'), ('22.0','39.4'), ('22.0','39.5'), ('22.0','39.6'), ('22.0','39.7'), ('22.0','39.8'), ('22.0','39.9'), ('22.0','40.0'), ('22.1','39.1'), ('22.1','39.2'), ('22.1','39.3'), ('22.1','39.4'), ('22.1','39.5'), ('22.1','39.6'), ('22.1','39.7'), ('22.1','39.8'), ('22.1','39.9'), ('22.1','40.0'), ('22.2','39.2'), ('22.2','39.3'), ('22.2','39.4'), ('22.2','39.5'), ('22.2','39.6'), ('22.2','39.7'), ('22.2','39.8'), ('22.2','39.9'), ('22.2','40.0'), ('22.3','39.3'), ('22.3','39.4'), ('22.3','39.5'), ('22.3','39.6'), ('22.3','39.7'), ('22.3','39.8'), ('22.3','39.9'), ('22.3','40.0'), ('22.4','39.3'), ('22.4','39.4'), ('22.4','39.5'), ('22.4','39.6'), ('22.4','39.7'), ('22.4','39.8'), ('22.4','39.9'), ('22.4','40.0'), ('22.5','39.1'), ('22.5','39.2'), ('22.5','39.3'), ('22.5','39.4'), ('22.5','39.5'), ('22.5','39.6'), ('22.5','39.7'), ('22.5','39.8'), ('22.5','39.9'), ('22.6','39.1'), ('22.6','39.2'), ('22.6','39.3'), ('22.6','39.4'), ('22.6','39.5'), ('22.6','39.6'), ('22.6','39.7'), ('22.6','39.8'), ('22.6','39.9'), ('22.7','39.1'), ('22.7','39.2'), ('22.7','39.3'), ('22.7','39.4'), ('22.7','39.5'), ('22.7','39.6'), ('22.7','39.7'), ('22.7','39.8'), ('22.7','39.9'), ('22.7','40.0'), ('22.8','39.0'), ('22.8','39.1'), ('22.8','39.2'), ('22.8','39.3'), ('22.8','39.4'), ('22.8','39.5'), ('22.8','39.6'), ('22.8','39.7'), ('22.8','39.8'), ('22.8','39.9'), ('22.9','39.0'), ('22.9','39.1'), ('22.9','39.2'), ('22.9','39.3'), ('22.9','39.4'), ('22.9','39.5'), ('22.9','39.6'), ('22.9','39.7'), ('22.9','39.8'), ('23.0','39.0'), ('23.0','39.1'), ('23.0','39.2'), ('23.0','39.3'), ('23.0','39.4'), ('23.0','39.5'), ('23.0','39.6'), ('23.1','39.1'), ('23.1','39.2'), ('23.1','39.3'), ('23.1','39.4'), ('23.1','39.5'), ('23.2','39.1'), ('23.2','39.2'), ('23.2','39.3'), ('23.2','39.4'), ('23.2','39.5'), ('23.3','39.1'), ('23.3','39.2'), ('23.3','39.3'), ('23.3','39.4'), ('23.4','39.1'), ('23.4','39.2'), ('23.5','39.1'), ('23.5','39.2'), ('23.6','39.1'), ('23.6','39.2'), ('23.7','39.0'), ('23.7','39.1'), ('23.7','39.2'), ('23.8','39.1'), ('23.8','39.2'), ('23.9','39.0'), ('23.9','39.1'), ('23.9','39.2'), ('23.9','39.3'), ('24.0','39.0'), ('24.0','39.1'), ('24.0','39.2'), ('24.0','39.3'), ('24.0','39.4'), ('24.1','39.0'), ('24.1','39.1'), ('24.1','39.3'), ('24.1','39.4'), ('24.1','39.5'), ('24.2','39.1'), ('24.2','39.3'), ('24.2','39.4'), ('24.2','39.5'), ('24.3','39.3'), ('24.3','39.4'), ('24.4','39.3'), ('24.4','39.4'));",
+            "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.2, 39.3, 39.1, 39.0, 39.8, 39.9, 40.0) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1;"
+        ],
+        "SQL_raw_candidates": [
+            "```\n#reason: The question asks for the minimum wind speed in the Thessaly Region in January 2021. Based on the schema, wind speed data is stored in the table meteo_windspeedmax with column windspeedmax (type real) and coordinates (latitude, longitude) and time. The GEO_CONTEXT provides a list of latitude-longitude points in Thessaly Region, so we filter rows where latitude and longitude match any of these points. The time filter requires extracting year and month from the time column to match January 2021. We then apply MIN() on windspeedmax to get the minimum value.\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0), meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4), EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1\n#SELECT: meteo_windspeedmax.windspeedmax\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (...) AND longitude IN (...) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1\n#SQL: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;\n```",
+            "```\n#reason: The question asks for the minimum wind speed in the Thessaly Region in January 2021. The wind speed data is stored in the meteo_windspeedmax table, with the actual wind speed values in the windspeedmax column. The spatial constraint is given via GEO_CONTEXT, which provides a list of latitude and longitude coordinates for the Thessaly Region. We must filter records where the latitude and longitude fall within the provided coordinate bounds. The temporal constraint is January 2021, so we extract the year and month from the time column. Since the question asks for the minimum value, we use MIN() on windspeedmax. The GEO_CONTEXT coordinates define the region, so we filter using BETWEEN on latitude and longitude based on the min/max values in the provided points.\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: 'windspeedmax' refer to meteo_windspeedmax.windspeedmax, 'latitude between 39.0 and 40.0' refer to meteo_windspeedmax.latitude BETWEEN 39.0 AND 40.0, 'longitude between 21.2 and 24.4' refer to meteo_windspeedmax.longitude BETWEEN 21.2 AND 24.4, 'in January 2021' refer to EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1\n#SELECT: meteo_windspeedmax.windspeedmax\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude BETWEEN 39.0 AND 40.0 AND longitude BETWEEN 21.2 AND 24.4 AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1\n#SQL: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude BETWEEN 39.0 AND 40.0 AND longitude BETWEEN 21.2 AND 24.4 AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1\n```",
+            "```\n#reason: The question asks for the minimum wind speed in Thessaly Region in January 2021. From the schema, wind speed data is stored in the meteo_windspeedmax table with column windspeedmax (type real), and spatial coordinates are given by latitude and longitude. The time column is timestamp without time zone. The GEO_CONTEXT provides a list of latitude-longitude points belonging to Thessaly Region; we must filter records where latitude and longitude match any of these points. The time filter must extract records from January 2021 using EXTRACT(YEAR FROM time) = 2021 and EXTRACT(MONTH FROM time) = 1. The minimum value of windspeedmax is required. No joins are needed since all data is in one table.\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: 'Thessaly Region' refer to (meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4)) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1\n#SELECT: minimum wind speed refer to MIN(meteo_windspeedmax.windspeedmax)\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (...) AND longitude IN (...) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1\n#SQL: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;\n```",
+            "```\n#reason: The question asks for the minimum wind speed in the Thessaly Region in January 2021. The wind speed data is stored in the meteo_windspeedmax table, specifically in the windspeedmax column. The geographic constraint is provided via #GEO_CONTEXT, which lists valid (longitude, latitude) coordinate pairs for the Thessaly Region. The temporal constraint is January 2021, which requires filtering the time column for dates in that month. Since the time column is timestamp without time zone, we use EXTRACT(MONTH FROM time) = 1 and EXTRACT(YEAR FROM time) = 2021. We must only consider rows where the longitude and latitude match any of the provided coordinate points in GEO_CONTEXT. The minimum value of windspeedmax is then aggregated using MIN().\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: 'January 2021' refer to EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1, and each coordinate pair in GEO_CONTEXT refers to (meteo_windspeedmax.longitude, meteo_windspeedmax.latitude) IN (('21.2','39.5'), ('21.2','39.6'), ('21.2','39.7'), ('21.3','39.4'), ('21.3','39.5'), ('21.3','39.6'), ('21.3','39.7'), ('21.3','39.8'), ('21.4','39.2'), ('21.4','39.4'), ('21.4','39.5'), ('21.4','39.6'), ('21.4','39.7'), ('21.4','39.8'), ('21.5','39.3'), ('21.5','39.4'), ('21.5','39.5'), ('21.5','39.6'), ('21.5','39.7'), ('21.5','39.8'), ('21.6','39.3'), ('21.6','39.4'), ('21.6','39.5'), ('21.6','39.6'), ('21.6','39.7'), ('21.6','39.8'), ('21.7','39.2'), ('21.7','39.3'), ('21.7','39.4'), ('21.7','39.5'), ('21.7','39.6'), ('21.7','39.7'), ('21.7','39.8'), ('21.8','39.2'), ('21.8','39.3'), ('21.8','39.4'), ('21.8','39.5'), ('21.8','39.6'), ('21.8','39.7'), ('21.8','39.8'), ('21.9','39.2'), ('21.9','39.3'), ('21.9','39.4'), ('21.9','39.5'), ('21.9','39.6'), ('21.9','39.7'), ('21.9','39.8'), ('22.0','39.1'), ('22.0','39.2'), ('22.0','39.3'), ('22.0','39.4'), ('22.0','39.5'), ('22.0','39.6'), ('22.0','39.7'), ('22.0','39.8'), ('22.0','39.9'), ('22.0','40.0'), ('22.1','39.1'), ('22.1','39.2'), ('22.1','39.3'), ('22.1','39.4'), ('22.1','39.5'), ('22.1','39.6'), ('22.1','39.7'), ('22.1','39.8'), ('22.1','39.9'), ('22.1','40.0'), ('22.2','39.2'), ('22.2','39.3'), ('22.2','39.4'), ('22.2','39.5'), ('22.2','39.6'), ('22.2','39.7'), ('22.2','39.8'), ('22.2','39.9'), ('22.2','40.0'), ('22.3','39.3'), ('22.3','39.4'), ('22.3','39.5'), ('22.3','39.6'), ('22.3','39.7'), ('22.3','39.8'), ('22.3','39.9'), ('22.3','40.0'), ('22.4','39.3'), ('22.4','39.4'), ('22.4','39.5'), ('22.4','39.6'), ('22.4','39.7'), ('22.4','39.8'), ('22.4','39.9'), ('22.4','40.0'), ('22.5','39.1'), ('22.5','39.2'), ('22.5','39.3'), ('22.5','39.4'), ('22.5','39.5'), ('22.5','39.6'), ('22.5','39.7'), ('22.5','39.8'), ('22.5','39.9'), ('22.6','39.1'), ('22.6','39.2'), ('22.6','39.3'), ('22.6','39.4'), ('22.6','39.5'), ('22.6','39.6'), ('22.6','39.7'), ('22.6','39.8'), ('22.6','39.9'), ('22.7','39.1'), ('22.7','39.2'), ('22.7','39.3'), ('22.7','39.4'), ('22.7','39.5'), ('22.7','39.6'), ('22.7','39.7'), ('22.7','39.8'), ('22.7','39.9'), ('22.7','40.0'), ('22.8','39.0'), ('22.8','39.1'), ('22.8','39.2'), ('22.8','39.3'), ('22.8','39.4'), ('22.8','39.5'), ('22.8','39.6'), ('22.8','39.7'), ('22.8','39.8'), ('22.8','39.9'), ('22.9','39.0'), ('22.9','39.1'), ('22.9','39.2'), ('22.9','39.3'), ('22.9','39.4'), ('22.9','39.5'), ('22.9','39.6'), ('22.9','39.7'), ('22.9','39.8'), ('23.0','39.0'), ('23.0','39.1'), ('23.0','39.2'), ('23.0','39.3'), ('23.0','39.4'), ('23.0','39.5'), ('23.0','39.6'), ('23.1','39.1'), ('23.1','39.2'), ('23.1','39.3'), ('23.1','39.4'), ('23.1','39.5'), ('23.2','39.1'), ('23.2','39.2'), ('23.2','39.3'), ('23.2','39.4'), ('23.2','39.5'), ('23.3','39.1'), ('23.3','39.2'), ('23.3','39.3'), ('23.3','39.4'), ('23.4','39.1'), ('23.4','39.2'), ('23.5','39.1'), ('23.5','39.2'), ('23.6','39.1'), ('23.6','39.2'), ('23.7','39.0'), ('23.7','39.1'), ('23.7','39.2'), ('23.8','39.1'), ('23.8','39.2'), ('23.9','39.0'), ('23.9','39.1'), ('23.9','39.2'), ('23.9','39.3'), ('24.0','39.0'), ('24.0','39.1'), ('24.0','39.2'), ('24.0','39.3'), ('24.0','39.4'), ('24.1','39.0'), ('24.1','39.1'), ('24.1','39.3'), ('24.1','39.4'), ('24.1','39.5'), ('24.2','39.1'), ('24.2','39.3'), ('24.2','39.4'), ('24.2','39.5'), ('24.3','39.3'), ('24.3','39.4'), ('24.4','39.3'), ('24.4','39.4'))\n#SELECT: MIN(meteo_windspeedmax.windspeedmax)\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1 AND (longitude, latitude) IN (list of coordinate pairs from GEO_CONTEXT)\n#SQL: SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1 AND (meteo_windspeedmax.longitude, meteo_windspeedmax.latitude) IN (('21.2','39.5'), ('21.2','39.6'), ('21.2','39.7'), ('21.3','39.4'), ('21.3','39.5'), ('21.3','39.6'), ('21.3','39.7'), ('21.3','39.8'), ('21.4','39.2'), ('21.4','39.4'), ('21.4','39.5'), ('21.4','39.6'), ('21.4','39.7'), ('21.4','39.8'), ('21.5','39.3'), ('21.5','39.4'), ('21.5','39.5'), ('21.5','39.6'), ('21.5','39.7'), ('21.5','39.8'), ('21.6','39.3'), ('21.6','39.4'), ('21.6','39.5'), ('21.6','39.6'), ('21.6','39.7'), ('21.6','39.8'), ('21.7','39.2'), ('21.7','39.3'), ('21.7','39.4'), ('21.7','39.5'), ('21.7','39.6'), ('21.7','39.7'), ('21.7','39.8'), ('21.8','39.2'), ('21.8','39.3'), ('21.8','39.4'), ('21.8','39.5'), ('21.8','39.6'), ('21.8','39.7'), ('21.8','39.8'), ('21.9','39.2'), ('21.9','39.3'), ('21.9','39.4'), ('21.9','39.5'), ('21.9','39.6'), ('21.9','39.7'), ('21.9','39.8'), ('22.0','39.1'), ('22.0','39.2'), ('22.0','39.3'), ('22.0','39.4'), ('22.0','39.5'), ('22.0','39.6'), ('22.0','39.7'), ('22.0','39.8'), ('22.0','39.9'), ('22.0','40.0'), ('22.1','39.1'), ('22.1','39.2'), ('22.1','39.3'), ('22.1','39.4'), ('22.1','39.5'), ('22.1','39.6'), ('22.1','39.7'), ('22.1','39.8'), ('22.1','39.9'), ('22.1','40.0'), ('22.2','39.2'), ('22.2','39.3'), ('22.2','39.4'), ('22.2','39.5'), ('22.2','39.6'), ('22.2','39.7'), ('22.2','39.8'), ('22.2','39.9'), ('22.2','40.0'), ('22.3','39.3'), ('22.3','39.4'), ('22.3','39.5'), ('22.3','39.6'), ('22.3','39.7'), ('22.3','39.8'), ('22.3','39.9'), ('22.3','40.0'), ('22.4','39.3'), ('22.4','39.4'), ('22.4','39.5'), ('22.4','39.6'), ('22.4','39.7'), ('22.4','39.8'), ('22.4','39.9'), ('22.4','40.0'), ('22.5','39.1'), ('22.5','39.2'), ('22.5','39.3'), ('22.5','39.4'), ('22.5','39.5'), ('22.5','39.6'), ('22.5','39.7'), ('22.5','39.8'), ('22.5','39.9'), ('22.6','39.1'), ('22.6','39.2'), ('22.6','39.3'), ('22.6','39.4'), ('22.6','39.5'), ('22.6','39.6'), ('22.6','39.7'), ('22.6','39.8'), ('22.6','39.9'), ('22.7','39.1'), ('22.7','39.2'), ('22.7','39.3'), ('22.7','39.4'), ('22.7','39.5'), ('22.7','39.6'), ('22.7','39.7'), ('22.7','39.8'), ('22.7','39.9'), ('22.7','40.0'), ('22.8','39.0'), ('22.8','39.1'), ('22.8','39.2'), ('22.8','39.3'), ('22.8','39.4'), ('22.8','39.5'), ('22.8','39.6'), ('22.8','39.7'), ('22.8','39.8'), ('22.8','39.9'), ('22.9','39.0'), ('22.9','39.1'), ('22.9','39.2'), ('22.9','39.3'), ('22.9','39.4'), ('22.9','39.5'), ('22.9','39.6'), ('22.9','39.7'), ('22.9','39.8'), ('23.0','39.0'), ('23.0','39.1'), ('23.0','39.2'), ('23.0','39.3'), ('23.0','39.4'), ('23.0','39.5'), ('23.0','39.6'), ('23.1','39.1'), ('23.1','39.2'), ('23.1','39.3'), ('23.1','39.4'), ('23.1','39.5'), ('23.2','39.1'), ('23.2','39.2'), ('23.2','39.3'), ('23.2','39.4'), ('23.2','39.5'), ('23.3','39.1'), ('23.3','39.2'), ('23.3','39.3'), ('23.3','39.4'), ('23.4','39.1'), ('23.4','39.2'), ('23.5','39.1'), ('23.5','39.2'), ('23.6','39.1'), ('23.6','39.2'), ('23.7','39.0'), ('23.7','39.1'), ('23.7','39.2'), ('23.8','39.1'), ('23.8','39.2'), ('23.9','39.0'), ('23.9','39.1'), ('23.9','39.2'), ('23.9','39.3'), ('24.0','39.0'), ('24.0','39.1'), ('24.0','39.2'), ('24.0','39.3'), ('24.0','39.4'), ('24.1','39.0'), ('24.1','39.1'), ('24.1','39.3'), ('24.1','39.4'), ('24.1','39.5'), ('24.2','39.1'), ('24.2','39.3'), ('24.2','39.4'), ('24.2','39.5'), ('24.3','39.3'), ('24.3','39.4'), ('24.4','39.3'), ('24.4','39.4'));\n```",
+            "```\n#reason: The question asks for the minimum wind speed in the Thessaly Region in January 2021. Based on the schema, wind speed data is stored in the meteo_windspeedmax table, specifically in the column windspeedmax. The geographic context (Thessaly Region) is provided as a list of latitude-longitude points. We must filter records where the latitude and longitude fall within the given points. The time filter requires extracting records from January 2021 using the time column. Since the question asks for the minimum value, we use MIN() on windspeedmax. The GEO_CONTEXT provides discrete points, so we filter using latitude and longitude IN the list of provided coordinates. We ignore ONTOLOGY_GROUNDED_FUNCTION as it does not provide actionable thresholds or functions applicable to the schema (no threshold value or operator is specified).\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: 'Thessaly Region' refer to meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.2, 39.3, 39.1, 39.0, 39.8, 39.9, 40.0) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1\n#SELECT: MIN(meteo_windspeedmax.windspeedmax)\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (...) AND longitude IN (...) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1\n#SQL: SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.2, 39.3, 39.1, 39.0, 39.8, 39.9, 40.0) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1;\n```"
+        ],
+        "SQL_structured_candidates": [
+            {
+                "sql": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;",
+                "reasoning": "```\n#reason: The question asks for the minimum wind speed in the Thessaly Region in January 2021. Based on the schema, wind speed data is stored in the table meteo_windspeedmax with column windspeedmax (type real) and coordinates (latitude, longitude) and time. The GEO_CONTEXT provides a list of latitude-longitude points in Thessaly Region, so we filter rows where latitude and longitude match any of these points. The time filter requires extracting year and month from the time column to match January 2021. We then apply MIN() on windspeedmax to get the minimum value.\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0), meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4), EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1\n#SELECT: meteo_windspeedmax.windspeedmax\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (...) AND longitude IN (...) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1",
+                "raw": "```\n#reason: The question asks for the minimum wind speed in the Thessaly Region in January 2021. Based on the schema, wind speed data is stored in the table meteo_windspeedmax with column windspeedmax (type real) and coordinates (latitude, longitude) and time. The GEO_CONTEXT provides a list of latitude-longitude points in Thessaly Region, so we filter rows where latitude and longitude match any of these points. The time filter requires extracting year and month from the time column to match January 2021. We then apply MIN() on windspeedmax to get the minimum value.\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0), meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4), EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1\n#SELECT: meteo_windspeedmax.windspeedmax\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (...) AND longitude IN (...) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1\n#SQL: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;\n```"
+            },
+            {
+                "sql": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude BETWEEN 39.0 AND 40.0 AND longitude BETWEEN 21.2 AND 24.4 AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1",
+                "reasoning": "```\n#reason: The question asks for the minimum wind speed in the Thessaly Region in January 2021. The wind speed data is stored in the meteo_windspeedmax table, with the actual wind speed values in the windspeedmax column. The spatial constraint is given via GEO_CONTEXT, which provides a list of latitude and longitude coordinates for the Thessaly Region. We must filter records where the latitude and longitude fall within the provided coordinate bounds. The temporal constraint is January 2021, so we extract the year and month from the time column. Since the question asks for the minimum value, we use MIN() on windspeedmax. The GEO_CONTEXT coordinates define the region, so we filter using BETWEEN on latitude and longitude based on the min/max values in the provided points.\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: 'windspeedmax' refer to meteo_windspeedmax.windspeedmax, 'latitude between 39.0 and 40.0' refer to meteo_windspeedmax.latitude BETWEEN 39.0 AND 40.0, 'longitude between 21.2 and 24.4' refer to meteo_windspeedmax.longitude BETWEEN 21.2 AND 24.4, 'in January 2021' refer to EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1\n#SELECT: meteo_windspeedmax.windspeedmax\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude BETWEEN 39.0 AND 40.0 AND longitude BETWEEN 21.2 AND 24.4 AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1",
+                "raw": "```\n#reason: The question asks for the minimum wind speed in the Thessaly Region in January 2021. The wind speed data is stored in the meteo_windspeedmax table, with the actual wind speed values in the windspeedmax column. The spatial constraint is given via GEO_CONTEXT, which provides a list of latitude and longitude coordinates for the Thessaly Region. We must filter records where the latitude and longitude fall within the provided coordinate bounds. The temporal constraint is January 2021, so we extract the year and month from the time column. Since the question asks for the minimum value, we use MIN() on windspeedmax. The GEO_CONTEXT coordinates define the region, so we filter using BETWEEN on latitude and longitude based on the min/max values in the provided points.\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: 'windspeedmax' refer to meteo_windspeedmax.windspeedmax, 'latitude between 39.0 and 40.0' refer to meteo_windspeedmax.latitude BETWEEN 39.0 AND 40.0, 'longitude between 21.2 and 24.4' refer to meteo_windspeedmax.longitude BETWEEN 21.2 AND 24.4, 'in January 2021' refer to EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1\n#SELECT: meteo_windspeedmax.windspeedmax\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude BETWEEN 39.0 AND 40.0 AND longitude BETWEEN 21.2 AND 24.4 AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1\n#SQL: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude BETWEEN 39.0 AND 40.0 AND longitude BETWEEN 21.2 AND 24.4 AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1\n```"
+            },
+            {
+                "sql": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;",
+                "reasoning": "```\n#reason: The question asks for the minimum wind speed in Thessaly Region in January 2021. From the schema, wind speed data is stored in the meteo_windspeedmax table with column windspeedmax (type real), and spatial coordinates are given by latitude and longitude. The time column is timestamp without time zone. The GEO_CONTEXT provides a list of latitude-longitude points belonging to Thessaly Region; we must filter records where latitude and longitude match any of these points. The time filter must extract records from January 2021 using EXTRACT(YEAR FROM time) = 2021 and EXTRACT(MONTH FROM time) = 1. The minimum value of windspeedmax is required. No joins are needed since all data is in one table.\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: 'Thessaly Region' refer to (meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4)) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1\n#SELECT: minimum wind speed refer to MIN(meteo_windspeedmax.windspeedmax)\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (...) AND longitude IN (...) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1",
+                "raw": "```\n#reason: The question asks for the minimum wind speed in Thessaly Region in January 2021. From the schema, wind speed data is stored in the meteo_windspeedmax table with column windspeedmax (type real), and spatial coordinates are given by latitude and longitude. The time column is timestamp without time zone. The GEO_CONTEXT provides a list of latitude-longitude points belonging to Thessaly Region; we must filter records where latitude and longitude match any of these points. The time filter must extract records from January 2021 using EXTRACT(YEAR FROM time) = 2021 and EXTRACT(MONTH FROM time) = 1. The minimum value of windspeedmax is required. No joins are needed since all data is in one table.\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: 'Thessaly Region' refer to (meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4)) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1\n#SELECT: minimum wind speed refer to MIN(meteo_windspeedmax.windspeedmax)\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (...) AND longitude IN (...) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1\n#SQL: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;\n```"
+            },
+            {
+                "sql": "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1 AND (meteo_windspeedmax.longitude, meteo_windspeedmax.latitude) IN (('21.2','39.5'), ('21.2','39.6'), ('21.2','39.7'), ('21.3','39.4'), ('21.3','39.5'), ('21.3','39.6'), ('21.3','39.7'), ('21.3','39.8'), ('21.4','39.2'), ('21.4','39.4'), ('21.4','39.5'), ('21.4','39.6'), ('21.4','39.7'), ('21.4','39.8'), ('21.5','39.3'), ('21.5','39.4'), ('21.5','39.5'), ('21.5','39.6'), ('21.5','39.7'), ('21.5','39.8'), ('21.6','39.3'), ('21.6','39.4'), ('21.6','39.5'), ('21.6','39.6'), ('21.6','39.7'), ('21.6','39.8'), ('21.7','39.2'), ('21.7','39.3'), ('21.7','39.4'), ('21.7','39.5'), ('21.7','39.6'), ('21.7','39.7'), ('21.7','39.8'), ('21.8','39.2'), ('21.8','39.3'), ('21.8','39.4'), ('21.8','39.5'), ('21.8','39.6'), ('21.8','39.7'), ('21.8','39.8'), ('21.9','39.2'), ('21.9','39.3'), ('21.9','39.4'), ('21.9','39.5'), ('21.9','39.6'), ('21.9','39.7'), ('21.9','39.8'), ('22.0','39.1'), ('22.0','39.2'), ('22.0','39.3'), ('22.0','39.4'), ('22.0','39.5'), ('22.0','39.6'), ('22.0','39.7'), ('22.0','39.8'), ('22.0','39.9'), ('22.0','40.0'), ('22.1','39.1'), ('22.1','39.2'), ('22.1','39.3'), ('22.1','39.4'), ('22.1','39.5'), ('22.1','39.6'), ('22.1','39.7'), ('22.1','39.8'), ('22.1','39.9'), ('22.1','40.0'), ('22.2','39.2'), ('22.2','39.3'), ('22.2','39.4'), ('22.2','39.5'), ('22.2','39.6'), ('22.2','39.7'), ('22.2','39.8'), ('22.2','39.9'), ('22.2','40.0'), ('22.3','39.3'), ('22.3','39.4'), ('22.3','39.5'), ('22.3','39.6'), ('22.3','39.7'), ('22.3','39.8'), ('22.3','39.9'), ('22.3','40.0'), ('22.4','39.3'), ('22.4','39.4'), ('22.4','39.5'), ('22.4','39.6'), ('22.4','39.7'), ('22.4','39.8'), ('22.4','39.9'), ('22.4','40.0'), ('22.5','39.1'), ('22.5','39.2'), ('22.5','39.3'), ('22.5','39.4'), ('22.5','39.5'), ('22.5','39.6'), ('22.5','39.7'), ('22.5','39.8'), ('22.5','39.9'), ('22.6','39.1'), ('22.6','39.2'), ('22.6','39.3'), ('22.6','39.4'), ('22.6','39.5'), ('22.6','39.6'), ('22.6','39.7'), ('22.6','39.8'), ('22.6','39.9'), ('22.7','39.1'), ('22.7','39.2'), ('22.7','39.3'), ('22.7','39.4'), ('22.7','39.5'), ('22.7','39.6'), ('22.7','39.7'), ('22.7','39.8'), ('22.7','39.9'), ('22.7','40.0'), ('22.8','39.0'), ('22.8','39.1'), ('22.8','39.2'), ('22.8','39.3'), ('22.8','39.4'), ('22.8','39.5'), ('22.8','39.6'), ('22.8','39.7'), ('22.8','39.8'), ('22.8','39.9'), ('22.9','39.0'), ('22.9','39.1'), ('22.9','39.2'), ('22.9','39.3'), ('22.9','39.4'), ('22.9','39.5'), ('22.9','39.6'), ('22.9','39.7'), ('22.9','39.8'), ('23.0','39.0'), ('23.0','39.1'), ('23.0','39.2'), ('23.0','39.3'), ('23.0','39.4'), ('23.0','39.5'), ('23.0','39.6'), ('23.1','39.1'), ('23.1','39.2'), ('23.1','39.3'), ('23.1','39.4'), ('23.1','39.5'), ('23.2','39.1'), ('23.2','39.2'), ('23.2','39.3'), ('23.2','39.4'), ('23.2','39.5'), ('23.3','39.1'), ('23.3','39.2'), ('23.3','39.3'), ('23.3','39.4'), ('23.4','39.1'), ('23.4','39.2'), ('23.5','39.1'), ('23.5','39.2'), ('23.6','39.1'), ('23.6','39.2'), ('23.7','39.0'), ('23.7','39.1'), ('23.7','39.2'), ('23.8','39.1'), ('23.8','39.2'), ('23.9','39.0'), ('23.9','39.1'), ('23.9','39.2'), ('23.9','39.3'), ('24.0','39.0'), ('24.0','39.1'), ('24.0','39.2'), ('24.0','39.3'), ('24.0','39.4'), ('24.1','39.0'), ('24.1','39.1'), ('24.1','39.3'), ('24.1','39.4'), ('24.1','39.5'), ('24.2','39.1'), ('24.2','39.3'), ('24.2','39.4'), ('24.2','39.5'), ('24.3','39.3'), ('24.3','39.4'), ('24.4','39.3'), ('24.4','39.4'));",
+                "reasoning": "```\n#reason: The question asks for the minimum wind speed in the Thessaly Region in January 2021. The wind speed data is stored in the meteo_windspeedmax table, specifically in the windspeedmax column. The geographic constraint is provided via #GEO_CONTEXT, which lists valid (longitude, latitude) coordinate pairs for the Thessaly Region. The temporal constraint is January 2021, which requires filtering the time column for dates in that month. Since the time column is timestamp without time zone, we use EXTRACT(MONTH FROM time) = 1 and EXTRACT(YEAR FROM time) = 2021. We must only consider rows where the longitude and latitude match any of the provided coordinate points in GEO_CONTEXT. The minimum value of windspeedmax is then aggregated using MIN().\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: 'January 2021' refer to EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1, and each coordinate pair in GEO_CONTEXT refers to (meteo_windspeedmax.longitude, meteo_windspeedmax.latitude) IN (('21.2','39.5'), ('21.2','39.6'), ('21.2','39.7'), ('21.3','39.4'), ('21.3','39.5'), ('21.3','39.6'), ('21.3','39.7'), ('21.3','39.8'), ('21.4','39.2'), ('21.4','39.4'), ('21.4','39.5'), ('21.4','39.6'), ('21.4','39.7'), ('21.4','39.8'), ('21.5','39.3'), ('21.5','39.4'), ('21.5','39.5'), ('21.5','39.6'), ('21.5','39.7'), ('21.5','39.8'), ('21.6','39.3'), ('21.6','39.4'), ('21.6','39.5'), ('21.6','39.6'), ('21.6','39.7'), ('21.6','39.8'), ('21.7','39.2'), ('21.7','39.3'), ('21.7','39.4'), ('21.7','39.5'), ('21.7','39.6'), ('21.7','39.7'), ('21.7','39.8'), ('21.8','39.2'), ('21.8','39.3'), ('21.8','39.4'), ('21.8','39.5'), ('21.8','39.6'), ('21.8','39.7'), ('21.8','39.8'), ('21.9','39.2'), ('21.9','39.3'), ('21.9','39.4'), ('21.9','39.5'), ('21.9','39.6'), ('21.9','39.7'), ('21.9','39.8'), ('22.0','39.1'), ('22.0','39.2'), ('22.0','39.3'), ('22.0','39.4'), ('22.0','39.5'), ('22.0','39.6'), ('22.0','39.7'), ('22.0','39.8'), ('22.0','39.9'), ('22.0','40.0'), ('22.1','39.1'), ('22.1','39.2'), ('22.1','39.3'), ('22.1','39.4'), ('22.1','39.5'), ('22.1','39.6'), ('22.1','39.7'), ('22.1','39.8'), ('22.1','39.9'), ('22.1','40.0'), ('22.2','39.2'), ('22.2','39.3'), ('22.2','39.4'), ('22.2','39.5'), ('22.2','39.6'), ('22.2','39.7'), ('22.2','39.8'), ('22.2','39.9'), ('22.2','40.0'), ('22.3','39.3'), ('22.3','39.4'), ('22.3','39.5'), ('22.3','39.6'), ('22.3','39.7'), ('22.3','39.8'), ('22.3','39.9'), ('22.3','40.0'), ('22.4','39.3'), ('22.4','39.4'), ('22.4','39.5'), ('22.4','39.6'), ('22.4','39.7'), ('22.4','39.8'), ('22.4','39.9'), ('22.4','40.0'), ('22.5','39.1'), ('22.5','39.2'), ('22.5','39.3'), ('22.5','39.4'), ('22.5','39.5'), ('22.5','39.6'), ('22.5','39.7'), ('22.5','39.8'), ('22.5','39.9'), ('22.6','39.1'), ('22.6','39.2'), ('22.6','39.3'), ('22.6','39.4'), ('22.6','39.5'), ('22.6','39.6'), ('22.6','39.7'), ('22.6','39.8'), ('22.6','39.9'), ('22.7','39.1'), ('22.7','39.2'), ('22.7','39.3'), ('22.7','39.4'), ('22.7','39.5'), ('22.7','39.6'), ('22.7','39.7'), ('22.7','39.8'), ('22.7','39.9'), ('22.7','40.0'), ('22.8','39.0'), ('22.8','39.1'), ('22.8','39.2'), ('22.8','39.3'), ('22.8','39.4'), ('22.8','39.5'), ('22.8','39.6'), ('22.8','39.7'), ('22.8','39.8'), ('22.8','39.9'), ('22.9','39.0'), ('22.9','39.1'), ('22.9','39.2'), ('22.9','39.3'), ('22.9','39.4'), ('22.9','39.5'), ('22.9','39.6'), ('22.9','39.7'), ('22.9','39.8'), ('23.0','39.0'), ('23.0','39.1'), ('23.0','39.2'), ('23.0','39.3'), ('23.0','39.4'), ('23.0','39.5'), ('23.0','39.6'), ('23.1','39.1'), ('23.1','39.2'), ('23.1','39.3'), ('23.1','39.4'), ('23.1','39.5'), ('23.2','39.1'), ('23.2','39.2'), ('23.2','39.3'), ('23.2','39.4'), ('23.2','39.5'), ('23.3','39.1'), ('23.3','39.2'), ('23.3','39.3'), ('23.3','39.4'), ('23.4','39.1'), ('23.4','39.2'), ('23.5','39.1'), ('23.5','39.2'), ('23.6','39.1'), ('23.6','39.2'), ('23.7','39.0'), ('23.7','39.1'), ('23.7','39.2'), ('23.8','39.1'), ('23.8','39.2'), ('23.9','39.0'), ('23.9','39.1'), ('23.9','39.2'), ('23.9','39.3'), ('24.0','39.0'), ('24.0','39.1'), ('24.0','39.2'), ('24.0','39.3'), ('24.0','39.4'), ('24.1','39.0'), ('24.1','39.1'), ('24.1','39.3'), ('24.1','39.4'), ('24.1','39.5'), ('24.2','39.1'), ('24.2','39.3'), ('24.2','39.4'), ('24.2','39.5'), ('24.3','39.3'), ('24.3','39.4'), ('24.4','39.3'), ('24.4','39.4'))\n#SELECT: MIN(meteo_windspeedmax.windspeedmax)\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1 AND (longitude, latitude) IN (list of coordinate pairs from GEO_CONTEXT)",
+                "raw": "```\n#reason: The question asks for the minimum wind speed in the Thessaly Region in January 2021. The wind speed data is stored in the meteo_windspeedmax table, specifically in the windspeedmax column. The geographic constraint is provided via #GEO_CONTEXT, which lists valid (longitude, latitude) coordinate pairs for the Thessaly Region. The temporal constraint is January 2021, which requires filtering the time column for dates in that month. Since the time column is timestamp without time zone, we use EXTRACT(MONTH FROM time) = 1 and EXTRACT(YEAR FROM time) = 2021. We must only consider rows where the longitude and latitude match any of the provided coordinate points in GEO_CONTEXT. The minimum value of windspeedmax is then aggregated using MIN().\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: 'January 2021' refer to EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1, and each coordinate pair in GEO_CONTEXT refers to (meteo_windspeedmax.longitude, meteo_windspeedmax.latitude) IN (('21.2','39.5'), ('21.2','39.6'), ('21.2','39.7'), ('21.3','39.4'), ('21.3','39.5'), ('21.3','39.6'), ('21.3','39.7'), ('21.3','39.8'), ('21.4','39.2'), ('21.4','39.4'), ('21.4','39.5'), ('21.4','39.6'), ('21.4','39.7'), ('21.4','39.8'), ('21.5','39.3'), ('21.5','39.4'), ('21.5','39.5'), ('21.5','39.6'), ('21.5','39.7'), ('21.5','39.8'), ('21.6','39.3'), ('21.6','39.4'), ('21.6','39.5'), ('21.6','39.6'), ('21.6','39.7'), ('21.6','39.8'), ('21.7','39.2'), ('21.7','39.3'), ('21.7','39.4'), ('21.7','39.5'), ('21.7','39.6'), ('21.7','39.7'), ('21.7','39.8'), ('21.8','39.2'), ('21.8','39.3'), ('21.8','39.4'), ('21.8','39.5'), ('21.8','39.6'), ('21.8','39.7'), ('21.8','39.8'), ('21.9','39.2'), ('21.9','39.3'), ('21.9','39.4'), ('21.9','39.5'), ('21.9','39.6'), ('21.9','39.7'), ('21.9','39.8'), ('22.0','39.1'), ('22.0','39.2'), ('22.0','39.3'), ('22.0','39.4'), ('22.0','39.5'), ('22.0','39.6'), ('22.0','39.7'), ('22.0','39.8'), ('22.0','39.9'), ('22.0','40.0'), ('22.1','39.1'), ('22.1','39.2'), ('22.1','39.3'), ('22.1','39.4'), ('22.1','39.5'), ('22.1','39.6'), ('22.1','39.7'), ('22.1','39.8'), ('22.1','39.9'), ('22.1','40.0'), ('22.2','39.2'), ('22.2','39.3'), ('22.2','39.4'), ('22.2','39.5'), ('22.2','39.6'), ('22.2','39.7'), ('22.2','39.8'), ('22.2','39.9'), ('22.2','40.0'), ('22.3','39.3'), ('22.3','39.4'), ('22.3','39.5'), ('22.3','39.6'), ('22.3','39.7'), ('22.3','39.8'), ('22.3','39.9'), ('22.3','40.0'), ('22.4','39.3'), ('22.4','39.4'), ('22.4','39.5'), ('22.4','39.6'), ('22.4','39.7'), ('22.4','39.8'), ('22.4','39.9'), ('22.4','40.0'), ('22.5','39.1'), ('22.5','39.2'), ('22.5','39.3'), ('22.5','39.4'), ('22.5','39.5'), ('22.5','39.6'), ('22.5','39.7'), ('22.5','39.8'), ('22.5','39.9'), ('22.6','39.1'), ('22.6','39.2'), ('22.6','39.3'), ('22.6','39.4'), ('22.6','39.5'), ('22.6','39.6'), ('22.6','39.7'), ('22.6','39.8'), ('22.6','39.9'), ('22.7','39.1'), ('22.7','39.2'), ('22.7','39.3'), ('22.7','39.4'), ('22.7','39.5'), ('22.7','39.6'), ('22.7','39.7'), ('22.7','39.8'), ('22.7','39.9'), ('22.7','40.0'), ('22.8','39.0'), ('22.8','39.1'), ('22.8','39.2'), ('22.8','39.3'), ('22.8','39.4'), ('22.8','39.5'), ('22.8','39.6'), ('22.8','39.7'), ('22.8','39.8'), ('22.8','39.9'), ('22.9','39.0'), ('22.9','39.1'), ('22.9','39.2'), ('22.9','39.3'), ('22.9','39.4'), ('22.9','39.5'), ('22.9','39.6'), ('22.9','39.7'), ('22.9','39.8'), ('23.0','39.0'), ('23.0','39.1'), ('23.0','39.2'), ('23.0','39.3'), ('23.0','39.4'), ('23.0','39.5'), ('23.0','39.6'), ('23.1','39.1'), ('23.1','39.2'), ('23.1','39.3'), ('23.1','39.4'), ('23.1','39.5'), ('23.2','39.1'), ('23.2','39.2'), ('23.2','39.3'), ('23.2','39.4'), ('23.2','39.5'), ('23.3','39.1'), ('23.3','39.2'), ('23.3','39.3'), ('23.3','39.4'), ('23.4','39.1'), ('23.4','39.2'), ('23.5','39.1'), ('23.5','39.2'), ('23.6','39.1'), ('23.6','39.2'), ('23.7','39.0'), ('23.7','39.1'), ('23.7','39.2'), ('23.8','39.1'), ('23.8','39.2'), ('23.9','39.0'), ('23.9','39.1'), ('23.9','39.2'), ('23.9','39.3'), ('24.0','39.0'), ('24.0','39.1'), ('24.0','39.2'), ('24.0','39.3'), ('24.0','39.4'), ('24.1','39.0'), ('24.1','39.1'), ('24.1','39.3'), ('24.1','39.4'), ('24.1','39.5'), ('24.2','39.1'), ('24.2','39.3'), ('24.2','39.4'), ('24.2','39.5'), ('24.3','39.3'), ('24.3','39.4'), ('24.4','39.3'), ('24.4','39.4'))\n#SELECT: MIN(meteo_windspeedmax.windspeedmax)\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1 AND (longitude, latitude) IN (list of coordinate pairs from GEO_CONTEXT)\n#SQL: SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1 AND (meteo_windspeedmax.longitude, meteo_windspeedmax.latitude) IN (('21.2','39.5'), ('21.2','39.6'), ('21.2','39.7'), ('21.3','39.4'), ('21.3','39.5'), ('21.3','39.6'), ('21.3','39.7'), ('21.3','39.8'), ('21.4','39.2'), ('21.4','39.4'), ('21.4','39.5'), ('21.4','39.6'), ('21.4','39.7'), ('21.4','39.8'), ('21.5','39.3'), ('21.5','39.4'), ('21.5','39.5'), ('21.5','39.6'), ('21.5','39.7'), ('21.5','39.8'), ('21.6','39.3'), ('21.6','39.4'), ('21.6','39.5'), ('21.6','39.6'), ('21.6','39.7'), ('21.6','39.8'), ('21.7','39.2'), ('21.7','39.3'), ('21.7','39.4'), ('21.7','39.5'), ('21.7','39.6'), ('21.7','39.7'), ('21.7','39.8'), ('21.8','39.2'), ('21.8','39.3'), ('21.8','39.4'), ('21.8','39.5'), ('21.8','39.6'), ('21.8','39.7'), ('21.8','39.8'), ('21.9','39.2'), ('21.9','39.3'), ('21.9','39.4'), ('21.9','39.5'), ('21.9','39.6'), ('21.9','39.7'), ('21.9','39.8'), ('22.0','39.1'), ('22.0','39.2'), ('22.0','39.3'), ('22.0','39.4'), ('22.0','39.5'), ('22.0','39.6'), ('22.0','39.7'), ('22.0','39.8'), ('22.0','39.9'), ('22.0','40.0'), ('22.1','39.1'), ('22.1','39.2'), ('22.1','39.3'), ('22.1','39.4'), ('22.1','39.5'), ('22.1','39.6'), ('22.1','39.7'), ('22.1','39.8'), ('22.1','39.9'), ('22.1','40.0'), ('22.2','39.2'), ('22.2','39.3'), ('22.2','39.4'), ('22.2','39.5'), ('22.2','39.6'), ('22.2','39.7'), ('22.2','39.8'), ('22.2','39.9'), ('22.2','40.0'), ('22.3','39.3'), ('22.3','39.4'), ('22.3','39.5'), ('22.3','39.6'), ('22.3','39.7'), ('22.3','39.8'), ('22.3','39.9'), ('22.3','40.0'), ('22.4','39.3'), ('22.4','39.4'), ('22.4','39.5'), ('22.4','39.6'), ('22.4','39.7'), ('22.4','39.8'), ('22.4','39.9'), ('22.4','40.0'), ('22.5','39.1'), ('22.5','39.2'), ('22.5','39.3'), ('22.5','39.4'), ('22.5','39.5'), ('22.5','39.6'), ('22.5','39.7'), ('22.5','39.8'), ('22.5','39.9'), ('22.6','39.1'), ('22.6','39.2'), ('22.6','39.3'), ('22.6','39.4'), ('22.6','39.5'), ('22.6','39.6'), ('22.6','39.7'), ('22.6','39.8'), ('22.6','39.9'), ('22.7','39.1'), ('22.7','39.2'), ('22.7','39.3'), ('22.7','39.4'), ('22.7','39.5'), ('22.7','39.6'), ('22.7','39.7'), ('22.7','39.8'), ('22.7','39.9'), ('22.7','40.0'), ('22.8','39.0'), ('22.8','39.1'), ('22.8','39.2'), ('22.8','39.3'), ('22.8','39.4'), ('22.8','39.5'), ('22.8','39.6'), ('22.8','39.7'), ('22.8','39.8'), ('22.8','39.9'), ('22.9','39.0'), ('22.9','39.1'), ('22.9','39.2'), ('22.9','39.3'), ('22.9','39.4'), ('22.9','39.5'), ('22.9','39.6'), ('22.9','39.7'), ('22.9','39.8'), ('23.0','39.0'), ('23.0','39.1'), ('23.0','39.2'), ('23.0','39.3'), ('23.0','39.4'), ('23.0','39.5'), ('23.0','39.6'), ('23.1','39.1'), ('23.1','39.2'), ('23.1','39.3'), ('23.1','39.4'), ('23.1','39.5'), ('23.2','39.1'), ('23.2','39.2'), ('23.2','39.3'), ('23.2','39.4'), ('23.2','39.5'), ('23.3','39.1'), ('23.3','39.2'), ('23.3','39.3'), ('23.3','39.4'), ('23.4','39.1'), ('23.4','39.2'), ('23.5','39.1'), ('23.5','39.2'), ('23.6','39.1'), ('23.6','39.2'), ('23.7','39.0'), ('23.7','39.1'), ('23.7','39.2'), ('23.8','39.1'), ('23.8','39.2'), ('23.9','39.0'), ('23.9','39.1'), ('23.9','39.2'), ('23.9','39.3'), ('24.0','39.0'), ('24.0','39.1'), ('24.0','39.2'), ('24.0','39.3'), ('24.0','39.4'), ('24.1','39.0'), ('24.1','39.1'), ('24.1','39.3'), ('24.1','39.4'), ('24.1','39.5'), ('24.2','39.1'), ('24.2','39.3'), ('24.2','39.4'), ('24.2','39.5'), ('24.3','39.3'), ('24.3','39.4'), ('24.4','39.3'), ('24.4','39.4'));\n```"
+            },
+            {
+                "sql": "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.2, 39.3, 39.1, 39.0, 39.8, 39.9, 40.0) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1;",
+                "reasoning": "```\n#reason: The question asks for the minimum wind speed in the Thessaly Region in January 2021. Based on the schema, wind speed data is stored in the meteo_windspeedmax table, specifically in the column windspeedmax. The geographic context (Thessaly Region) is provided as a list of latitude-longitude points. We must filter records where the latitude and longitude fall within the given points. The time filter requires extracting records from January 2021 using the time column. Since the question asks for the minimum value, we use MIN() on windspeedmax. The GEO_CONTEXT provides discrete points, so we filter using latitude and longitude IN the list of provided coordinates. We ignore ONTOLOGY_GROUNDED_FUNCTION as it does not provide actionable thresholds or functions applicable to the schema (no threshold value or operator is specified).\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: 'Thessaly Region' refer to meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.2, 39.3, 39.1, 39.0, 39.8, 39.9, 40.0) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1\n#SELECT: MIN(meteo_windspeedmax.windspeedmax)\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (...) AND longitude IN (...) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1",
+                "raw": "```\n#reason: The question asks for the minimum wind speed in the Thessaly Region in January 2021. Based on the schema, wind speed data is stored in the meteo_windspeedmax table, specifically in the column windspeedmax. The geographic context (Thessaly Region) is provided as a list of latitude-longitude points. We must filter records where the latitude and longitude fall within the given points. The time filter requires extracting records from January 2021 using the time column. Since the question asks for the minimum value, we use MIN() on windspeedmax. The GEO_CONTEXT provides discrete points, so we filter using latitude and longitude IN the list of provided coordinates. We ignore ONTOLOGY_GROUNDED_FUNCTION as it does not provide actionable thresholds or functions applicable to the schema (no threshold value or operator is specified).\n#columns: meteo_windspeedmax.windspeedmax, meteo_windspeedmax.latitude, meteo_windspeedmax.longitude, meteo_windspeedmax.time\n#values: 'Thessaly Region' refer to meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.2, 39.3, 39.1, 39.0, 39.8, 39.9, 40.0) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1\n#SELECT: MIN(meteo_windspeedmax.windspeedmax)\n#SQL-like: SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (...) AND longitude IN (...) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1\n#SQL: SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.2, 39.3, 39.1, 39.0, 39.8, 39.9, 40.0) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1;\n```"
+            }
+        ],
+        "plugin_trace": [
+            {
+                "plugin": "registry",
+                "enabled": false
+            }
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "align_correct",
+        "vote": [
+            {
+                "sql_history": {
+                    "style_align": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;",
+                    "function_align": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1;"
+                },
+                "sql": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1;",
+                "answer": [
+                    [
+                        null
+                    ]
+                ],
+                "count": 1,
+                "time_cost": 0.06047201156616211,
+                "align_sql": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1;",
+                "align_ans": null,
+                "correct_sql": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;",
+                "correct_ans": null
+            },
+            {
+                "sql_history": {
+                    "style_align": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;",
+                    "function_align": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1;"
+                },
+                "sql": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1;",
+                "answer": [
+                    [
+                        null
+                    ]
+                ],
+                "count": 1,
+                "time_cost": 0.05473494529724121,
+                "align_sql": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1;",
+                "align_ans": null,
+                "correct_sql": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;",
+                "correct_ans": null
+            },
+            {
+                "sql_history": {
+                    "style_align": "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.2, 39.3, 39.1, 39.0, 39.8, 39.9, 40.0) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1;",
+                    "function_align": "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.2, 39.3, 39.1, 39.0, 39.8, 39.9, 40.0) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = '2021' AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1;"
+                },
+                "sql": "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.2, 39.3, 39.1, 39.0, 39.8, 39.9, 40.0) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = '2021' AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1;",
+                "answer": [
+                    [
+                        null
+                    ]
+                ],
+                "count": 1,
+                "time_cost": 0.05475616455078125,
+                "align_sql": "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.2, 39.3, 39.1, 39.0, 39.8, 39.9, 40.0) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = '2021' AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1;",
+                "align_ans": null,
+                "correct_sql": "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE meteo_windspeedmax.latitude IN (39.5, 39.6, 39.7, 39.4, 39.2, 39.3, 39.1, 39.0, 39.8, 39.9, 40.0) AND meteo_windspeedmax.longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1;",
+                "correct_ans": null
+            },
+            {
+                "sql_history": {
+                    "style_align": "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1 AND (meteo_windspeedmax.longitude, meteo_windspeedmax.latitude) IN (('21.2','39.5'), ('21.2','39.6'), ('21.2','39.7'), ('21.3','39.4'), ('21.3','39.5'), ('21.3','39.6'), ('21.3','39.7'), ('21.3','39.8'), ('21.4','39.2'), ('21.4','39.4'), ('21.4','39.5'), ('21.4','39.6'), ('21.4','39.7'), ('21.4','39.8'), ('21.5','39.3'), ('21.5','39.4'), ('21.5','39.5'), ('21.5','39.6'), ('21.5','39.7'), ('21.5','39.8'), ('21.6','39.3'), ('21.6','39.4'), ('21.6','39.5'), ('21.6','39.6'), ('21.6','39.7'), ('21.6','39.8'), ('21.7','39.2'), ('21.7','39.3'), ('21.7','39.4'), ('21.7','39.5'), ('21.7','39.6'), ('21.7','39.7'), ('21.7','39.8'), ('21.8','39.2'), ('21.8','39.3'), ('21.8','39.4'), ('21.8','39.5'), ('21.8','39.6'), ('21.8','39.7'), ('21.8','39.8'), ('21.9','39.2'), ('21.9','39.3'), ('21.9','39.4'), ('21.9','39.5'), ('21.9','39.6'), ('21.9','39.7'), ('21.9','39.8'), ('22.0','39.1'), ('22.0','39.2'), ('22.0','39.3'), ('22.0','39.4'), ('22.0','39.5'), ('22.0','39.6'), ('22.0','39.7'), ('22.0','39.8'), ('22.0','39.9'), ('22.0','40.0'), ('22.1','39.1'), ('22.1','39.2'), ('22.1','39.3'), ('22.1','39.4'), ('22.1','39.5'), ('22.1','39.6'), ('22.1','39.7'), ('22.1','39.8'), ('22.1','39.9'), ('22.1','40.0'), ('22.2','39.2'), ('22.2','39.3'), ('22.2','39.4'), ('22.2','39.5'), ('22.2','39.6'), ('22.2','39.7'), ('22.2','39.8'), ('22.2','39.9'), ('22.2','40.0'), ('22.3','39.3'), ('22.3','39.4'), ('22.3','39.5'), ('22.3','39.6'), ('22.3','39.7'), ('22.3','39.8'), ('22.3','39.9'), ('22.3','40.0'), ('22.4','39.3'), ('22.4','39.4'), ('22.4','39.5'), ('22.4','39.6'), ('22.4','39.7'), ('22.4','39.8'), ('22.4','39.9'), ('22.4','40.0'), ('22.5','39.1'), ('22.5','39.2'), ('22.5','39.3'), ('22.5','39.4'), ('22.5','39.5'), ('22.5','39.6'), ('22.5','39.7'), ('22.5','39.8'), ('22.5','39.9'), ('22.6','39.1'), ('22.6','39.2'), ('22.6','39.3'), ('22.6','39.4'), ('22.6','39.5'), ('22.6','39.6'), ('22.6','39.7'), ('22.6','39.8'), ('22.6','39.9'), ('22.7','39.1'), ('22.7','39.2'), ('22.7','39.3'), ('22.7','39.4'), ('22.7','39.5'), ('22.7','39.6'), ('22.7','39.7'), ('22.7','39.8'), ('22.7','39.9'), ('22.7','40.0'), ('22.8','39.0'), ('22.8','39.1'), ('22.8','39.2'), ('22.8','39.3'), ('22.8','39.4'), ('22.8','39.5'), ('22.8','39.6'), ('22.8','39.7'), ('22.8','39.8'), ('22.8','39.9'), ('22.9','39.0'), ('22.9','39.1'), ('22.9','39.2'), ('22.9','39.3'), ('22.9','39.4'), ('22.9','39.5'), ('22.9','39.6'), ('22.9','39.7'), ('22.9','39.8'), ('23.0','39.0'), ('23.0','39.1'), ('23.0','39.2'), ('23.0','39.3'), ('23.0','39.4'), ('23.0','39.5'), ('23.0','39.6'), ('23.1','39.1'), ('23.1','39.2'), ('23.1','39.3'), ('23.1','39.4'), ('23.1','39.5'), ('23.2','39.1'), ('23.2','39.2'), ('23.2','39.3'), ('23.2','39.4'), ('23.2','39.5'), ('23.3','39.1'), ('23.3','39.2'), ('23.3','39.3'), ('23.3','39.4'), ('23.4','39.1'), ('23.4','39.2'), ('23.5','39.1'), ('23.5','39.2'), ('23.6','39.1'), ('23.6','39.2'), ('23.7','39.0'), ('23.7','39.1'), ('23.7','39.2'), ('23.8','39.1'), ('23.8','39.2'), ('23.9','39.0'), ('23.9','39.1'), ('23.9','39.2'), ('23.9','39.3'), ('24.0','39.0'), ('24.0','39.1'), ('24.0','39.2'), ('24.0','39.3'), ('24.0','39.4'), ('24.1','39.0'), ('24.1','39.1'), ('24.1','39.3'), ('24.1','39.4'), ('24.1','39.5'), ('24.2','39.1'), ('24.2','39.3'), ('24.2','39.4'), ('24.2','39.5'), ('24.3','39.3'), ('24.3','39.4'), ('24.4','39.3'), ('24.4','39.4'));",
+                    "function_align": "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM meteo_windspeedmax.time) = '2021' AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1 AND (meteo_windspeedmax.longitude, meteo_windspeedmax.latitude) IN (('21.2','39.5'), ('21.2','39.6'), ('21.2','39.7'), ('21.3','39.4'), ('21.3','39.5'), ('21.3','39.6'), ('21.3','39.7'), ('21.3','39.8'), ('21.4','39.2'), ('21.4','39.4'), ('21.4','39.5'), ('21.4','39.6'), ('21.4','39.7'), ('21.4','39.8'), ('21.5','39.3'), ('21.5','39.4'), ('21.5','39.5'), ('21.5','39.6'), ('21.5','39.7'), ('21.5','39.8'), ('21.6','39.3'), ('21.6','39.4'), ('21.6','39.5'), ('21.6','39.6'), ('21.6','39.7'), ('21.6','39.8'), ('21.7','39.2'), ('21.7','39.3'), ('21.7','39.4'), ('21.7','39.5'), ('21.7','39.6'), ('21.7','39.7'), ('21.7','39.8'), ('21.8','39.2'), ('21.8','39.3'), ('21.8','39.4'), ('21.8','39.5'), ('21.8','39.6'), ('21.8','39.7'), ('21.8','39.8'), ('21.9','39.2'), ('21.9','39.3'), ('21.9','39.4'), ('21.9','39.5'), ('21.9','39.6'), ('21.9','39.7'), ('21.9','39.8'), ('22.0','39.1'), ('22.0','39.2'), ('22.0','39.3'), ('22.0','39.4'), ('22.0','39.5'), ('22.0','39.6'), ('22.0','39.7'), ('22.0','39.8'), ('22.0','39.9'), ('22.0','40.0'), ('22.1','39.1'), ('22.1','39.2'), ('22.1','39.3'), ('22.1','39.4'), ('22.1','39.5'), ('22.1','39.6'), ('22.1','39.7'), ('22.1','39.8'), ('22.1','39.9'), ('22.1','40.0'), ('22.2','39.2'), ('22.2','39.3'), ('22.2','39.4'), ('22.2','39.5'), ('22.2','39.6'), ('22.2','39.7'), ('22.2','39.8'), ('22.2','39.9'), ('22.2','40.0'), ('22.3','39.3'), ('22.3','39.4'), ('22.3','39.5'), ('22.3','39.6'), ('22.3','39.7'), ('22.3','39.8'), ('22.3','39.9'), ('22.3','40.0'), ('22.4','39.3'), ('22.4','39.4'), ('22.4','39.5'), ('22.4','39.6'), ('22.4','39.7'), ('22.4','39.8'), ('22.4','39.9'), ('22.4','40.0'), ('22.5','39.1'), ('22.5','39.2'), ('22.5','39.3'), ('22.5','39.4'), ('22.5','39.5'), ('22.5','39.6'), ('22.5','39.7'), ('22.5','39.8'), ('22.5','39.9'), ('22.6','39.1'), ('22.6','39.2'), ('22.6','39.3'), ('22.6','39.4'), ('22.6','39.5'), ('22.6','39.6'), ('22.6','39.7'), ('22.6','39.8'), ('22.6','39.9'), ('22.7','39.1'), ('22.7','39.2'), ('22.7','39.3'), ('22.7','39.4'), ('22.7','39.5'), ('22.7','39.6'), ('22.7','39.7'), ('22.7','39.8'), ('22.7','39.9'), ('22.7','40.0'), ('22.8','39.0'), ('22.8','39.1'), ('22.8','39.2'), ('22.8','39.3'), ('22.8','39.4'), ('22.8','39.5'), ('22.8','39.6'), ('22.8','39.7'), ('22.8','39.8'), ('22.8','39.9'), ('22.9','39.0'), ('22.9','39.1'), ('22.9','39.2'), ('22.9','39.3'), ('22.9','39.4'), ('22.9','39.5'), ('22.9','39.6'), ('22.9','39.7'), ('22.9','39.8'), ('23.0','39.0'), ('23.0','39.1'), ('23.0','39.2'), ('23.0','39.3'), ('23.0','39.4'), ('23.0','39.5'), ('23.0','39.6'), ('23.1','39.1'), ('23.1','39.2'), ('23.1','39.3'), ('23.1','39.4'), ('23.1','39.5'), ('23.2','39.1'), ('23.2','39.2'), ('23.2','39.3'), ('23.2','39.4'), ('23.2','39.5'), ('23.3','39.1'), ('23.3','39.2'), ('23.3','39.3'), ('23.3','39.4'), ('23.4','39.1'), ('23.4','39.2'), ('23.5','39.1'), ('23.5','39.2'), ('23.6','39.1'), ('23.6','39.2'), ('23.7','39.0'), ('23.7','39.1'), ('23.7','39.2'), ('23.8','39.1'), ('23.8','39.2'), ('23.9','39.0'), ('23.9','39.1'), ('23.9','39.2'), ('23.9','39.3'), ('24.0','39.0'), ('24.0','39.1'), ('24.0','39.2'), ('24.0','39.3'), ('24.0','39.4'), ('24.1','39.0'), ('24.1','39.1'), ('24.1','39.3'), ('24.1','39.4'), ('24.1','39.5'), ('24.2','39.1'), ('24.2','39.3'), ('24.2','39.4'), ('24.2','39.5'), ('24.3','39.3'), ('24.3','39.4'), ('24.4','39.3'), ('24.4','39.4'));"
+                },
+                "sql": "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM meteo_windspeedmax.time) = '2021' AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1 AND (meteo_windspeedmax.longitude, meteo_windspeedmax.latitude) IN (('21.2','39.5'), ('21.2','39.6'), ('21.2','39.7'), ('21.3','39.4'), ('21.3','39.5'), ('21.3','39.6'), ('21.3','39.7'), ('21.3','39.8'), ('21.4','39.2'), ('21.4','39.4'), ('21.4','39.5'), ('21.4','39.6'), ('21.4','39.7'), ('21.4','39.8'), ('21.5','39.3'), ('21.5','39.4'), ('21.5','39.5'), ('21.5','39.6'), ('21.5','39.7'), ('21.5','39.8'), ('21.6','39.3'), ('21.6','39.4'), ('21.6','39.5'), ('21.6','39.6'), ('21.6','39.7'), ('21.6','39.8'), ('21.7','39.2'), ('21.7','39.3'), ('21.7','39.4'), ('21.7','39.5'), ('21.7','39.6'), ('21.7','39.7'), ('21.7','39.8'), ('21.8','39.2'), ('21.8','39.3'), ('21.8','39.4'), ('21.8','39.5'), ('21.8','39.6'), ('21.8','39.7'), ('21.8','39.8'), ('21.9','39.2'), ('21.9','39.3'), ('21.9','39.4'), ('21.9','39.5'), ('21.9','39.6'), ('21.9','39.7'), ('21.9','39.8'), ('22.0','39.1'), ('22.0','39.2'), ('22.0','39.3'), ('22.0','39.4'), ('22.0','39.5'), ('22.0','39.6'), ('22.0','39.7'), ('22.0','39.8'), ('22.0','39.9'), ('22.0','40.0'), ('22.1','39.1'), ('22.1','39.2'), ('22.1','39.3'), ('22.1','39.4'), ('22.1','39.5'), ('22.1','39.6'), ('22.1','39.7'), ('22.1','39.8'), ('22.1','39.9'), ('22.1','40.0'), ('22.2','39.2'), ('22.2','39.3'), ('22.2','39.4'), ('22.2','39.5'), ('22.2','39.6'), ('22.2','39.7'), ('22.2','39.8'), ('22.2','39.9'), ('22.2','40.0'), ('22.3','39.3'), ('22.3','39.4'), ('22.3','39.5'), ('22.3','39.6'), ('22.3','39.7'), ('22.3','39.8'), ('22.3','39.9'), ('22.3','40.0'), ('22.4','39.3'), ('22.4','39.4'), ('22.4','39.5'), ('22.4','39.6'), ('22.4','39.7'), ('22.4','39.8'), ('22.4','39.9'), ('22.4','40.0'), ('22.5','39.1'), ('22.5','39.2'), ('22.5','39.3'), ('22.5','39.4'), ('22.5','39.5'), ('22.5','39.6'), ('22.5','39.7'), ('22.5','39.8'), ('22.5','39.9'), ('22.6','39.1'), ('22.6','39.2'), ('22.6','39.3'), ('22.6','39.4'), ('22.6','39.5'), ('22.6','39.6'), ('22.6','39.7'), ('22.6','39.8'), ('22.6','39.9'), ('22.7','39.1'), ('22.7','39.2'), ('22.7','39.3'), ('22.7','39.4'), ('22.7','39.5'), ('22.7','39.6'), ('22.7','39.7'), ('22.7','39.8'), ('22.7','39.9'), ('22.7','40.0'), ('22.8','39.0'), ('22.8','39.1'), ('22.8','39.2'), ('22.8','39.3'), ('22.8','39.4'), ('22.8','39.5'), ('22.8','39.6'), ('22.8','39.7'), ('22.8','39.8'), ('22.8','39.9'), ('22.9','39.0'), ('22.9','39.1'), ('22.9','39.2'), ('22.9','39.3'), ('22.9','39.4'), ('22.9','39.5'), ('22.9','39.6'), ('22.9','39.7'), ('22.9','39.8'), ('23.0','39.0'), ('23.0','39.1'), ('23.0','39.2'), ('23.0','39.3'), ('23.0','39.4'), ('23.0','39.5'), ('23.0','39.6'), ('23.1','39.1'), ('23.1','39.2'), ('23.1','39.3'), ('23.1','39.4'), ('23.1','39.5'), ('23.2','39.1'), ('23.2','39.2'), ('23.2','39.3'), ('23.2','39.4'), ('23.2','39.5'), ('23.3','39.1'), ('23.3','39.2'), ('23.3','39.3'), ('23.3','39.4'), ('23.4','39.1'), ('23.4','39.2'), ('23.5','39.1'), ('23.5','39.2'), ('23.6','39.1'), ('23.6','39.2'), ('23.7','39.0'), ('23.7','39.1'), ('23.7','39.2'), ('23.8','39.1'), ('23.8','39.2'), ('23.9','39.0'), ('23.9','39.1'), ('23.9','39.2'), ('23.9','39.3'), ('24.0','39.0'), ('24.0','39.1'), ('24.0','39.2'), ('24.0','39.3'), ('24.0','39.4'), ('24.1','39.0'), ('24.1','39.1'), ('24.1','39.3'), ('24.1','39.4'), ('24.1','39.5'), ('24.2','39.1'), ('24.2','39.3'), ('24.2','39.4'), ('24.2','39.5'), ('24.3','39.3'), ('24.3','39.4'), ('24.4','39.3'), ('24.4','39.4'));",
+                "answer": [
+                    [
+                        null
+                    ]
+                ],
+                "count": 1,
+                "time_cost": 0.08731293678283691,
+                "align_sql": "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM meteo_windspeedmax.time) = '2021' AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1 AND (meteo_windspeedmax.longitude, meteo_windspeedmax.latitude) IN (('21.2','39.5'), ('21.2','39.6'), ('21.2','39.7'), ('21.3','39.4'), ('21.3','39.5'), ('21.3','39.6'), ('21.3','39.7'), ('21.3','39.8'), ('21.4','39.2'), ('21.4','39.4'), ('21.4','39.5'), ('21.4','39.6'), ('21.4','39.7'), ('21.4','39.8'), ('21.5','39.3'), ('21.5','39.4'), ('21.5','39.5'), ('21.5','39.6'), ('21.5','39.7'), ('21.5','39.8'), ('21.6','39.3'), ('21.6','39.4'), ('21.6','39.5'), ('21.6','39.6'), ('21.6','39.7'), ('21.6','39.8'), ('21.7','39.2'), ('21.7','39.3'), ('21.7','39.4'), ('21.7','39.5'), ('21.7','39.6'), ('21.7','39.7'), ('21.7','39.8'), ('21.8','39.2'), ('21.8','39.3'), ('21.8','39.4'), ('21.8','39.5'), ('21.8','39.6'), ('21.8','39.7'), ('21.8','39.8'), ('21.9','39.2'), ('21.9','39.3'), ('21.9','39.4'), ('21.9','39.5'), ('21.9','39.6'), ('21.9','39.7'), ('21.9','39.8'), ('22.0','39.1'), ('22.0','39.2'), ('22.0','39.3'), ('22.0','39.4'), ('22.0','39.5'), ('22.0','39.6'), ('22.0','39.7'), ('22.0','39.8'), ('22.0','39.9'), ('22.0','40.0'), ('22.1','39.1'), ('22.1','39.2'), ('22.1','39.3'), ('22.1','39.4'), ('22.1','39.5'), ('22.1','39.6'), ('22.1','39.7'), ('22.1','39.8'), ('22.1','39.9'), ('22.1','40.0'), ('22.2','39.2'), ('22.2','39.3'), ('22.2','39.4'), ('22.2','39.5'), ('22.2','39.6'), ('22.2','39.7'), ('22.2','39.8'), ('22.2','39.9'), ('22.2','40.0'), ('22.3','39.3'), ('22.3','39.4'), ('22.3','39.5'), ('22.3','39.6'), ('22.3','39.7'), ('22.3','39.8'), ('22.3','39.9'), ('22.3','40.0'), ('22.4','39.3'), ('22.4','39.4'), ('22.4','39.5'), ('22.4','39.6'), ('22.4','39.7'), ('22.4','39.8'), ('22.4','39.9'), ('22.4','40.0'), ('22.5','39.1'), ('22.5','39.2'), ('22.5','39.3'), ('22.5','39.4'), ('22.5','39.5'), ('22.5','39.6'), ('22.5','39.7'), ('22.5','39.8'), ('22.5','39.9'), ('22.6','39.1'), ('22.6','39.2'), ('22.6','39.3'), ('22.6','39.4'), ('22.6','39.5'), ('22.6','39.6'), ('22.6','39.7'), ('22.6','39.8'), ('22.6','39.9'), ('22.7','39.1'), ('22.7','39.2'), ('22.7','39.3'), ('22.7','39.4'), ('22.7','39.5'), ('22.7','39.6'), ('22.7','39.7'), ('22.7','39.8'), ('22.7','39.9'), ('22.7','40.0'), ('22.8','39.0'), ('22.8','39.1'), ('22.8','39.2'), ('22.8','39.3'), ('22.8','39.4'), ('22.8','39.5'), ('22.8','39.6'), ('22.8','39.7'), ('22.8','39.8'), ('22.8','39.9'), ('22.9','39.0'), ('22.9','39.1'), ('22.9','39.2'), ('22.9','39.3'), ('22.9','39.4'), ('22.9','39.5'), ('22.9','39.6'), ('22.9','39.7'), ('22.9','39.8'), ('23.0','39.0'), ('23.0','39.1'), ('23.0','39.2'), ('23.0','39.3'), ('23.0','39.4'), ('23.0','39.5'), ('23.0','39.6'), ('23.1','39.1'), ('23.1','39.2'), ('23.1','39.3'), ('23.1','39.4'), ('23.1','39.5'), ('23.2','39.1'), ('23.2','39.2'), ('23.2','39.3'), ('23.2','39.4'), ('23.2','39.5'), ('23.3','39.1'), ('23.3','39.2'), ('23.3','39.3'), ('23.3','39.4'), ('23.4','39.1'), ('23.4','39.2'), ('23.5','39.1'), ('23.5','39.2'), ('23.6','39.1'), ('23.6','39.2'), ('23.7','39.0'), ('23.7','39.1'), ('23.7','39.2'), ('23.8','39.1'), ('23.8','39.2'), ('23.9','39.0'), ('23.9','39.1'), ('23.9','39.2'), ('23.9','39.3'), ('24.0','39.0'), ('24.0','39.1'), ('24.0','39.2'), ('24.0','39.3'), ('24.0','39.4'), ('24.1','39.0'), ('24.1','39.1'), ('24.1','39.3'), ('24.1','39.4'), ('24.1','39.5'), ('24.2','39.1'), ('24.2','39.3'), ('24.2','39.4'), ('24.2','39.5'), ('24.3','39.3'), ('24.3','39.4'), ('24.4','39.3'), ('24.4','39.4'));",
+                "align_ans": null,
+                "correct_sql": "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1 AND (meteo_windspeedmax.longitude, meteo_windspeedmax.latitude) IN (('21.2','39.5'), ('21.2','39.6'), ('21.2','39.7'), ('21.3','39.4'), ('21.3','39.5'), ('21.3','39.6'), ('21.3','39.7'), ('21.3','39.8'), ('21.4','39.2'), ('21.4','39.4'), ('21.4','39.5'), ('21.4','39.6'), ('21.4','39.7'), ('21.4','39.8'), ('21.5','39.3'), ('21.5','39.4'), ('21.5','39.5'), ('21.5','39.6'), ('21.5','39.7'), ('21.5','39.8'), ('21.6','39.3'), ('21.6','39.4'), ('21.6','39.5'), ('21.6','39.6'), ('21.6','39.7'), ('21.6','39.8'), ('21.7','39.2'), ('21.7','39.3'), ('21.7','39.4'), ('21.7','39.5'), ('21.7','39.6'), ('21.7','39.7'), ('21.7','39.8'), ('21.8','39.2'), ('21.8','39.3'), ('21.8','39.4'), ('21.8','39.5'), ('21.8','39.6'), ('21.8','39.7'), ('21.8','39.8'), ('21.9','39.2'), ('21.9','39.3'), ('21.9','39.4'), ('21.9','39.5'), ('21.9','39.6'), ('21.9','39.7'), ('21.9','39.8'), ('22.0','39.1'), ('22.0','39.2'), ('22.0','39.3'), ('22.0','39.4'), ('22.0','39.5'), ('22.0','39.6'), ('22.0','39.7'), ('22.0','39.8'), ('22.0','39.9'), ('22.0','40.0'), ('22.1','39.1'), ('22.1','39.2'), ('22.1','39.3'), ('22.1','39.4'), ('22.1','39.5'), ('22.1','39.6'), ('22.1','39.7'), ('22.1','39.8'), ('22.1','39.9'), ('22.1','40.0'), ('22.2','39.2'), ('22.2','39.3'), ('22.2','39.4'), ('22.2','39.5'), ('22.2','39.6'), ('22.2','39.7'), ('22.2','39.8'), ('22.2','39.9'), ('22.2','40.0'), ('22.3','39.3'), ('22.3','39.4'), ('22.3','39.5'), ('22.3','39.6'), ('22.3','39.7'), ('22.3','39.8'), ('22.3','39.9'), ('22.3','40.0'), ('22.4','39.3'), ('22.4','39.4'), ('22.4','39.5'), ('22.4','39.6'), ('22.4','39.7'), ('22.4','39.8'), ('22.4','39.9'), ('22.4','40.0'), ('22.5','39.1'), ('22.5','39.2'), ('22.5','39.3'), ('22.5','39.4'), ('22.5','39.5'), ('22.5','39.6'), ('22.5','39.7'), ('22.5','39.8'), ('22.5','39.9'), ('22.6','39.1'), ('22.6','39.2'), ('22.6','39.3'), ('22.6','39.4'), ('22.6','39.5'), ('22.6','39.6'), ('22.6','39.7'), ('22.6','39.8'), ('22.6','39.9'), ('22.7','39.1'), ('22.7','39.2'), ('22.7','39.3'), ('22.7','39.4'), ('22.7','39.5'), ('22.7','39.6'), ('22.7','39.7'), ('22.7','39.8'), ('22.7','39.9'), ('22.7','40.0'), ('22.8','39.0'), ('22.8','39.1'), ('22.8','39.2'), ('22.8','39.3'), ('22.8','39.4'), ('22.8','39.5'), ('22.8','39.6'), ('22.8','39.7'), ('22.8','39.8'), ('22.8','39.9'), ('22.9','39.0'), ('22.9','39.1'), ('22.9','39.2'), ('22.9','39.3'), ('22.9','39.4'), ('22.9','39.5'), ('22.9','39.6'), ('22.9','39.7'), ('22.9','39.8'), ('23.0','39.0'), ('23.0','39.1'), ('23.0','39.2'), ('23.0','39.3'), ('23.0','39.4'), ('23.0','39.5'), ('23.0','39.6'), ('23.1','39.1'), ('23.1','39.2'), ('23.1','39.3'), ('23.1','39.4'), ('23.1','39.5'), ('23.2','39.1'), ('23.2','39.2'), ('23.2','39.3'), ('23.2','39.4'), ('23.2','39.5'), ('23.3','39.1'), ('23.3','39.2'), ('23.3','39.3'), ('23.3','39.4'), ('23.4','39.1'), ('23.4','39.2'), ('23.5','39.1'), ('23.5','39.2'), ('23.6','39.1'), ('23.6','39.2'), ('23.7','39.0'), ('23.7','39.1'), ('23.7','39.2'), ('23.8','39.1'), ('23.8','39.2'), ('23.9','39.0'), ('23.9','39.1'), ('23.9','39.2'), ('23.9','39.3'), ('24.0','39.0'), ('24.0','39.1'), ('24.0','39.2'), ('24.0','39.3'), ('24.0','39.4'), ('24.1','39.0'), ('24.1','39.1'), ('24.1','39.3'), ('24.1','39.4'), ('24.1','39.5'), ('24.2','39.1'), ('24.2','39.3'), ('24.2','39.4'), ('24.2','39.5'), ('24.3','39.3'), ('24.3','39.4'), ('24.4','39.3'), ('24.4','39.4'));",
+                "correct_ans": null
+            },
+            {
+                "sql_history": {
+                    "style_align": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude BETWEEN 39.0 AND 40.0 AND longitude BETWEEN 21.2 AND 24.4 AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1",
+                    "function_align": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude BETWEEN 39.0 AND 40.0 AND longitude BETWEEN 21.2 AND 24.4 AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1"
+                },
+                "sql": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude BETWEEN 39.0 AND 40.0 AND longitude BETWEEN 21.2 AND 24.4 AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1",
+                "answer": [
+                    [
+                        null
+                    ]
+                ],
+                "count": 1,
+                "time_cost": 1.5981907844543457,
+                "align_sql": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude BETWEEN 39.0 AND 40.0 AND longitude BETWEEN 21.2 AND 24.4 AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1",
+                "align_ans": null,
+                "correct_sql": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude BETWEEN 39.0 AND 40.0 AND longitude BETWEEN 21.2 AND 24.4 AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1",
+                "correct_ans": null
+            }
+        ],
+        "none_case": false,
+        "implicit_check_status": "pass",
+        "implicit_check_warnings": [],
+        "status": "success"
+    },
+    {
+        "node_type": "vote",
+        "SQL": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1;",
+        "SQL_correct_vote": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1;",
+        "nonecase": false,
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generate": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the minimum wind speed in Thessaly Region in January 2021?",
+            "Evidence": "None",
+            "GOLD_SQL": "SELECT\n  MIN(mws.windspeedmax)\nFROM meteo_windspeedmax AS mws\nWHERE\n  EXTRACT(MONTH FROM mws.time) = 1\n  AND EXTRACT(YEAR FROM mws.time) = 2021\n  AND (\n    ROUND(CAST(mws.latitude AS DECIMAL), 1),\n    ROUND(CAST(mws.longitude AS DECIMAL), 1)\n  ) IN (\n    (39.5, 21.2),\n    (39.6, 21.2),\n    (39.7, 21.2),\n    (39.4, 21.3),\n    (39.5, 21.3),\n    (39.6, 21.3),\n    (39.7, 21.3),\n    (39.8, 21.3),\n    (39.2, 21.4),\n    (39.4, 21.4),\n    (39.5, 21.4),\n    (39.6, 21.4),\n    (39.7, 21.4),\n    (39.8, 21.4),\n    (39.3, 21.5),\n    (39.4, 21.5),\n    (39.5, 21.5),\n    (39.6, 21.5),\n    (39.7, 21.5),\n    (39.8, 21.5),\n    (39.3, 21.6),\n    (39.4, 21.6),\n    (39.5, 21.6),\n    (39.6, 21.6),\n    (39.7, 21.6),\n    (39.8, 21.6),\n    (39.2, 21.7),\n    (39.3, 21.7),\n    (39.4, 21.7),\n    (39.5, 21.7),\n    (39.6, 21.7),\n    (39.7, 21.7),\n    (39.8, 21.7),\n    (39.2, 21.8),\n    (39.3, 21.8),\n    (39.4, 21.8),\n    (39.5, 21.8),\n    (39.6, 21.8),\n    (39.7, 21.8),\n    (39.8, 21.8),\n    (39.2, 21.9),\n    (39.3, 21.9),\n    (39.4, 21.9),\n    (39.5, 21.9),\n    (39.6, 21.9),\n    (39.7, 21.9),\n    (39.8, 21.9),\n    (39.1, 22.0),\n    (39.2, 22.0),\n    (39.3, 22.0),\n    (39.4, 22.0),\n    (39.5, 22.0),\n    (39.6, 22.0),\n    (39.7, 22.0),\n    (39.8, 22.0),\n    (39.9, 22.0),\n    (40.0, 22.0),\n    (39.1, 22.1),\n    (39.2, 22.1),\n    (39.3, 22.1),\n    (39.4, 22.1),\n    (39.5, 22.1),\n    (39.6, 22.1),\n    (39.7, 22.1),\n    (39.8, 22.1),\n    (39.9, 22.1),\n    (40.0, 22.1),\n    (39.2, 22.2),\n    (39.3, 22.2),\n    (39.4, 22.2),\n    (39.5, 22.2),\n    (39.6, 22.2),\n    (39.7, 22.2),\n    (39.8, 22.2),\n    (39.9, 22.2),\n    (40.0, 22.2),\n    (39.3, 22.3),\n    (39.4, 22.3),\n    (39.5, 22.3),\n    (39.6, 22.3),\n    (39.7, 22.3),\n    (39.8, 22.3),\n    (39.9, 22.3),\n    (40.0, 22.3),\n    (39.3, 22.4),\n    (39.4, 22.4),\n    (39.5, 22.4),\n    (39.6, 22.4),\n    (39.7, 22.4),\n    (39.8, 22.4),\n    (39.9, 22.4),\n    (40.0, 22.4),\n    (39.1, 22.5),\n    (39.2, 22.5),\n    (39.3, 22.5),\n    (39.4, 22.5),\n    (39.5, 22.5),\n    (39.6, 22.5),\n    (39.7, 22.5),\n    (39.8, 22.5),\n    (39.9, 22.5),\n    (39.1, 22.6),\n    (39.2, 22.6),\n    (39.3, 22.6),\n    (39.4, 22.6),\n    (39.5, 22.6),\n    (39.6, 22.6),\n    (39.7, 22.6),\n    (39.8, 22.6),\n    (39.9, 22.6),\n    (39.1, 22.7),\n    (39.2, 22.7),\n    (39.3, 22.7),\n    (39.4, 22.7),\n    (39.5, 22.7),\n    (39.6, 22.7),\n    (39.7, 22.7),\n    (39.8, 22.7),\n    (39.9, 22.7),\n    (40.0, 22.7),\n    (39.0, 22.8),\n    (39.1, 22.8),\n    (39.2, 22.8),\n    (39.3, 22.8),\n    (39.4, 22.8),\n    (39.5, 22.8),\n    (39.6, 22.8),\n    (39.7, 22.8),\n    (39.8, 22.8),\n    (39.9, 22.8),\n    (39.0, 22.9),\n    (39.1, 22.9),\n    (39.2, 22.9),\n    (39.3, 22.9),\n    (39.4, 22.9),\n    (39.5, 22.9),\n    (39.6, 22.9),\n    (39.7, 22.9),\n    (39.8, 22.9),\n    (39.0, 23.0),\n    (39.1, 23.0),\n    (39.2, 23.0),\n    (39.3, 23.0),\n    (39.4, 23.0),\n    (39.5, 23.0),\n    (39.6, 23.0),\n    (39.1, 23.1),\n    (39.2, 23.1),\n    (39.3, 23.1),\n    (39.4, 23.1),\n    (39.5, 23.1),\n    (39.1, 23.2),\n    (39.2, 23.2),\n    (39.3, 23.2),\n    (39.4, 23.2),\n    (39.5, 23.2),\n    (39.1, 23.3),\n    (39.2, 23.3),\n    (39.3, 23.3),\n    (39.4, 23.3),\n    (39.1, 23.4),\n    (39.2, 23.4),\n    (39.1, 23.5),\n    (39.2, 23.5),\n    (39.1, 23.6),\n    (39.2, 23.6),\n    (39.0, 23.7),\n    (39.1, 23.7),\n    (39.2, 23.7),\n    (39.1, 23.8),\n    (39.2, 23.8),\n    (39.0, 23.9),\n    (39.1, 23.9),\n    (39.2, 23.9),\n    (39.3, 23.9),\n    (39.0, 24.0),\n    (39.1, 24.0),\n    (39.2, 24.0),\n    (39.3, 24.0),\n    (39.4, 24.0),\n    (39.0, 24.1),\n    (39.1, 24.1),\n    (39.3, 24.1),\n    (39.4, 24.1),\n    (39.5, 24.1),\n    (39.1, 24.2),\n    (39.3, 24.2),\n    (39.4, 24.2),\n    (39.5, 24.2),\n    (39.3, 24.3),\n    (39.4, 24.3),\n    (39.3, 24.4),\n    (39.4, 24.4)\n  )",
+            "PREDICTED_SQL": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1;"
+        },
+        "align_correct": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the minimum wind speed in Thessaly Region in January 2021?",
+            "Evidence": "None",
+            "GOLD_SQL": "SELECT\n  MIN(mws.windspeedmax)\nFROM meteo_windspeedmax AS mws\nWHERE\n  EXTRACT(MONTH FROM mws.time) = 1\n  AND EXTRACT(YEAR FROM mws.time) = 2021\n  AND (\n    ROUND(CAST(mws.latitude AS DECIMAL), 1),\n    ROUND(CAST(mws.longitude AS DECIMAL), 1)\n  ) IN (\n    (39.5, 21.2),\n    (39.6, 21.2),\n    (39.7, 21.2),\n    (39.4, 21.3),\n    (39.5, 21.3),\n    (39.6, 21.3),\n    (39.7, 21.3),\n    (39.8, 21.3),\n    (39.2, 21.4),\n    (39.4, 21.4),\n    (39.5, 21.4),\n    (39.6, 21.4),\n    (39.7, 21.4),\n    (39.8, 21.4),\n    (39.3, 21.5),\n    (39.4, 21.5),\n    (39.5, 21.5),\n    (39.6, 21.5),\n    (39.7, 21.5),\n    (39.8, 21.5),\n    (39.3, 21.6),\n    (39.4, 21.6),\n    (39.5, 21.6),\n    (39.6, 21.6),\n    (39.7, 21.6),\n    (39.8, 21.6),\n    (39.2, 21.7),\n    (39.3, 21.7),\n    (39.4, 21.7),\n    (39.5, 21.7),\n    (39.6, 21.7),\n    (39.7, 21.7),\n    (39.8, 21.7),\n    (39.2, 21.8),\n    (39.3, 21.8),\n    (39.4, 21.8),\n    (39.5, 21.8),\n    (39.6, 21.8),\n    (39.7, 21.8),\n    (39.8, 21.8),\n    (39.2, 21.9),\n    (39.3, 21.9),\n    (39.4, 21.9),\n    (39.5, 21.9),\n    (39.6, 21.9),\n    (39.7, 21.9),\n    (39.8, 21.9),\n    (39.1, 22.0),\n    (39.2, 22.0),\n    (39.3, 22.0),\n    (39.4, 22.0),\n    (39.5, 22.0),\n    (39.6, 22.0),\n    (39.7, 22.0),\n    (39.8, 22.0),\n    (39.9, 22.0),\n    (40.0, 22.0),\n    (39.1, 22.1),\n    (39.2, 22.1),\n    (39.3, 22.1),\n    (39.4, 22.1),\n    (39.5, 22.1),\n    (39.6, 22.1),\n    (39.7, 22.1),\n    (39.8, 22.1),\n    (39.9, 22.1),\n    (40.0, 22.1),\n    (39.2, 22.2),\n    (39.3, 22.2),\n    (39.4, 22.2),\n    (39.5, 22.2),\n    (39.6, 22.2),\n    (39.7, 22.2),\n    (39.8, 22.2),\n    (39.9, 22.2),\n    (40.0, 22.2),\n    (39.3, 22.3),\n    (39.4, 22.3),\n    (39.5, 22.3),\n    (39.6, 22.3),\n    (39.7, 22.3),\n    (39.8, 22.3),\n    (39.9, 22.3),\n    (40.0, 22.3),\n    (39.3, 22.4),\n    (39.4, 22.4),\n    (39.5, 22.4),\n    (39.6, 22.4),\n    (39.7, 22.4),\n    (39.8, 22.4),\n    (39.9, 22.4),\n    (40.0, 22.4),\n    (39.1, 22.5),\n    (39.2, 22.5),\n    (39.3, 22.5),\n    (39.4, 22.5),\n    (39.5, 22.5),\n    (39.6, 22.5),\n    (39.7, 22.5),\n    (39.8, 22.5),\n    (39.9, 22.5),\n    (39.1, 22.6),\n    (39.2, 22.6),\n    (39.3, 22.6),\n    (39.4, 22.6),\n    (39.5, 22.6),\n    (39.6, 22.6),\n    (39.7, 22.6),\n    (39.8, 22.6),\n    (39.9, 22.6),\n    (39.1, 22.7),\n    (39.2, 22.7),\n    (39.3, 22.7),\n    (39.4, 22.7),\n    (39.5, 22.7),\n    (39.6, 22.7),\n    (39.7, 22.7),\n    (39.8, 22.7),\n    (39.9, 22.7),\n    (40.0, 22.7),\n    (39.0, 22.8),\n    (39.1, 22.8),\n    (39.2, 22.8),\n    (39.3, 22.8),\n    (39.4, 22.8),\n    (39.5, 22.8),\n    (39.6, 22.8),\n    (39.7, 22.8),\n    (39.8, 22.8),\n    (39.9, 22.8),\n    (39.0, 22.9),\n    (39.1, 22.9),\n    (39.2, 22.9),\n    (39.3, 22.9),\n    (39.4, 22.9),\n    (39.5, 22.9),\n    (39.6, 22.9),\n    (39.7, 22.9),\n    (39.8, 22.9),\n    (39.0, 23.0),\n    (39.1, 23.0),\n    (39.2, 23.0),\n    (39.3, 23.0),\n    (39.4, 23.0),\n    (39.5, 23.0),\n    (39.6, 23.0),\n    (39.1, 23.1),\n    (39.2, 23.1),\n    (39.3, 23.1),\n    (39.4, 23.1),\n    (39.5, 23.1),\n    (39.1, 23.2),\n    (39.2, 23.2),\n    (39.3, 23.2),\n    (39.4, 23.2),\n    (39.5, 23.2),\n    (39.1, 23.3),\n    (39.2, 23.3),\n    (39.3, 23.3),\n    (39.4, 23.3),\n    (39.1, 23.4),\n    (39.2, 23.4),\n    (39.1, 23.5),\n    (39.2, 23.5),\n    (39.1, 23.6),\n    (39.2, 23.6),\n    (39.0, 23.7),\n    (39.1, 23.7),\n    (39.2, 23.7),\n    (39.1, 23.8),\n    (39.2, 23.8),\n    (39.0, 23.9),\n    (39.1, 23.9),\n    (39.2, 23.9),\n    (39.3, 23.9),\n    (39.0, 24.0),\n    (39.1, 24.0),\n    (39.2, 24.0),\n    (39.3, 24.0),\n    (39.4, 24.0),\n    (39.0, 24.1),\n    (39.1, 24.1),\n    (39.3, 24.1),\n    (39.4, 24.1),\n    (39.5, 24.1),\n    (39.1, 24.2),\n    (39.3, 24.2),\n    (39.4, 24.2),\n    (39.5, 24.2),\n    (39.3, 24.3),\n    (39.4, 24.3),\n    (39.3, 24.4),\n    (39.4, 24.4)\n  )",
+            "PREDICTED_SQL": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.9, 40.0, 39.1) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1;"
+        },
+        "vote": {
+            "exec_res": 1,
+            "exec_err": "--",
+            "Question": "What is the minimum wind speed in Thessaly Region in January 2021?",
+            "Evidence": "None",
+            "GOLD_SQL": "SELECT\n  MIN(mws.windspeedmax)\nFROM meteo_windspeedmax AS mws\nWHERE\n  EXTRACT(MONTH FROM mws.time) = 1\n  AND EXTRACT(YEAR FROM mws.time) = 2021\n  AND (\n    ROUND(CAST(mws.latitude AS DECIMAL), 1),\n    ROUND(CAST(mws.longitude AS DECIMAL), 1)\n  ) IN (\n    (39.5, 21.2),\n    (39.6, 21.2),\n    (39.7, 21.2),\n    (39.4, 21.3),\n    (39.5, 21.3),\n    (39.6, 21.3),\n    (39.7, 21.3),\n    (39.8, 21.3),\n    (39.2, 21.4),\n    (39.4, 21.4),\n    (39.5, 21.4),\n    (39.6, 21.4),\n    (39.7, 21.4),\n    (39.8, 21.4),\n    (39.3, 21.5),\n    (39.4, 21.5),\n    (39.5, 21.5),\n    (39.6, 21.5),\n    (39.7, 21.5),\n    (39.8, 21.5),\n    (39.3, 21.6),\n    (39.4, 21.6),\n    (39.5, 21.6),\n    (39.6, 21.6),\n    (39.7, 21.6),\n    (39.8, 21.6),\n    (39.2, 21.7),\n    (39.3, 21.7),\n    (39.4, 21.7),\n    (39.5, 21.7),\n    (39.6, 21.7),\n    (39.7, 21.7),\n    (39.8, 21.7),\n    (39.2, 21.8),\n    (39.3, 21.8),\n    (39.4, 21.8),\n    (39.5, 21.8),\n    (39.6, 21.8),\n    (39.7, 21.8),\n    (39.8, 21.8),\n    (39.2, 21.9),\n    (39.3, 21.9),\n    (39.4, 21.9),\n    (39.5, 21.9),\n    (39.6, 21.9),\n    (39.7, 21.9),\n    (39.8, 21.9),\n    (39.1, 22.0),\n    (39.2, 22.0),\n    (39.3, 22.0),\n    (39.4, 22.0),\n    (39.5, 22.0),\n    (39.6, 22.0),\n    (39.7, 22.0),\n    (39.8, 22.0),\n    (39.9, 22.0),\n    (40.0, 22.0),\n    (39.1, 22.1),\n    (39.2, 22.1),\n    (39.3, 22.1),\n    (39.4, 22.1),\n    (39.5, 22.1),\n    (39.6, 22.1),\n    (39.7, 22.1),\n    (39.8, 22.1),\n    (39.9, 22.1),\n    (40.0, 22.1),\n    (39.2, 22.2),\n    (39.3, 22.2),\n    (39.4, 22.2),\n    (39.5, 22.2),\n    (39.6, 22.2),\n    (39.7, 22.2),\n    (39.8, 22.2),\n    (39.9, 22.2),\n    (40.0, 22.2),\n    (39.3, 22.3),\n    (39.4, 22.3),\n    (39.5, 22.3),\n    (39.6, 22.3),\n    (39.7, 22.3),\n    (39.8, 22.3),\n    (39.9, 22.3),\n    (40.0, 22.3),\n    (39.3, 22.4),\n    (39.4, 22.4),\n    (39.5, 22.4),\n    (39.6, 22.4),\n    (39.7, 22.4),\n    (39.8, 22.4),\n    (39.9, 22.4),\n    (40.0, 22.4),\n    (39.1, 22.5),\n    (39.2, 22.5),\n    (39.3, 22.5),\n    (39.4, 22.5),\n    (39.5, 22.5),\n    (39.6, 22.5),\n    (39.7, 22.5),\n    (39.8, 22.5),\n    (39.9, 22.5),\n    (39.1, 22.6),\n    (39.2, 22.6),\n    (39.3, 22.6),\n    (39.4, 22.6),\n    (39.5, 22.6),\n    (39.6, 22.6),\n    (39.7, 22.6),\n    (39.8, 22.6),\n    (39.9, 22.6),\n    (39.1, 22.7),\n    (39.2, 22.7),\n    (39.3, 22.7),\n    (39.4, 22.7),\n    (39.5, 22.7),\n    (39.6, 22.7),\n    (39.7, 22.7),\n    (39.8, 22.7),\n    (39.9, 22.7),\n    (40.0, 22.7),\n    (39.0, 22.8),\n    (39.1, 22.8),\n    (39.2, 22.8),\n    (39.3, 22.8),\n    (39.4, 22.8),\n    (39.5, 22.8),\n    (39.6, 22.8),\n    (39.7, 22.8),\n    (39.8, 22.8),\n    (39.9, 22.8),\n    (39.0, 22.9),\n    (39.1, 22.9),\n    (39.2, 22.9),\n    (39.3, 22.9),\n    (39.4, 22.9),\n    (39.5, 22.9),\n    (39.6, 22.9),\n    (39.7, 22.9),\n    (39.8, 22.9),\n    (39.0, 23.0),\n    (39.1, 23.0),\n    (39.2, 23.0),\n    (39.3, 23.0),\n    (39.4, 23.0),\n    (39.5, 23.0),\n    (39.6, 23.0),\n    (39.1, 23.1),\n    (39.2, 23.1),\n    (39.3, 23.1),\n    (39.4, 23.1),\n    (39.5, 23.1),\n    (39.1, 23.2),\n    (39.2, 23.2),\n    (39.3, 23.2),\n    (39.4, 23.2),\n    (39.5, 23.2),\n    (39.1, 23.3),\n    (39.2, 23.3),\n    (39.3, 23.3),\n    (39.4, 23.3),\n    (39.1, 23.4),\n    (39.2, 23.4),\n    (39.1, 23.5),\n    (39.2, 23.5),\n    (39.1, 23.6),\n    (39.2, 23.6),\n    (39.0, 23.7),\n    (39.1, 23.7),\n    (39.2, 23.7),\n    (39.1, 23.8),\n    (39.2, 23.8),\n    (39.0, 23.9),\n    (39.1, 23.9),\n    (39.2, 23.9),\n    (39.3, 23.9),\n    (39.0, 24.0),\n    (39.1, 24.0),\n    (39.2, 24.0),\n    (39.3, 24.0),\n    (39.4, 24.0),\n    (39.0, 24.1),\n    (39.1, 24.1),\n    (39.3, 24.1),\n    (39.4, 24.1),\n    (39.5, 24.1),\n    (39.1, 24.2),\n    (39.3, 24.2),\n    (39.4, 24.2),\n    (39.5, 24.2),\n    (39.3, 24.3),\n    (39.4, 24.3),\n    (39.3, 24.4),\n    (39.4, 24.4)\n  )",
+            "PREDICTED_SQL": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE latitude IN (39.5, 39.6, 39.7, 39.4, 39.8, 39.2, 39.3, 39.1, 39.9, 40.0, 39.0) AND longitude IN (21.2, 21.3, 21.4, 21.5, 21.6, 21.7, 21.8, 21.9, 22.0, 22.1, 22.2, 22.3, 22.4, 22.5, 22.6, 22.7, 22.8, 22.9, 23.0, 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7, 23.8, 23.9, 24.0, 24.1, 24.2, 24.3, 24.4) AND EXTRACT(YEAR FROM time) = '2021' AND EXTRACT(MONTH FROM time) = 1;"
+        },
+        "status": "success"
+    }
+]

@@ -1,0 +1,180 @@
+{
+    "counts": {
+        "candidate_generate": {
+            "correct": 0,
+            "incorrect": 2,
+            "error": 8,
+            "total": 10
+        },
+        "align_correct": {
+            "correct": 0,
+            "incorrect": 6,
+            "error": 4,
+            "total": 10
+        },
+        "vote": {
+            "correct": 0,
+            "incorrect": 7,
+            "error": 3,
+            "total": 10
+        }
+    },
+    "ids": {
+        "candidate_generate": {
+            "correct": [],
+            "incorrect": [
+                [
+                    "meteo",
+                    3
+                ],
+                [
+                    "meteo",
+                    9
+                ]
+            ],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "cannot subscript type integer because it does not support subscripting\nLINE 1: ...led.ranks) AS rank ON TRUE JOIN landcover_type ON rank[1] = ...\n                                                             ^\n"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "cannot subscript type integer because it does not support subscripting\nLINE 1: ...nks) AS rank_array ON TRUE JOIN landcover_type ON rank_array...\n                                                             ^\n"
+                ],
+                [
+                    "meteo",
+                    2,
+                    "cannot subscript type integer because it does not support subscripting\nLINE 1: ...AS rank_element ON TRUE JOIN landcover_type lt ON rank_eleme...\n                                                             ^\n"
+                ],
+                [
+                    "meteo",
+                    4,
+                    "cannot subscript type integer because it does not support subscripting\nLINE 1: ... AS rank FROM landcover_upscaled ) AS unnested ON unnested.r...\n                                                             ^\n"
+                ],
+                [
+                    "meteo",
+                    5,
+                    "operator does not exist: text = integer\nLINE 1: ...e FROM landcover_upscaled ) lu ON lt.level3_label = lu.level...\n                                                             ^\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.\n"
+                ],
+                [
+                    "meteo",
+                    6,
+                    "cannot subscript type integer because it does not support subscripting\nLINE 1: ...k_idx) JOIN landcover_type lt ON lt.level3_code = rank_item....\n                                                             ^\n"
+                ],
+                [
+                    "meteo",
+                    7,
+                    "cannot subscript type integer because it does not support subscripting\nLINE 1: ...k_idx) JOIN landcover_type lt ON lt.level3_code = rank_item....\n                                                             ^\n"
+                ],
+                [
+                    "meteo",
+                    8,
+                    "operator does not exist: integer = text\nLINE 1: ...longitude JOIN landcover_type ON lc_unnested.rank = landcove...\n                                                             ^\nHINT:  No operator matches the given name and argument types. You might need to add explicit type casts.\n"
+                ]
+            ]
+        },
+        "align_correct": {
+            "correct": [],
+            "incorrect": [
+                [
+                    "meteo",
+                    0
+                ],
+                [
+                    "meteo",
+                    1
+                ],
+                [
+                    "meteo",
+                    3
+                ],
+                [
+                    "meteo",
+                    6
+                ],
+                [
+                    "meteo",
+                    8
+                ],
+                [
+                    "meteo",
+                    9
+                ]
+            ],
+            "error": [
+                [
+                    "meteo",
+                    2,
+                    "cannot subscript type integer because it does not support subscripting\nLINE 1: ...N true JOIN landcover_type lt ON lt.level3_code = rank_entry...\n                                                             ^\n"
+                ],
+                [
+                    "meteo",
+                    4,
+                    "cannot subscript type integer because it does not support subscripting\nLINE 1: ...itude JOIN landcover_type lt ON lt.level3_code = (lu.rank_en...\n                                                             ^\n"
+                ],
+                [
+                    "meteo",
+                    5,
+                    "column lu.level3_code does not exist\nLINE 1: ...M landcover_upscaled lu JOIN landcover_type lt ON lu.level3_...\n                                                             ^\nHINT:  Perhaps you meant to reference the column \"lt.level3_code\".\n"
+                ],
+                [
+                    "meteo",
+                    7,
+                    "column landcover_upscaled.level3_label does not exist\nLINE 1: ...el FROM landcover_upscaled JOIN landcover_type ON landcover_...\n                                                             ^\n"
+                ]
+            ]
+        },
+        "vote": {
+            "correct": [],
+            "incorrect": [
+                [
+                    "meteo",
+                    0
+                ],
+                [
+                    "meteo",
+                    1
+                ],
+                [
+                    "meteo",
+                    3
+                ],
+                [
+                    "meteo",
+                    4
+                ],
+                [
+                    "meteo",
+                    6
+                ],
+                [
+                    "meteo",
+                    8
+                ],
+                [
+                    "meteo",
+                    9
+                ]
+            ],
+            "error": [
+                [
+                    "meteo",
+                    2,
+                    "cannot subscript type integer because it does not support subscripting\nLINE 1: ...N true JOIN landcover_type lt ON lt.level3_code = rank_entry...\n                                                             ^\n"
+                ],
+                [
+                    "meteo",
+                    5,
+                    "column lu.level3_code does not exist\nLINE 1: ...M landcover_upscaled lu JOIN landcover_type lt ON lu.level3_...\n                                                             ^\nHINT:  Perhaps you meant to reference the column \"lt.level3_code\".\n"
+                ],
+                [
+                    "meteo",
+                    7,
+                    "column landcover_upscaled.level3_label does not exist\nLINE 1: ...el FROM landcover_upscaled JOIN landcover_type ON landcover_...\n                                                             ^\n"
+                ]
+            ]
+        }
+    }
+}

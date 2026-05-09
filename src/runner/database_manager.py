@@ -52,13 +52,18 @@ class DatabaseManager:
 
     @staticmethod
     def get_connection():
-        """Return a new psycopg2 connection from env vars."""
+        """Return a new psycopg2 connection from env vars with correct schema search_path."""
+        # Set search_path to the configured schema (default: era5_land2)
+        schema = os.environ.get("DB_SCHEMA", "era5_land2")
+        options = f"-c search_path={schema}"
+        
         return psycopg2.connect(
             host=os.environ.get("DB_HOST"),
             dbname=os.environ.get("DB_NAME"),
             user=os.environ.get("DB_USER"),
             port=os.environ.get("DB_PORT"),
             password=os.environ.get("DB_PASS"),
+            options=options,
         )
 
     # -- Execution-based comparison -------------------------------------------

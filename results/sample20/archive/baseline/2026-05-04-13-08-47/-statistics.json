@@ -1,0 +1,57 @@
+{
+    "counts": {
+        "candidate_generate": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 1,
+            "total": 1
+        },
+        "align_correct": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 1,
+            "total": 1
+        },
+        "vote": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 1,
+            "total": 1
+        }
+    },
+    "ids": {
+        "candidate_generate": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "relation \"meteo_tmean\" does not exist\nLINE 1: SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT...\n                                           ^\n"
+                ]
+            ]
+        },
+        "align_correct": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'OSError'>: <[Errno 5] Input/output error>"
+                ]
+            ]
+        },
+        "vote": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'KeyError'>: <'vote'>"
+                ]
+            ]
+        }
+    }
+}

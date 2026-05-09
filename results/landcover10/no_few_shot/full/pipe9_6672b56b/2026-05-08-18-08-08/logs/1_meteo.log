@@ -1,0 +1,3188 @@
+############################## Human at step extract_col_value ##############################
+
+/* Some extract examples are provided based on similar problems: */
+/* Answer the following: Please give the name of the course in which most numbers of the students got an A. Also, list the full name of the students who got an A in this course. most number of students got an A refers MAX(COUNT(student_id WHERE grade = 'A')); full name = f_name, l_name; got an A refers to grade = 'A'; */
+#reason: The question requires display in order: "name of the course", "full name"."A" is filtering condition.
+#columns: course.name, student.f_name, student.l_name, registration.grade, registration.student_id
+#values: "A"
+
+/* Answer the following:How much more votes for episode 1 than for episode 5? more votes refers to SUBTRACT(SUM(votes when episode = 1), SUM(votes when episode = 5)) */
+#reason: The question requires display in order: "How much more vote". The definition of "more vote" is SUBTRACT(SUM(votes when episode = 1), SUM(votes when episode = 5)). 1, 5 are filtering conditions.
+#columns: Episode.episode, Vote.votes
+#values: "1", "5"
+
+/* Answer the following: What is the average score of the movie "The Fall of Berlin" in 2019? Average score refers to Avg(rating_score); */
+#reason: The question requires display in order: "average score". Average score is Avg(rating_score), "The Fall of Berlin",2019 are filtering conditions.
+#columns: ratings.rating_score, ratings.rating_id, ratings.rating_timestamp_utc, movies.movie_title
+#values: "The Fall of Berlin", "2019"
+
+/* Answer the following: How many distinct orders were there in 2003 when the quantity ordered was less than 30? "year(orderDate) = '2003'; quantityOrdered < 30;" */
+#reason:  The question requires display in order: "How many distinct orders"." in 2003", "less than 30" are filtering conditions.
+#columns: orderdetails.orderNumber, orderdetails.quantityOrdered, orders.orderDate
+#values: "30", "2003"
+
+
+
+/* Database schema */
+Database Management System: PostgreSQL
+#Database name: meteo
+## Table landcover_type:
+id: The type is integer, which does not include Null and is Unique. Values format like: [19, 2, 34]
+level1_code: The type is integer, which does not include Null and is Non-Unique. Values format like: [4, 2, 5]
+level1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']
+level2_code: The type is integer, which does not include Null and is Non-Unique. Values format like: [22, 21, 24]
+level2_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Marine waters', 'Maritime wetlands', 'Pastures']
+level3_code: The type is integer, which does not include Null and is Unique. Values format like: [213, 312, 521]
+level3_label: The type is text, which does not include Null and is Unique. Values format like: ['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']
+
+## Table landcover_upscaled:
+latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+ranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]
+
+## Table meteo_elevation:
+id: The type is integer, which does not include Null and is Unique. Values format like: [16, 53, 31]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+elevation: The type is double precision, which does not include Null and is Unique. Values format like: [262.32, 261.07, 267.04]
+
+## Table meteo_sdmax:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+time_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+time_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]
+latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+sdmax: The type is double precision, which does not include Null and is Non-Unique. Values format like: [0.1543006004608365, 0.005855887968656992, 0.1904323847336456]
+
+## Table meteo_ssrd:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+ssrd: The type is double precision, which does not include Null and is Unique. Values format like: [2455904.0, 3285964.0, 3006604.0]
+
+## Table meteo_tmax:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+time_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+time_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+tmax: The type is real, which does not include Null and is Non-Unique. Values format like: [278.1831, 276.86865, 280.3921]
+
+## Table meteo_tmean:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+time_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+time_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+
+## Table meteo_tmin:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+time_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+time_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+tmin: The type is real, which does not include Null and is Non-Unique. Values format like: [275.60016, 275.70953, 274.0431]
+
+## Table meteo_tp:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+tp: The type is real, which does not include Null and is Unique. Values format like: [0.0043916972, 0.0024763464, 0.005056289]
+
+## Table meteo_windspeedmax:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+time_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+time_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+windspeedmax: The type is real, which does not include Null and is Unique. Values format like: [4.6727343, 4.60072, 5.389693]
+
+#Foreign keys:
+
+
+#Database Description: The database encompasses meteorological and geographical data, including weather variables (temperature, precipitation, wind speed, radiation), elevation information, and land cover classifications associated with specific coordinates and timestamps.
+#Tables Descriptions:
+landcover_type: Hierarchical classification codes and labels for different levels of land cover types.
+landcover_upscaled: Geographic coordinates linked to arrays of land cover ranks.
+meteo_elevation: Elevation data recorded for specific latitude and longitude coordinates.
+meteo_sdmax: Maximum standard deviation values with time boundaries and geographic coordinates.
+meteo_ssrd: Surface solar radiation downwards data associated with timestamps and locations.
+meteo_tmax: Maximum temperature records including time boundaries and geographic coordinates.
+meteo_tmean: Mean temperature records including time boundaries and geographic coordinates.
+meteo_tmin: Minimum temperature records including time boundaries and geographic coordinates.
+meteo_tp: Total precipitation data associated with timestamps and locations.
+meteo_windspeedmax: Maximum wind speed records including time boundaries and geographic coordinates.
+
+
+Attention:
+1. if the question have when\where\which, pay attention to pick table.column related to time, location and name in #columns
+2. Please answer the question in the following format without any other content:
+```
+#reason: Analysis of which columns and values might be relevant to the question. Note that when dealing with questions about time, who, which, what, etc., you should keep column related to time, names, and locations in the #column.(format: The question query xxx, the related column include table.column, the values include values)
+#columns: The top 10 columns relevant to the question( format: table.column_1, table.column_2 ...)
+#values: Potential filter values that the question might query(format: "value1", "value2" ...)
+```
+/* Answer the following: What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None */
+
+
+############################## AI at step extract_col_value ##############################
+
+```
+#reason: The question asks for the first-level landcover type (level1_label) at the location with the highest annual average temperature in Thessaly Region during 2010. To find the highest temperature, we need to use meteo_tmean (mean temperature) or similar temperature tables, filtered by year 2010. The location (latitude, longitude) from meteo_tmean must be matched with landcover_upscaled to get the land cover rank, then joined with landcover_type to get level1_label. However, "Thessaly Region" is a geographic name not present in any table, so we cannot filter by region name. The question may be unanswerable due to missing region mapping, but we proceed with highest temperature in 2010 using available data. The related column include meteo_tmean.time, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.tmean, landcover_upscaled.latitude, landcover_upscaled.longitude, landcover_upscaled.ranks, landcover_type.level1_label.
+#columns: meteo_tmean.time, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.tmean, landcover_upscaled.latitude, landcover_upscaled.longitude, landcover_upscaled.ranks, landcover_type.level1_label
+#values: "2010"
+```
+
+############################## Human at step extract_query_noun ##############################
+
+Please extract all nouns and phrases from the following sentence, separating the results directly with a comma( format: "noun_1", "noun_2","phrases" ):
+What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None
+
+############################## AI at step extract_query_noun ##############################
+
+"landcover", "type", "location", "annual average temperature", "Thessaly Region", "year", "2010"
+
+############################## Human at step column_retrieve_and_other_info ##############################
+
+现在我们定义一个问句的语法原子单元如下:
+Q: 询问词: 如 calculate\ Include\ List\ List out\ List all\ give\ state\ Name\ In which\ How many\  which\ what\ who\ when\ provide\ Tally\ identify\ Find\ mention\ write等
+J: 判断词： 如 Do\ Did\ If\ Is\ Are等
+I: 查询内容: 查询的主体内容, 如: name, ID, date, location, item, biggest city.
+C: 条件句: 通过介词和连词引入的查询的要求或属性, 如大于、等于、排序、聚合等. 介词和连词有: of\ have\ with\ that\ by. 条件句的形式例子有: with condition\ have condition\ of attribute\ that was condition
+
+
+一个问题通过这些原子串联起来。常见的串联方式有
+QIC(询问句): List the student with score more than 80: Q: 'List' I: 'the student' C: 'with score more than 80'
+JC(判断句): State if Tom is a Cat? : J: 'State if C: is a Cat?'
+C(条件句): For all people in Beijing
+现在请你针对下面的问题, 把问题中的内容按照上述原子定义提取出来
+问题如下: What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010?
+
+请按照下面的json格式进行回答:
+
+```json
+[{"Type":"类型(QIC,JC,C)",
+"Extract":{//不存在的填null
+    "Q":"询问词",
+    "J":"判断词",
+    "I":['查询内容a', '查询内容b'],//只有查询内容用and或alongside连接时,才分成多个实体填入List
+    "C":["条件句a","属性b"]
+}},
+{}]
+```
+
+############################## AI at step column_retrieve_and_other_info ##############################
+
+```json
+[
+  {
+    "Type": "QIC",
+    "Extract": {
+      "Q": "What",
+      "I": ["the first-level landcover type"],
+      "C": [
+        "at the location with the highest annual average temperature in Thessaly Region during the year 2010"
+      ]
+    }
+  }
+]
+```
+
+############################## Human at step candidate_generate ##############################
+
+
+
+/* Database schema */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_type.level1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+landcover_upscaled.ranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+# Based on the database schema and the examples above, pay attention to the following:
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
+2. "#Values in Database" display part values from the database. Please ignore the unnecessary values.
+3. If "#GEO_CONTEXT" is provided, use it as a spatial grounding constraint. Use only coordinates/bounds that appear in GEO_CONTEXT; do not invent place names or geometry values.
+4. If "#ONTOLOGY_GROUNDED_FUNCTION" is provided, treat it as an executable semantic constraint package (thresholds, temporal logic, aggregation hints). Map it only to existing schema columns/functions.
+5. When GEO/ontology context conflicts with schema feasibility, keep SQL executable and prioritize schema-valid expressions.
+6. For landcover questions, never join landcover_upscaled to landcover_type directly on latitude/longitude. Expand landcover_upscaled.ranks first (UNNEST or generate_subscripts), then join level3 code.
+7. Please refer to the examples above and answer in the following format without any other content:
+```
+#reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
+#columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
+#values: the filter in SQL (format: 'filter in question' refer to 'table.column <op> value'. e.g. 'name is not tom' refer to name <> 'tom', 'in 2007' refer to "EXTRACT(YEAR FROM Date) = 2007")
+#SELECT: SELECT content (format like: 'query in question' refer to table.column. The order of columns in the SELECT clause must be the same as the order in the question.)
+#SQL-like: SQL-like statements ignoring Join conditions
+#SQL: SQL
+```
+
+/* Answer the following: What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None */
+['the first-level landcover type']
+#GEO_CONTEXT:
+{
+  "place": "Thessaly Region",
+  "points": [
+    {
+      "lon": "21.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.2",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.2",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.0",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.1",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.2",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.3",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.4",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.7",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.0"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.0"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.8"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.0"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.5"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.6"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.5"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.4",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.4",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.5",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.5",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.6",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.6",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.7",
+      "lat": "39.0"
+    },
+    {
+      "lon": "23.7",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.7",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.8",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.8",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.0"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.0"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.1"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.2"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.0"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.1"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.5"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.1"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "24.3",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.4",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.4",
+      "lat": "39.4"
+    }
+  ],
+  "resolution": "places_dict"
+}
+#ONTOLOGY_GROUNDED_FUNCTION:
+{
+  "schema_version": "ontology_grounded_function.v1",
+  "question": "What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None",
+  "anchor": "appliesToVariable",
+  "target_variable": "",
+  "hops": null,
+  "semantic_chain": [],
+  "function_specs": [
+    {
+      "name": "Threshold",
+      "inputs": [
+        "Variable"
+      ],
+      "semantics": "Apply explicit operator from ontology threshold config.",
+      "pseudo_code_template": "ThresholdMatch := (Variable >= threshold_value)"
+    }
+  ],
+  "composition_order": [
+    "Threshold"
+  ],
+  "constraints": [
+    "operator sourced from hasOperator",
+    "threshold unit sourced from hasThresholdUnit",
+    "duration sourced from hasDuration"
+  ]
+}
+
+
+############################## AI at step candidate_generate ##############################
+
+['```\n#reason: The question asks for the first-level landcover type at the locatio', '```\n#reason: The question asks for the first-level landcover type at the locatio', '```\n#reason: The question asks for the first-level landcover type at the locatio', '```\n#reason: The question asks for the first-level landcover type at the locatio', '```\n#reason: The question asks for the first-level landcover type at the locatio']
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_type.level1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+landcover_upscaled.ranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None
+#Error SQL: SELECT lt.level1_label FROM meteo_tmean mt JOIN landcover_upscaled lu ON mt.latitude = lu.latitude AND mt.longitude = lu.longitude CROSS JOIN UNNEST(lu.ranks) AS rank_element JOIN landcover_type lt ON rank_element[1] = lt.level3_code WHERE EXTRACT(YEAR FROM mt.time) = '2010' AND mt.latitude BETWEEN 39.0 AND 40.0 AND mt.longitude BETWEEN 21.2 AND 24.4 ORDER BY mt.tmean DESC LIMIT 1;
+Error: cannot subscript type integer because it does not support subscripting
+LINE 1: ....ranks) AS rank_element JOIN landcover_type lt ON rank_eleme...
+                                                             ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error occurs because `lu.ranks` is an ARRAY of ARRAYs (e.g., [[[523, 10929]]]), and the query attempts to subscript `rank_element` (which is already an element from UNNEST) as if it were an array, but `rank_element` is of type integer when the array is unnested one level. The correct approach is to first unnest `ranks` to get the inner arrays (e.g., [523, 10929]), then access the first element of that inner array using `[1]`. Since `ranks` is a 3D array (array of array of array), we need to unnest twice: first to get the array of arrays, then to extract the first element of the innermost array. Alternatively, since each `ranks` element is a single-element array containing a 2-element array, we can use `ranks[1][1]` directly without UNNEST to access the level3_code. The fix is to avoid UNNEST and directly index into `ranks[1][1]` to get the level3_code.
+#SQL: SELECT lt.level1_label FROM meteo_tmean mt JOIN landcover_upscaled lu ON mt.latitude = lu.latitude AND mt.longitude = lu.longitude JOIN landcover_type lt ON lu.ranks[1][1] = lt.level3_code WHERE EXTRACT(YEAR FROM mt.time) = 2010 AND mt.latitude BETWEEN 39.0 AND 40.0 AND mt.longitude BETWEEN 21.2 AND 24.4 ORDER BY mt.tmean DESC LIMIT 1;
+```
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_type.level1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+landcover_upscaled.ranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None
+#Error SQL: SELECT lt.level1_label FROM meteo_tmean mt JOIN landcover_upscaled lu ON mt.latitude = lu.latitude AND mt.longitude = lu.longitude JOIN LATERAL UNNEST(lu.ranks) AS rank_array ON TRUE JOIN landcover_type lt ON rank_array[1][1] = lt.level3_code WHERE EXTRACT(YEAR FROM mt.time) = '2010' AND (mt.latitude, mt.longitude) IN ( (39.5,21.2), (39.6,21.2), (39.7,21.2), (39.4,21.3), (39.5,21.3), (39.6,21.3), (39.7,21.3), (39.8,21.3), (39.2,21.4), (39.4,21.4), (39.5,21.4), (39.6,21.4), (39.7,21.4), (39.8,21.4), (39.3,21.5), (39.4,21.5), (39.5,21.5), (39.6,21.5), (39.7,21.5), (39.8,21.5), (39.3,21.6), (39.4,21.6), (39.5,21.6), (39.6,21.6), (39.7,21.6), (39.8,21.6), (39.2,21.7), (39.3,21.7), (39.4,21.7), (39.5,21.7), (39.6,21.7), (39.7,21.7), (39.8,21.7), (39.2,21.8), (39.3,21.8), (39.4,21.8), (39.5,21.8), (39.6,21.8), (39.7,21.8), (39.8,21.8), (39.2,21.9), (39.3,21.9), (39.4,21.9), (39.5,21.9), (39.6,21.9), (39.7,21.9), (39.8,21.9), (39.1,22.0), (39.2,22.0), (39.3,22.0), (39.4,22.0), (39.5,22.0), (39.6,22.0), (39.7,22.0), (39.8,22.0), (39.9,22.0), (40.0,22.0), (39.1,22.1), (39.2,22.1), (39.3,22.1), (39.4,22.1), (39.5,22.1), (39.6,22.1), (39.7,22.1), (39.8,22.1), (39.9,22.1), (40.0,22.1), (39.2,22.2), (39.3,22.2), (39.4,22.2), (39.5,22.2), (39.6,22.2), (39.7,22.2), (39.8,22.2), (39.9,22.2), (40.0,22.2), (39.3,22.3), (39.4,22.3), (39.5,22.3), (39.6,22.3), (39.7,22.3), (39.8,22.3), (39.9,22.3), (40.0,22.3), (39.3,22.4), (39.4,22.4), (39.5,22.4), (39.6,22.4), (39.7,22.4), (39.8,22.4), (39.9,22.4), (40.0,22.4), (39.1,22.5), (39.2,22.5), (39.3,22.5), (39.4,22.5), (39.5,22.5), (39.6,22.5), (39.7,22.5), (39.8,22.5), (39.9,22.5), (39.1,22.6), (39.2,22.6), (39.3,22.6), (39.4,22.6), (39.5,22.6), (39.6,22.6), (39.7,22.6), (39.8,22.6), (39.9,22.6), (39.1,22.7), (39.2,22.7), (39.3,22.7), (39.4,22.7), (39.5,22.7), (39.6,22.7), (39.7,22.7), (39.8,22.7), (39.9,22.7), (40.0,22.7), (39.0,22.8), (39.1,22.8), (39.2,22.8), (39.3,22.8), (39.4,22.8), (39.5,22.8), (39.6,22.8), (39.7,22.8), (39.8,22.8), (39.9,22.8), (39.0,22.9), (39.1,22.9), (39.2,22.9), (39.3,22.9), (39.4,22.9), (39.5,22.9), (39.6,22.9), (39.7,22.9), (39.8,22.9), (39.0,23.0), (39.1,23.0), (39.2,23.0), (39.3,23.0), (39.4,23.0), (39.5,23.0), (39.6,23.0), (39.1,23.1), (39.2,23.1), (39.3,23.1), (39.4,23.1), (39.5,23.1), (39.1,23.2), (39.2,23.2), (39.3,23.2), (39.4,23.2), (39.5,23.2), (39.1,23.3), (39.2,23.3), (39.3,23.3), (39.4,23.3), (39.1,23.4), (39.2,23.4), (39.1,23.5), (39.2,23.5), (39.0,23.7), (39.1,23.7), (39.2,23.7), (39.1,23.8), (39.2,23.8), (39.0,23.9), (39.1,23.9), (39.2,23.9), (39.3,23.9), (39.0,24.0), (39.1,24.0), (39.2,24.0), (39.3,24.0), (39.4,24.0), (39.0,24.1), (39.1,24.1), (39.3,24.1), (39.4,24.1), (39.5,24.1), (39.1,24.2), (39.3,24.2), (39.4,24.2), (39.5,24.2), (39.3,24.3), (39.4,24.3), (39.3,24.4), (39.4,24.4) ) ORDER BY mt.tmean DESC LIMIT 1;
+Error: cannot subscript type integer because it does not support subscripting
+LINE 1: ...) AS rank_array ON TRUE JOIN landcover_type lt ON rank_array...
+                                                             ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error occurs because `rank_array` is the result of UNNEST(lu.ranks), and lu.ranks is an ARRAY of ARRAYs (e.g., [[[523, 10929]]]). When UNNEST is applied, it returns individual elements of the top-level array — so each rank_array element is itself an ARRAY (e.g., [523, 10929]), not an integer. The original SQL incorrectly tries to subscript rank_array[1][1] as if rank_array were a 2D array, but after UNNEST, rank_array is a 1D array. To access the first element of the inner array, we need to use rank_array[1] (not rank_array[1][1]). Additionally, the condition JOIN landcover_type lt ON rank_array[1] = lt.level3_code assumes level3_code is an integer, which matches the first value in the inner array (e.g., 523). The list of coordinates is overly verbose and may be replaced with a spatial region filter if possible, but since the question specifies exact coordinates, we retain them. The main fix is correcting the subscripting from rank_array[1][1] to rank_array[1].
+#SQL: SELECT lt.level1_label FROM meteo_tmean mt JOIN landcover_upscaled lu ON mt.latitude = lu.latitude AND mt.longitude = lu.longitude JOIN LATERAL UNNEST(lu.ranks) AS rank_array ON TRUE JOIN landcover_type lt ON rank_array[1] = lt.level3_code WHERE EXTRACT(YEAR FROM mt.time) = '2010' AND (mt.latitude, mt.longitude) IN ( (39.5,21.2), (39.6,21.2), (39.7,21.2), (39.4,21.3), (39.5,21.3), (39.6,21.3), (39.7,21.3), (39.8,21.3), (39.2,21.4), (39.4,21.4), (39.5,21.4), (39.6,21.4), (39.7,21.4), (39.8,21.4), (39.3,21.5), (39.4,21.5), (39.5,21.5), (39.6,21.5), (39.7,21.5), (39.8,21.5), (39.3,21.6), (39.4,21.6), (39.5,21.6), (39.6,21.6), (39.7,21.6), (39.8,21.6), (39.2,21.7), (39.3,21.7), (39.4,21.7), (39.5,21.7), (39.6,21.7), (39.7,21.7), (39.8,21.7), (39.2,21.8), (39.3,21.8), (39.4,21.8), (39.5,21.8), (39.6,21.8), (39.7,21.8), (39.8,21.8), (39.2,21.9), (39.3,21.9), (39.4,21.9), (39.5,21.9), (39.6,21.9), (39.7,21.9), (39.8,21.9), (39.1,22.0), (39.2,22.0), (39.3,22.0), (39.4,22.0), (39.5,22.0), (39.6,22.0), (39.7,22.0), (39.8,22.0), (39.9,22.0), (40.0,22.0), (39.1,22.1), (39.2,22.1), (39.3,22.1), (39.4,22.1), (39.5,22.1), (39.6,22.1), (39.7,22.1), (39.8,22.1), (39.9,22.1), (40.0,22.1), (39.2,22.2), (39.3,22.2), (39.4,22.2), (39.5,22.2), (39.6,22.2), (39.7,22.2), (39.8,22.2), (39.9,22.2), (40.0,22.2), (39.3,22.3), (39.4,22.3), (39.5,22.3), (39.6,22.3), (39.7,22.3), (39.8,22.3), (39.9,22.3), (40.0,22.3), (39.3,22.4), (39.4,22.4), (39.5,22.4), (39.6,22.4), (39.7,22.4), (39.8,22.4), (39.9,22.4), (40.0,22.4), (39.1,22.5), (39.2,22.5), (39.3,22.5), (39.4,22.5), (39.5,22.5), (39.6,22.5), (39.7,22.5), (39.8,22.5), (39.9,22.5), (39.1,22.6), (39.2,22.6), (39.3,22.6), (39.4,22.6), (39.5,22.6), (39.6,22.6), (39.7,22.6), (39.8,22.6), (39.9,22.6), (39.1,22.7), (39.2,22.7), (39.3,22.7), (39.4,22.7), (39.5,22.7), (39.6,22.7), (39.7,22.7), (39.8,22.7), (39.9,22.7), (40.0,22.7), (39.0,22.8), (39.1,22.8), (39.2,22.8), (39.3,22.8), (39.4,22.8), (39.5,22.8), (39.6,22.8), (39.7,22.8), (39.8,22.8), (39.9,22.8), (39.0,22.9), (39.1,22.9), (39.2,22.9), (39.3,22.9), (39.4,22.9), (39.5,22.9), (39.6,22.9), (39.7,22.9), (39.8,22.9), (39.0,23.0), (39.1,23.0), (39.2,23.0), (39.3,23.0), (39.4,23.0), (39.5,23.0), (39.6,23.0), (39.1,23.1), (39.2,23.1), (39.3,23.1), (39.4,23.1), (39.5,23.1), (39.1,23.2), (39.2,23.2), (39.3,23.2), (39.4,23.2), (39.5,23.2), (39.1,23.3), (39.2,23.3), (39.3,23.3), (39.4,23.3), (39.1,23.4), (39.2,23.4), (39.1,23.5), (39.2,23.5), (39.0,23.7), (39.1,23.7), (39.2,23.7), (39.1,23.8), (39.2,23.8), (39.0,23.9), (39.1,23.9), (39.2,23.9), (39.3,23.9), (39.0,24.0), (39.1,24.0), (39.2,24.0), (39.3,24.0), (39.4,24.0), (39.0,24.1), (39.1,24.1), (39.3,24.1), (39.4,24.1), (39.5,24.1), (39.1,24.2), (39.3,24.2), (39.4,24.2), (39.5,24.2), (39.3,24.3), (39.4,24.3), (39.3,24.4), (39.4,24.4) ) ORDER BY mt.tmean DESC LIMIT 1;
+```
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_type.level1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+landcover_upscaled.ranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None
+#Error SQL: SELECT landcover_type.level1_label FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank_array ON TRUE JOIN landcover_type ON rank_array[1][1] = landcover_type.level3_code WHERE (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((39.5, 21.2), (39.6, 21.2), (39.7, 21.2), (39.4, 21.3), (39.5, 21.3), (39.6, 21.3), (39.7, 21.3), (39.8, 21.3), (39.2, 21.4), (39.4, 21.4), (39.5, 21.4), (39.6, 21.4), (39.7, 21.4), (39.8, 21.4), (39.3, 21.5), (39.4, 21.5), (39.5, 21.5), (39.6, 21.5), (39.7, 21.5), (39.8, 21.5), (39.3, 21.6), (39.4, 21.6), (39.5, 21.6), (39.6, 21.6), (39.7, 21.6), (39.8, 21.6), (39.2, 21.7), (39.3, 21.7), (39.4, 21.7), (39.5, 21.7), (39.6, 21.7), (39.7, 21.7), (39.8, 21.7), (39.2, 21.8), (39.3, 21.8), (39.4, 21.8), (39.5, 21.8), (39.6, 21.8), (39.7, 21.8), (39.8, 21.8), (39.2, 21.9), (39.3, 21.9), (39.4, 21.9), (39.5, 21.9), (39.6, 21.9), (39.7, 21.9), (39.8, 21.9), (39.1, 22.0), (39.2, 22.0), (39.3, 22.0), (39.4, 22.0), (39.5, 22.0), (39.6, 22.0), (39.7, 22.0), (39.8, 22.0), (39.9, 22.0), (40.0, 22.0), (39.1, 22.1), (39.2, 22.1), (39.3, 22.1), (39.4, 22.1), (39.5, 22.1), (39.6, 22.1), (39.7, 22.1), (39.8, 22.1), (39.9, 22.1), (40.0, 22.1), (39.2, 22.2), (39.3, 22.2), (39.4, 22.2), (39.5, 22.2), (39.6, 22.2), (39.7, 22.2), (39.8, 22.2), (39.9, 22.2), (40.0, 22.2), (39.3, 22.3), (39.4, 22.3), (39.5, 22.3), (39.6, 22.3), (39.7, 22.3), (39.8, 22.3), (39.9, 22.3), (40.0, 22.3), (39.3, 22.4), (39.4, 22.4), (39.5, 22.4), (39.6, 22.4), (39.7, 22.4), (39.8, 22.4), (39.9, 22.4), (40.0, 22.4), (39.1, 22.5), (39.2, 22.5), (39.3, 22.5), (39.4, 22.5), (39.5, 22.5), (39.6, 22.5), (39.7, 22.5), (39.8, 22.5), (39.9, 22.5), (39.1, 22.6), (39.2, 22.6), (39.3, 22.6), (39.4, 22.6), (39.5, 22.6), (39.6, 22.6), (39.7, 22.6), (39.8, 22.6), (39.9, 22.6), (39.1, 22.7), (39.2, 22.7), (39.3, 22.7), (39.4, 22.7), (39.5, 22.7), (39.6, 22.7), (39.7, 22.7), (39.8, 22.7), (39.9, 22.7), (40.0, 22.7), (39.0, 22.8), (39.1, 22.8), (39.2, 22.8), (39.3, 22.8), (39.4, 22.8), (39.5, 22.8), (39.6, 22.8), (39.7, 22.8), (39.8, 22.8), (39.9, 22.8), (39.0, 22.9), (39.1, 22.9), (39.2, 22.9), (39.3, 22.9), (39.4, 22.9), (39.5, 22.9), (39.6, 22.9), (39.7, 22.9), (39.8, 22.9), (39.0, 23.0), (39.1, 23.0), (39.2, 23.0), (39.3, 23.0), (39.4, 23.0), (39.5, 23.0), (39.6, 23.0), (39.1, 23.1), (39.2, 23.1), (39.3, 23.1), (39.4, 23.1), (39.5, 23.1), (39.1, 23.2), (39.2, 23.2), (39.3, 23.2), (39.4, 23.2), (39.5, 23.2), (39.1, 23.3), (39.2, 23.3), (39.3, 23.3), (39.4, 23.3), (39.1, 23.4), (39.2, 23.4), (39.1, 23.5), (39.2, 23.5), (39.1, 23.6), (39.2, 23.6), (39.0, 23.7), (39.1, 23.7), (39.2, 23.7), (39.1, 23.8), (39.2, 23.8), (39.0, 23.9), (39.1, 23.9), (39.2, 23.9), (39.3, 23.9), (39.0, 24.0), (39.1, 24.0), (39.2, 24.0), (39.3, 24.0), (39.4, 24.0), (39.0, 24.1), (39.1, 24.1), (39.3, 24.1), (39.4, 24.1), (39.5, 24.1), (39.1, 24.2), (39.3, 24.2), (39.4, 24.2), (39.5, 24.2), (39.3, 24.3), (39.4, 24.3), (39.3, 24.4), (39.4, 24.4)) AND EXTRACT(YEAR FROM meteo_tmean.time) = '2010' ORDER BY meteo_tmean.tmean DESC LIMIT 1;
+Error: cannot subscript type integer because it does not support subscripting
+LINE 1: ...nks) AS rank_array ON TRUE JOIN landcover_type ON rank_array...
+                                                             ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error occurs because `rank_array` is the result of UNNESTing an ARRAY of arrays (e.g., [[523, 10929]]), so each element of rank_array is itself an ARRAY (e.g., [523, 10929]). The original SQL attempts to subscript it as rank_array[1][1], which is invalid in PostgreSQL when rank_array is already a single array element from UNNEST. Instead, we must first treat rank_array as a 1D array and then access its first element with rank_array[1]. The nested structure [[523, 10929]] means the outer array has one element, which is the inner array [523, 10929]. So rank_array[1] gives 523, which is the level3_code. The fix is to use rank_array[1] directly, not rank_array[1][1]. Additionally, the WHERE clause uses a long list of latitude/longitude pairs to approximate the Thessaly region, but this is inefficient and error-prone. Instead, we should use a spatial bounding box or polygon filter if possible. However, since no spatial functions are available and the question implies exact coordinate matching, we retain the coordinate list but fix the subscripting error.
+#SQL: SELECT landcover_type.level1_label FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank_array ON TRUE JOIN landcover_type ON rank_array[1] = landcover_type.level3_code WHERE (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((39.5, 21.2), (39.6, 21.2), (39.7, 21.2), (39.4, 21.3), (39.5, 21.3), (39.6, 21.3), (39.7, 21.3), (39.8, 21.3), (39.2, 21.4), (39.4, 21.4), (39.5, 21.4), (39.6, 21.4), (39.7, 21.4), (39.8, 21.4), (39.3, 21.5), (39.4, 21.5), (39.5, 21.5), (39.6, 21.5), (39.7, 21.5), (39.8, 21.5), (39.3, 21.6), (39.4, 21.6), (39.5, 21.6), (39.6, 21.6), (39.7, 21.6), (39.8, 21.6), (39.2, 21.7), (39.3, 21.7), (39.4, 21.7), (39.5, 21.7), (39.6, 21.7), (39.7, 21.7), (39.8, 21.7), (39.2, 21.8), (39.3, 21.8), (39.4, 21.8), (39.5, 21.8), (39.6, 21.8), (39.7, 21.8), (39.8, 21.8), (39.2, 21.9), (39.3, 21.9), (39.4, 21.9), (39.5, 21.9), (39.6, 21.9), (39.7, 21.9), (39.8, 21.9), (39.1, 22.0), (39.2, 22.0), (39.3, 22.0), (39.4, 22.0), (39.5, 22.0), (39.6, 22.0), (39.7, 22.0), (39.8, 22.0), (39.9, 22.0), (40.0, 22.0), (39.1, 22.1), (39.2, 22.1), (39.3, 22.1), (39.4, 22.1), (39.5, 22.1), (39.6, 22.1), (39.7, 22.1), (39.8, 22.1), (39.9, 22.1), (40.0, 22.1), (39.2, 22.2), (39.3, 22.2), (39.4, 22.2), (39.5, 22.2), (39.6, 22.2), (39.7, 22.2), (39.8, 22.2), (39.9, 22.2), (40.0, 22.2), (39.3, 22.3), (39.4, 22.3), (39.5, 22.3), (39.6, 22.3), (39.7, 22.3), (39.8, 22.3), (39.9, 22.3), (40.0, 22.3), (39.3, 22.4), (39.4, 22.4), (39.5, 22.4), (39.6, 22.4), (39.7, 22.4), (39.8, 22.4), (39.9, 22.4), (40.0, 22.4), (39.1, 22.5), (39.2, 22.5), (39.3, 22.5), (39.4, 22.5), (39.5, 22.5), (39.6, 22.5), (39.7, 22.5), (39.8, 22.5), (39.9, 22.5), (39.1, 22.6), (39.2, 22.6), (39.3, 22.6), (39.4, 22.6), (39.5, 22.6), (39.6, 22.6), (39.7, 22.6), (39.8, 22.6), (39.9, 22.6), (39.1, 22.7), (39.2, 22.7), (39.3, 22.7), (39.4, 22.7), (39.5, 22.7), (39.6, 22.7), (39.7, 22.7), (39.8, 22.7), (39.9, 22.7), (40.0, 22.7), (39.0, 22.8), (39.1, 22.8), (39.2, 22.8), (39.3, 22.8), (39.4, 22.8), (39.5, 22.8), (39.6, 22.8), (39.7, 22.8), (39.8, 22.8), (39.9, 22.8), (39.0, 22.9), (39.1, 22.9), (39.2, 22.9), (39.3, 22.9), (39.4, 22.9), (39.5, 22.9), (39.6, 22.9), (39.7, 22.9), (39.8, 22.9), (39.0, 23.0), (39.1, 23.0), (39.2, 23.0), (39.3, 23.0), (39.4, 23.0), (39.5, 23.0), (39.6, 23.0), (39.1, 23.1), (39.2, 23.1), (39.3, 23.1), (39.4, 23.1), (39.5, 23.1), (39.1, 23.2), (39.2, 23.2), (39.3, 23.2), (39.4, 23.2), (39.5, 23.2), (39.1, 23.3), (39.2, 23.3), (39.3, 23.3), (39.4, 23.3), (39.1, 23.4), (39.2, 23.4), (39.1, 23.5), (39.2, 23.5), (39.1, 23.6), (39.2, 23.6), (39.0, 23.7), (39.1, 23.7), (39.2, 23.7), (39.1, 23.8), (39.2, 23.8), (39.0, 23.9), (39.1, 23.9), (39.2, 23.9), (39.3, 23.9), (39.0, 24.0), (39.1, 24.0), (39.2, 24.0), (39.3, 24.0), (39.4, 24.0), (39.0, 24.1), (39.1, 24.1), (39.3, 24.1), (39.4, 24.1), (39.5, 24.1), (39.1, 24.2), (39.3, 24.2), (39.4, 24.2), (39.5, 24.2), (39.3, 24.3), (39.4, 24.3), (39.3, 24.4), (39.4, 24.4)) AND EXTRACT(YEAR FROM meteo_tmean.time) = 2010 ORDER BY meteo_tmean.tmean DESC LIMIT 1;
+```
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_type.level1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+landcover_upscaled.ranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None
+#Error SQL: SELECT lt.level1_label FROM meteo_tmean mt JOIN landcover_upscaled lu ON mt.latitude = lu.latitude AND mt.longitude = lu.longitude JOIN LATERAL UNNEST(lu.ranks) AS rank_array ON TRUE JOIN landcover_type lt ON rank_array[1] = lt.level3_code WHERE EXTRACT(YEAR FROM mt.time) = '2010' AND (mt.latitude, mt.longitude) IN ( (39.5,21.2), (39.6,21.2), (39.7,21.2), (39.4,21.3), (39.5,21.3), (39.6,21.3), (39.7,21.3), (39.8,21.3), (39.2,21.4), (39.4,21.4), (39.5,21.4), (39.6,21.4), (39.7,21.4), (39.8,21.4), (39.3,21.5), (39.4,21.5), (39.5,21.5), (39.6,21.5), (39.7,21.5), (39.8,21.5), (39.3,21.6), (39.4,21.6), (39.5,21.6), (39.6,21.6), (39.7,21.6), (39.8,21.6), (39.2,21.7), (39.3,21.7), (39.4,21.7), (39.5,21.7), (39.6,21.7), (39.7,21.7), (39.8,21.7), (39.2,21.8), (39.3,21.8), (39.4,21.8), (39.5,21.8), (39.6,21.8), (39.7,21.8), (39.8,21.8), (39.2,21.9), (39.3,21.9), (39.4,21.9), (39.5,21.9), (39.6,21.9), (39.7,21.9), (39.8,21.9), (39.1,22.0), (39.2,22.0), (39.3,22.0), (39.4,22.0), (39.5,22.0), (39.6,22.0), (39.7,22.0), (39.8,22.0), (39.9,22.0), (40.0,22.0), (39.1,22.1), (39.2,22.1), (39.3,22.1), (39.4,22.1), (39.5,22.1), (39.6,22.1), (39.7,22.1), (39.8,22.1), (39.9,22.1), (40.0,22.1), (39.2,22.2), (39.3,22.2), (39.4,22.2), (39.5,22.2), (39.6,22.2), (39.7,22.2), (39.8,22.2), (39.9,22.2), (40.0,22.2), (39.3,22.3), (39.4,22.3), (39.5,22.3), (39.6,22.3), (39.7,22.3), (39.8,22.3), (39.9,22.3), (40.0,22.3), (39.3,22.4), (39.4,22.4), (39.5,22.4), (39.6,22.4), (39.7,22.4), (39.8,22.4), (39.9,22.4), (40.0,22.4), (39.1,22.5), (39.2,22.5), (39.3,22.5), (39.4,22.5), (39.5,22.5), (39.6,22.5), (39.7,22.5), (39.8,22.5), (39.9,22.5), (39.1,22.6), (39.2,22.6), (39.3,22.6), (39.4,22.6), (39.5,22.6), (39.6,22.6), (39.7,22.6), (39.8,22.6), (39.9,22.6), (39.1,22.7), (39.2,22.7), (39.3,22.7), (39.4,22.7), (39.5,22.7), (39.6,22.7), (39.7,22.7), (39.8,22.7), (39.9,22.7), (40.0,22.7), (39.0,22.8), (39.1,22.8), (39.2,22.8), (39.3,22.8), (39.4,22.8), (39.5,22.8), (39.6,22.8), (39.7,22.8), (39.8,22.8), (39.9,22.8), (39.0,22.9), (39.1,22.9), (39.2,22.9), (39.3,22.9), (39.4,22.9), (39.5,22.9), (39.6,22.9), (39.7,22.9), (39.8,22.9), (39.0,23.0), (39.1,23.0), (39.2,23.0), (39.3,23.0), (39.4,23.0), (39.5,23.0), (39.6,23.0), (39.1,23.1), (39.2,23.1), (39.3,23.1), (39.4,23.1), (39.5,23.1), (39.1,23.2), (39.2,23.2), (39.3,23.2), (39.4,23.2), (39.5,23.2), (39.1,23.3), (39.2,23.3), (39.3,23.3), (39.4,23.3), (39.1,23.4), (39.2,23.4), (39.1,23.5), (39.2,23.5), (39.0,23.7), (39.1,23.7), (39.2,23.7), (39.1,23.8), (39.2,23.8), (39.0,23.9), (39.1,23.9), (39.2,23.9), (39.3,23.9), (39.0,24.0), (39.1,24.0), (39.2,24.0), (39.3,24.0), (39.4,24.0), (39.0,24.1), (39.1,24.1), (39.3,24.1), (39.4,24.1), (39.5,24.1), (39.1,24.2), (39.3,24.2), (39.4,24.2), (39.5,24.2), (39.3,24.3), (39.4,24.3), (39.3,24.4), (39.4,24.4) ) ORDER BY mt.tmean DESC LIMIT 1;
+Error: cannot subscript type integer because it does not support subscripting
+LINE 1: ...) AS rank_array ON TRUE JOIN landcover_type lt ON rank_array...
+                                                             ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error occurs because `rank_array` is derived from `UNNEST(lu.ranks)`, and `lu.ranks` is an ARRAY of ARRAYs (e.g., [[[523, 10929]]]), meaning each element after UNNEST is itself an ARRAY (e.g., [523, 10929]). However, the query tries to access `rank_array[1]` as if it were an integer, but it's an ARRAY. To fix this, we need to first unnest the outermost array to get the inner arrays, then extract the first element of those inner arrays (which is the integer code). Additionally, the condition `(mt.latitude, mt.longitude) IN (...)` is overly verbose and inefficient — we can use a bounding box or spatial condition if available, but since no spatial index or geometry type is mentioned, we'll retain it but fix the core error. The key fix is replacing `rank_array[1]` with `rank_array[1][1]` to access the first element of the inner array.
+#SQL: SELECT lt.level1_label FROM meteo_tmean mt JOIN landcover_upscaled lu ON mt.latitude = lu.latitude AND mt.longitude = lu.longitude JOIN LATERAL UNNEST(lu.ranks) AS rank_array ON TRUE JOIN landcover_type lt ON rank_array[1][1] = lt.level3_code WHERE EXTRACT(YEAR FROM mt.time) = 2010 AND (mt.latitude, mt.longitude) IN ( (39.5,21.2), (39.6,21.2), (39.7,21.2), (39.4,21.3), (39.5,21.3), (39.6,21.3), (39.7,21.3), (39.8,21.3), (39.2,21.4), (39.4,21.4), (39.5,21.4), (39.6,21.4), (39.7,21.4), (39.8,21.4), (39.3,21.5), (39.4,21.5), (39.5,21.5), (39.6,21.5), (39.7,21.5), (39.8,21.5), (39.3,21.6), (39.4,21.6), (39.5,21.6), (39.6,21.6), (39.7,21.6), (39.8,21.6), (39.2,21.7), (39.3,21.7), (39.4,21.7), (39.5,21.7), (39.6,21.7), (39.7,21.7), (39.8,21.7), (39.2,21.8), (39.3,21.8), (39.4,21.8), (39.5,21.8), (39.6,21.8), (39.7,21.8), (39.8,21.8), (39.2,21.9), (39.3,21.9), (39.4,21.9), (39.5,21.9), (39.6,21.9), (39.7,21.9), (39.8,21.9), (39.1,22.0), (39.2,22.0), (39.3,22.0), (39.4,22.0), (39.5,22.0), (39.6,22.0), (39.7,22.0), (39.8,22.0), (39.9,22.0), (40.0,22.0), (39.1,22.1), (39.2,22.1), (39.3,22.1), (39.4,22.1), (39.5,22.1), (39.6,22.1), (39.7,22.1), (39.8,22.1), (39.9,22.1), (40.0,22.1), (39.2,22.2), (39.3,22.2), (39.4,22.2), (39.5,22.2), (39.6,22.2), (39.7,22.2), (39.8,22.2), (39.9,22.2), (40.0,22.2), (39.3,22.3), (39.4,22.3), (39.5,22.3), (39.6,22.3), (39.7,22.3), (39.8,22.3), (39.9,22.3), (40.0,22.3), (39.3,22.4), (39.4,22.4), (39.5,22.4), (39.6,22.4), (39.7,22.4), (39.8,22.4), (39.9,22.4), (40.0,22.4), (39.1,22.5), (39.2,22.5), (39.3,22.5), (39.4,22.5), (39.5,22.5), (39.6,22.5), (39.7,22.5), (39.8,22.5), (39.9,22.5), (39.1,22.6), (39.2,22.6), (39.3,22.6), (39.4,22.6), (39.5,22.6), (39.6,22.6), (39.7,22.6), (39.8,22.6), (39.9,22.6), (39.1,22.7), (39.2,22.7), (39.3,22.7), (39.4,22.7), (39.5,22.7), (39.6,22.7), (39.7,22.7), (39.8,22.7), (39.9,22.7), (40.0,22.7), (39.0,22.8), (39.1,22.8), (39.2,22.8), (39.3,22.8), (39.4,22.8), (39.5,22.8), (39.6,22.8), (39.7,22.8), (39.8,22.8), (39.9,22.8), (39.0,22.9), (39.1,22.9), (39.2,22.9), (39.3,22.9), (39.4,22.9), (39.5,22.9), (39.6,22.9), (39.7,22.9), (39.8,22.9), (39.0,23.0), (39.1,23.0), (39.2,23.0), (39.3,23.0), (39.4,23.0), (39.5,23.0), (39.6,23.0), (39.1,23.1), (39.2,23.1), (39.3,23.1), (39.4,23.1), (39.5,23.1), (39.1,23.2), (39.2,23.2), (39.3,23.2), (39.4,23.2), (39.5,23.2), (39.1,23.3), (39.2,23.3), (39.3,23.3), (39.4,23.3), (39.1,23.4), (39.2,23.4), (39.1,23.5), (39.2,23.5), (39.0,23.7), (39.1,23.7), (39.2,23.7), (39.1,23.8), (39.2,23.8), (39.0,23.9), (39.1,23.9), (39.2,23.9), (39.3,23.9), (39.0,24.0), (39.1,24.0), (39.2,24.0), (39.3,24.0), (39.4,24.0), (39.0,24.1), (39.1,24.1), (39.3,24.1), (39.4,24.1), (39.5,24.1), (39.1,24.2), (39.3,24.2), (39.4,24.2), (39.5,24.2), (39.3,24.3), (39.4,24.3), (39.3,24.4), (39.4,24.4) ) ORDER BY mt.tmean DESC LIMIT 1;
+```
+
+############################## Human at step align_correct ##############################
+
+You are an SQL expert, and now I would like you to write SQL based on the question.
+
+
+/* Database schema */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_type.level1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+landcover_upscaled.ranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Based on the database schema and the question, pay attention to the following */
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
+2. #values in db display part values from the database. Please ignore the unnecessary values.
+3. If "#GEO_CONTEXT" is provided, use it as a spatial grounding constraint. Use only coordinates/bounds that appear in GEO_CONTEXT; do not invent place names or geometry values.
+4. If "#ONTOLOGY_GROUNDED_FUNCTION" is provided, treat it as an executable semantic constraint package (thresholds, temporal logic, aggregation hints). Map it only to existing schema columns/functions.
+5. When GEO/ontology context conflicts with schema feasibility, keep SQL executable and prioritize schema-valid expressions.
+6. For landcover questions, never join landcover_upscaled to landcover_type directly on latitude/longitude. Expand landcover_upscaled.ranks first (UNNEST or generate_subscripts), then join level3 code.
+
+Please rewrite the question to SQL-like query in the format: "Show #SELECT (table.column), WHERE condition are xxx (refer to #values), Group by/Order By (refer to columns). Here are 3 example: 
+
+#SQL-like: Show top 5 cards.id, where condition is cards.spend>100, order by cards.spend. 
+#SQL: SELECT id FROM cards WHERE spend > 100 ORDER BY spend LIMIT 5
+
+#SQL-like: Show Count(PaperAuthor.Name), Where condition is Paper.Year = 0
+#SQL: SELECT COUNT(T2.Name) FROM Paper AS T1 INNER JOIN PaperAuthor AS T2 ON T1.Id = T2.PaperId WHERE T1.Year = 0
+
+#SQL-like: Show Author.Name, Where condition is Author.Affiliation = 'University of Oxford', Group By Author.Name Order By Author.spent
+#SQL: SELECT Name FROM Author WHERE Affiliation = 'University of Oxford' Group By Name ORDER BY spent ASC
+
+/* Answer the following: What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None */
+Please answer the question in the following format without any other content:
+```
+#reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
+#columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
+#values: the filter in SQL (format: 'filter in question' refer to table.column: value. e.g. 'name is not tom' refer to name <> "tom", 2007 refer to EXTRACT(YEAR FROM Date) = 2007)
+#SELECT: SELECT content (display in the order asked by the questions, do not display content not specified by the questions).
+#SQL-like: SQL-like statements ignoring Join conditions
+#SQL: SQL
+```
+#GEO_CONTEXT:
+{
+  "place": "Thessaly Region",
+  "points": [
+    {
+      "lon": "21.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.2",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.2",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.0",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.1",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.2",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.3",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.4",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.7",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.0"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.0"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.8"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.0"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.5"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.6"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.5"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.4",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.4",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.5",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.5",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.6",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.6",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.7",
+      "lat": "39.0"
+    },
+    {
+      "lon": "23.7",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.7",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.8",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.8",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.0"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.0"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.1"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.2"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.0"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.1"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.5"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.1"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "24.3",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.4",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.4",
+      "lat": "39.4"
+    }
+  ],
+  "resolution": "places_dict"
+}
+#ONTOLOGY_GROUNDED_FUNCTION:
+{
+  "schema_version": "ontology_grounded_function.v1",
+  "question": "What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None",
+  "anchor": "appliesToVariable",
+  "target_variable": "",
+  "hops": null,
+  "semantic_chain": [],
+  "function_specs": [
+    {
+      "name": "Threshold",
+      "inputs": [
+        "Variable"
+      ],
+      "semantics": "Apply explicit operator from ontology threshold config.",
+      "pseudo_code_template": "ThresholdMatch := (Variable >= threshold_value)"
+    }
+  ],
+  "composition_order": [
+    "Threshold"
+  ],
+  "constraints": [
+    "operator sourced from hasOperator",
+    "threshold unit sourced from hasThresholdUnit",
+    "duration sourced from hasDuration"
+  ]
+}
+
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The question asks for the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during 2010. To solve this, we need to: (1) find the location (latitude, longitude) with the maximum tmean in 2010 within the Thessaly Region bounds provided in GEO_CONTEXT; (2) join this location with landcover_upscaled to get the ranks array; (3) expand the ranks array to extract the landcover code; (4) join with landcover_type using the level3 code (implied by ranks structure) to get level1_label. Note: ranks is a nested array, so we must UNNEST it to extract the code, and since the schema does not provide direct level3→level1 mapping, we assume the first element in each sub-array of ranks is the landcover code (as per typical usage in such schemas). We filter by latitude and longitude within the Thessaly Region points and extract year 2010 from time.
+#columns: landcover_type.level1_label, meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, landcover_upscaled.ranks
+#values: 'Thessaly Region' refer to meteo_tmean.latitude BETWEEN 39.0 AND 40.0 AND meteo_tmean.longitude BETWEEN 21.2 AND 24.4, 2010 refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2010
+#SELECT: landcover_type.level1_label
+#SQL: SELECT lt.level1_label
+FROM meteo_tmean
+JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude
+JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank_array ON true
+JOIN landcover_type ON rank_array[1][1] = landcover_type.level3_code  -- assuming first element of first sub-array is level3 code
+WHERE meteo_tmean.latitude BETWEEN 39.0 AND 40.0
+  AND meteo_tmean.longitude BETWEEN 21.2 AND 24.4
+  AND EXTRACT(YEAR FROM meteo_tmean.time) = 2010
+ORDER BY meteo_tmean.tmean DESC
+LIMIT 1;
+```
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_type.level1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+landcover_upscaled.ranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None
+#Error SQL: SELECT landcover_type.level1_label FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank_array ON TRUE JOIN landcover_type ON rank_array[1] = landcover_type.level3_code WHERE (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((39.5, 21.2), (39.6, 21.2), (39.7, 21.2), (39.4, 21.3), (39.5, 21.3), (39.6, 21.3), (39.7, 21.3), (39.8, 21.3), (39.2, 21.4), (39.4, 21.4), (39.5, 21.4), (39.6, 21.4), (39.7, 21.4), (39.8, 21.4), (39.3, 21.5), (39.4, 21.5), (39.5, 21.5), (39.6, 21.5), (39.7, 21.5), (39.8, 21.5), (39.3, 21.6), (39.4, 21.6), (39.5, 21.6), (39.6, 21.6), (39.7, 21.6), (39.8, 21.6), (39.2, 21.7), (39.3, 21.7), (39.4, 21.7), (39.5, 21.7), (39.6, 21.7), (39.7, 21.7), (39.8, 21.7), (39.2, 21.8), (39.3, 21.8), (39.4, 21.8), (39.5, 21.8), (39.6, 21.8), (39.7, 21.8), (39.8, 21.8), (39.2, 21.9), (39.3, 21.9), (39.4, 21.9), (39.5, 21.9), (39.6, 21.9), (39.7, 21.9), (39.8, 21.9), (39.1, 22.0), (39.2, 22.0), (39.3, 22.0), (39.4, 22.0), (39.5, 22.0), (39.6, 22.0), (39.7, 22.0), (39.8, 22.0), (39.9, 22.0), (40.0, 22.0), (39.1, 22.1), (39.2, 22.1), (39.3, 22.1), (39.4, 22.1), (39.5, 22.1), (39.6, 22.1), (39.7, 22.1), (39.8, 22.1), (39.9, 22.1), (40.0, 22.1), (39.2, 22.2), (39.3, 22.2), (39.4, 22.2), (39.5, 22.2), (39.6, 22.2), (39.7, 22.2), (39.8, 22.2), (39.9, 22.2), (40.0, 22.2), (39.3, 22.3), (39.4, 22.3), (39.5, 22.3), (39.6, 22.3), (39.7, 22.3), (39.8, 22.3), (39.9, 22.3), (40.0, 22.3), (39.3, 22.4), (39.4, 22.4), (39.5, 22.4), (39.6, 22.4), (39.7, 22.4), (39.8, 22.4), (39.9, 22.4), (40.0, 22.4), (39.1, 22.5), (39.2, 22.5), (39.3, 22.5), (39.4, 22.5), (39.5, 22.5), (39.6, 22.5), (39.7, 22.5), (39.8, 22.5), (39.9, 22.5), (39.1, 22.6), (39.2, 22.6), (39.3, 22.6), (39.4, 22.6), (39.5, 22.6), (39.6, 22.6), (39.7, 22.6), (39.8, 22.6), (39.9, 22.6), (39.1, 22.7), (39.2, 22.7), (39.3, 22.7), (39.4, 22.7), (39.5, 22.7), (39.6, 22.7), (39.7, 22.7), (39.8, 22.7), (39.9, 22.7), (40.0, 22.7), (39.0, 22.8), (39.1, 22.8), (39.2, 22.8), (39.3, 22.8), (39.4, 22.8), (39.5, 22.8), (39.6, 22.8), (39.7, 22.8), (39.8, 22.8), (39.9, 22.8), (39.0, 22.9), (39.1, 22.9), (39.2, 22.9), (39.3, 22.9), (39.4, 22.9), (39.5, 22.9), (39.6, 22.9), (39.7, 22.9), (39.8, 22.9), (39.0, 23.0), (39.1, 23.0), (39.2, 23.0), (39.3, 23.0), (39.4, 23.0), (39.5, 23.0), (39.6, 23.0), (39.1, 23.1), (39.2, 23.1), (39.3, 23.1), (39.4, 23.1), (39.5, 23.1), (39.1, 23.2), (39.2, 23.2), (39.3, 23.2), (39.4, 23.2), (39.5, 23.2), (39.1, 23.3), (39.2, 23.3), (39.3, 23.3), (39.4, 23.3), (39.1, 23.4), (39.2, 23.4), (39.1, 23.5), (39.2, 23.5), (39.1, 23.6), (39.2, 23.6), (39.0, 23.7), (39.1, 23.7), (39.2, 23.7), (39.1, 23.8), (39.2, 23.8), (39.0, 23.9), (39.1, 23.9), (39.2, 23.9), (39.3, 23.9), (39.0, 24.0), (39.1, 24.0), (39.2, 24.0), (39.3, 24.0), (39.4, 24.0), (39.0, 24.1), (39.1, 24.1), (39.3, 24.1), (39.4, 24.1), (39.5, 24.1), (39.1, 24.2), (39.3, 24.2), (39.4, 24.2), (39.5, 24.2), (39.3, 24.3), (39.4, 24.3), (39.3, 24.4), (39.4, 24.4)) AND EXTRACT(YEAR FROM meteo_tmean.time) = 2010 ORDER BY meteo_tmean.tmean DESC LIMIT 1;
+Error: cannot subscript type integer because it does not support subscripting
+LINE 1: ...nks) AS rank_array ON TRUE JOIN landcover_type ON rank_array...
+                                                             ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error occurs because `rank_array` is derived from `UNNEST(landcover_upscaled.ranks)`, and `ranks` is an ARRAY of nested arrays (e.g., [[[523, 10929]]]). When unnested, each element is still a 2D array (like [523, 10929]), not a scalar integer. The query attempts to access `rank_array[1]` as if it were a 1D array of integers, but `rank_array` is itself a 1D array containing two integers. Thus, to access the first element of the inner array, we must use `rank_array[1]` correctly — but the issue is deeper: `ranks` is a 3-level nested array (array of array of array), so `UNNEST` produces a set of 2D arrays (e.g., [523, 10929]), and we need to extract the first element of that inner array to match `level3_code`. The fix is to properly dereference the nested array structure. We need to use `rank_array[1]` to get the first integer from the 2-element array produced by UNNEST. The original syntax is correct in intent, but the data structure implies that `ranks` is an array of arrays of arrays — so `UNNEST` returns array elements that are arrays themselves. The error message suggests that PostgreSQL does not recognize `rank_array` as subscriptable — this typically happens if the type inference fails or if the array is empty/invalid. However, given the schema, the real issue is likely that `ranks` is a 3D array (array of array of integer), and `UNNEST` returns array elements that are 2D arrays. We need to access `rank_array[1]` — but PostgreSQL may interpret `rank_array` as a scalar if the array structure is malformed. To fix: ensure we are extracting the first element of the innermost array by using `UNNEST` correctly and casting if needed. However, the actual root cause is that `ranks` is defined as ARRAY of arrays like [[[523, 10929]]], so `UNNEST` will return a set of elements like [523, 10929] — a 1D array. So `rank_array[1]` should work. The error may be due to an empty or malformed array in the data. But the query structure is logically correct. The real fix is to use `UNNEST` with `ranks` and then take the first element of the resulting array — but since `ranks` is 3D, we need to unnest twice? Let’s reconsider: if `ranks` is `ARRAY[ARRAY[INTEGER]]`, then `UNNEST` returns `ARRAY[INTEGER]`. But the example shows `[[[523, 10929]]]` — so it's `ARRAY[ARRAY[ARRAY[INTEGER]]]`. Then `UNNEST` will return `ARRAY[ARRAY[INTEGER]]`. So we need to unnest again? But the query only unnests once. Therefore, we must unnest twice to get to the integer. Alternatively, we can use `rank_array[1][1]` to get the first element of the first inner array. So the fix is to change `rank_array[1]` to `rank_array[1][1]` to access the innermost integer. This matches the schema: ranks is array[array[array[int]]], so after UNNEST, we have array[array[int]], and then [1][1] gets the first integer. This is the most likely fix.
+#SQL: SELECT landcover_type.level1_label FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank_array ON TRUE JOIN landcover_type ON rank_array[1][1] = landcover_type.level3_code WHERE (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((39.5, 21.2), (39.6, 21.2), (39.7, 21.2), (39.4, 21.3), (39.5, 21.3), (39.6, 21.3), (39.7, 21.3), (39.8, 21.3), (39.2, 21.4), (39.4, 21.4), (39.5, 21.4), (39.6, 21.4), (39.7, 21.4), (39.8, 21.4), (39.3, 21.5), (39.4, 21.5), (39.5, 21.5), (39.6, 21.5), (39.7, 21.5), (39.8, 21.5), (39.3, 21.6), (39.4, 21.6), (39.5, 21.6), (39.6, 21.6), (39.7, 21.6), (39.8, 21.6), (39.2, 21.7), (39.3, 21.7), (39.4, 21.7), (39.5, 21.7), (39.6, 21.7), (39.7, 21.7), (39.8, 21.7), (39.2, 21.8), (39.3, 21.8), (39.4, 21.8), (39.5, 21.8), (39.6, 21.8), (39.7, 21.8), (39.8, 21.8), (39.2, 21.9), (39.3, 21.9), (39.4, 21.9), (39.5, 21.9), (39.6, 21.9), (39.7, 21.9), (39.8, 21.9), (39.1, 22.0), (39.2, 22.0), (39.3, 22.0), (39.4, 22.0), (39.5, 22.0), (39.6, 22.0), (39.7, 22.0), (39.8, 22.0), (39.9, 22.0), (40.0, 22.0), (39.1, 22.1), (39.2, 22.1), (39.3, 22.1), (39.4, 22.1), (39.5, 22.1), (39.6, 22.1), (39.7, 22.1), (39.8, 22.1), (39.9, 22.1), (40.0, 22.1), (39.2, 22.2), (39.3, 22.2), (39.4, 22.2), (39.5, 22.2), (39.6, 22.2), (39.7, 22.2), (39.8, 22.2), (39.9, 22.2), (40.0, 22.2), (39.3, 22.3), (39.4, 22.3), (39.5, 22.3), (39.6, 22.3), (39.7, 22.3), (39.8, 22.3), (39.9, 22.3), (40.0, 22.3), (39.3, 22.4), (39.4, 22.4), (39.5, 22.4), (39.6, 22.4), (39.7, 22.4), (39.8, 22.4), (39.9, 22.4), (40.0, 22.4), (39.1, 22.5), (39.2, 22.5), (39.3, 22.5), (39.4, 22.5), (39.5, 22.5), (39.6, 22.5), (39.7, 22.5), (39.8, 22.5), (39.9, 22.5), (39.1, 22.6), (39.2, 22.6), (39.3, 22.6), (39.4, 22.6), (39.5, 22.6), (39.6, 22.6), (39.7, 22.6), (39.8, 22.6), (39.9, 22.6), (39.1, 22.7), (39.2, 22.7), (39.3, 22.7), (39.4, 22.7), (39.5, 22.7), (39.6, 22.7), (39.7, 22.7), (39.8, 22.7), (39.9, 22.7), (40.0, 22.7), (39.0, 22.8), (39.1, 22.8), (39.2, 22.8), (39.3, 22.8), (39.4, 22.8), (39.5, 22.8), (39.6, 22.8), (39.7, 22.8), (39.8, 22.8), (39.9, 22.8), (39.0, 22.9), (39.1, 22.9), (39.2, 22.9), (39.3, 22.9), (39.4, 22.9), (39.5, 22.9), (39.6, 22.9), (39.7, 22.9), (39.8, 22.9), (39.0, 23.0), (39.1, 23.0), (39.2, 23.0), (39.3, 23.0), (39.4, 23.0), (39.5, 23.0), (39.6, 23.0), (39.1, 23.1), (39.2, 23.1), (39.3, 23.1), (39.4, 23.1), (39.5, 23.1), (39.1, 23.2), (39.2, 23.2), (39.3, 23.2), (39.4, 23.2), (39.5, 23.2), (39.1, 23.3), (39.2, 23.3), (39.3, 23.3), (39.4, 23.3), (39.1, 23.4), (39.2, 23.4), (39.1, 23.5), (39.2, 23.5), (39.1, 23.6), (39.2, 23.6), (39.0, 23.7), (39.1, 23.7), (39.2, 23.7), (39.1, 23.8), (39.2, 23.8), (39.0, 23.9), (39.1, 23.9), (39.2, 23.9), (39.3, 23.9), (39.0, 24.0), (39.1, 24.0), (39.2, 24.0), (39.3, 24.0), (39.4, 24.0), (39.0, 24.1), (39.1, 24.1), (39.3, 24.1), (39.4, 24.1), (39.5, 24.1), (39.1, 24.2), (39.3, 24.2), (39.4, 24.2), (39.5, 24.2), (39.3, 24.3), (39.4, 24.3), (39.3, 24.4), (39.4, 24.4)) AND EXTRACT(YEAR FROM meteo_tmean.time) = 2010 ORDER BY meteo_tmean.tmean DESC LIMIT 1;
+```
+
+############################## Human at step align_correct ##############################
+
+You are an SQL expert, and now I would like you to write SQL based on the question.
+
+
+/* Database schema */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_type.level1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+landcover_upscaled.ranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Based on the database schema and the question, pay attention to the following */
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
+2. #values in db display part values from the database. Please ignore the unnecessary values.
+3. If "#GEO_CONTEXT" is provided, use it as a spatial grounding constraint. Use only coordinates/bounds that appear in GEO_CONTEXT; do not invent place names or geometry values.
+4. If "#ONTOLOGY_GROUNDED_FUNCTION" is provided, treat it as an executable semantic constraint package (thresholds, temporal logic, aggregation hints). Map it only to existing schema columns/functions.
+5. When GEO/ontology context conflicts with schema feasibility, keep SQL executable and prioritize schema-valid expressions.
+6. For landcover questions, never join landcover_upscaled to landcover_type directly on latitude/longitude. Expand landcover_upscaled.ranks first (UNNEST or generate_subscripts), then join level3 code.
+
+Please rewrite the question to SQL-like query in the format: "Show #SELECT (table.column), WHERE condition are xxx (refer to #values), Group by/Order By (refer to columns). Here are 3 example: 
+
+#SQL-like: Show top 5 cards.id, where condition is cards.spend>100, order by cards.spend. 
+#SQL: SELECT id FROM cards WHERE spend > 100 ORDER BY spend LIMIT 5
+
+#SQL-like: Show Count(PaperAuthor.Name), Where condition is Paper.Year = 0
+#SQL: SELECT COUNT(T2.Name) FROM Paper AS T1 INNER JOIN PaperAuthor AS T2 ON T1.Id = T2.PaperId WHERE T1.Year = 0
+
+#SQL-like: Show Author.Name, Where condition is Author.Affiliation = 'University of Oxford', Group By Author.Name Order By Author.spent
+#SQL: SELECT Name FROM Author WHERE Affiliation = 'University of Oxford' Group By Name ORDER BY spent ASC
+
+/* Answer the following: What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None */
+Please answer the question in the following format without any other content:
+```
+#reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
+#columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
+#values: the filter in SQL (format: 'filter in question' refer to table.column: value. e.g. 'name is not tom' refer to name <> "tom", 2007 refer to EXTRACT(YEAR FROM Date) = 2007)
+#SELECT: SELECT content (display in the order asked by the questions, do not display content not specified by the questions).
+#SQL-like: SQL-like statements ignoring Join conditions
+#SQL: SQL
+```
+#GEO_CONTEXT:
+{
+  "place": "Thessaly Region",
+  "points": [
+    {
+      "lon": "21.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.2",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.2",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.0",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.1",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.2",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.3",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.4",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.7",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.0"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.0"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.8"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.0"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.5"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.6"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.5"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.4",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.4",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.5",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.5",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.6",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.6",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.7",
+      "lat": "39.0"
+    },
+    {
+      "lon": "23.7",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.7",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.8",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.8",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.0"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.0"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.1"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.2"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.0"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.1"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.5"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.1"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "24.3",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.4",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.4",
+      "lat": "39.4"
+    }
+  ],
+  "resolution": "places_dict"
+}
+#ONTOLOGY_GROUNDED_FUNCTION:
+{
+  "schema_version": "ontology_grounded_function.v1",
+  "question": "What is the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during the year 2010? None",
+  "anchor": "appliesToVariable",
+  "target_variable": "",
+  "hops": null,
+  "semantic_chain": [],
+  "function_specs": [
+    {
+      "name": "Threshold",
+      "inputs": [
+        "Variable"
+      ],
+      "semantics": "Apply explicit operator from ontology threshold config.",
+      "pseudo_code_template": "ThresholdMatch := (Variable >= threshold_value)"
+    }
+  ],
+  "composition_order": [
+    "Threshold"
+  ],
+  "constraints": [
+    "operator sourced from hasOperator",
+    "threshold unit sourced from hasThresholdUnit",
+    "duration sourced from hasDuration"
+  ]
+}
+
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The question asks for the first-level landcover type at the location with the highest annual average temperature in Thessaly Region during 2010. To solve this, we need to find the location (latitude, longitude) with the maximum tmean value from meteo_tmean in 2010, then match that location to the landcover_upscaled table using spatial coordinates, expand the ranks array to get the landcover code, and join with landcover_type to get the level1_label. The GEO_CONTEXT provides the valid latitude/longitude points in Thessaly Region, so we filter coordinates within those bounds. We extract the year 2010 from the time column and find the maximum tmean.
+#columns: landcover_type.level1_label, meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, landcover_upscaled.ranks
+#values: 'Thessaly Region' refer to meteo_tmean.latitude BETWEEN 39.0 AND 40.0 AND meteo_tmean.longitude BETWEEN 21.2 AND 24.4, 2010 refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2010
+#SELECT: landcover_type.level1_label
+#SQL-like: Show landcover_type.level1_label, where condition is meteo_tmean.latitude between 39.0 and 40.0 and meteo_tmean.longitude between 21.2 and 24.4 and EXTRACT(YEAR FROM meteo_tmean.time) = 2010, order by meteo_tmean.tmean DESC, limit 1, then join landcover_upscaled on latitude and longitude, unnest ranks to match landcover_type
+#SQL: SELECT lt.level1_label
+FROM meteo_tmean mt
+JOIN landcover_upscaled lu ON mt.latitude = lu.latitude AND mt.longitude = lu.longitude
+JOIN LATERAL UNNEST(lu.ranks) AS rank_elem ON true
+JOIN landcover_type lt ON lt.level3_code = rank_elem[1][1]  -- assuming first element of nested array is the level3 code
+WHERE mt.latitude BETWEEN 39.0 AND 40.0
+  AND mt.longitude BETWEEN 21.2 AND 24.4
+  AND EXTRACT(YEAR FROM mt.time) = 2010
+ORDER BY mt.tmean DESC
+LIMIT 1;
+```
+

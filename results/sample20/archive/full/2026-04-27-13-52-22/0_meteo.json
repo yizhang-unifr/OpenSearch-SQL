@@ -1,0 +1,590 @@
+[
+    {
+        "node_type": "generate_db_schema",
+        "db_list": "Database Management System: PostgreSQL\n#Database name: meteo\n## Table landcover_type:\nid: The type is integer, which does not include Null and is Unique. Values format like: [19, 2, 34]\nlevel1_code: The type is integer, which does not include Null and is Non-Unique. Values format like: [4, 2, 5]\nlevel1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']\nlevel2_code: The type is integer, which does not include Null and is Non-Unique. Values format like: [22, 21, 24]\nlevel2_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Marine waters', 'Maritime wetlands', 'Pastures']\nlevel3_code: The type is integer, which does not include Null and is Unique. Values format like: [213, 312, 521]\nlevel3_label: The type is text, which does not include Null and is Unique. Values format like: ['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']\n\n## Table landcover_upscaled:\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]\nranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]\n\n## Table meteo_elevation:\nid: The type is integer, which does not include Null and is Unique. Values format like: [16, 53, 31]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]\nlongitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]\nelevation: The type is double precision, which does not include Null and is Unique. Values format like: [262.32, 261.07, 267.04]\n\n## Table meteo_sdmax:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]\nlongitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]\nsdmax: The type is double precision, which does not include Null and is Non-Unique. Values format like: [0.1543006004608365, 0.005855887968656992, 0.1904323847336456]\n\n## Table meteo_ssrd:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]\nssrd: The type is double precision, which does not include Null and is Unique. Values format like: [2455904.0, 3285964.0, 3006604.0]\n\n## Table meteo_tmax:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]\ntmax: The type is real, which does not include Null and is Non-Unique. Values format like: [278.1831, 276.86865, 280.3921]\n\n## Table meteo_tmean:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]\ntmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]\n\n## Table meteo_tmin:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]\ntmin: The type is real, which does not include Null and is Non-Unique. Values format like: [275.60016, 275.70953, 274.0431]\n\n## Table meteo_tp:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]\ntp: The type is real, which does not include Null and is Unique. Values format like: [0.0043916972, 0.0024763464, 0.005056289]\n\n## Table meteo_windspeedmax:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]\nwindspeedmax: The type is real, which does not include Null and is Unique. Values format like: [4.6727343, 4.60072, 5.389693]\n\n#Foreign keys:\n\n\n#Database Description: The database encompasses meteorological and geographical data, including weather variables (temperature, precipitation, wind speed, radiation), elevation information, and land cover classifications associated with specific coordinates and timestamps.\n#Tables Descriptions:\nlandcover_type: Hierarchical classification codes and labels for different levels of land cover types.\nlandcover_upscaled: Geographic coordinates linked to arrays of land cover ranks.\nmeteo_elevation: Elevation data recorded for specific latitude and longitude coordinates.\nmeteo_sdmax: Maximum standard deviation values with time boundaries and geographic coordinates.\nmeteo_ssrd: Surface solar radiation downwards data associated with timestamps and locations.\nmeteo_tmax: Maximum temperature records including time boundaries and geographic coordinates.\nmeteo_tmean: Mean temperature records including time boundaries and geographic coordinates.\nmeteo_tmin: Minimum temperature records including time boundaries and geographic coordinates.\nmeteo_tp: Total precipitation data associated with timestamps and locations.\nmeteo_windspeedmax: Maximum wind speed records including time boundaries and geographic coordinates.\n",
+        "db_col_dic": {
+            "landcover_type.id": [
+                "The type is integer, which does not include Null and is Unique. Values format like: [19, 2, 34]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Unique",
+                "[19, 2, 34]"
+            ],
+            "landcover_type.level1_code": [
+                "The type is integer, which does not include Null and is Non-Unique. Values format like: [4, 2, 5]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Non-Unique",
+                "[4, 2, 5]"
+            ],
+            "landcover_type.level1_label": [
+                "The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']",
+                "",
+                "",
+                "text",
+                "Non-Null",
+                "Non-Unique",
+                "['Forest and semi-natural areas', 'Water bodies', 'Wetlands']"
+            ],
+            "landcover_type.level2_code": [
+                "The type is integer, which does not include Null and is Non-Unique. Values format like: [22, 21, 24]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Non-Unique",
+                "[22, 21, 24]"
+            ],
+            "landcover_type.level2_label": [
+                "The type is text, which does not include Null and is Non-Unique. Values format like: ['Marine waters', 'Maritime wetlands', 'Pastures']",
+                "",
+                "",
+                "text",
+                "Non-Null",
+                "Non-Unique",
+                "['Marine waters', 'Maritime wetlands', 'Pastures']"
+            ],
+            "landcover_type.level3_code": [
+                "The type is integer, which does not include Null and is Unique. Values format like: [213, 312, 521]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Unique",
+                "[213, 312, 521]"
+            ],
+            "landcover_type.level3_label": [
+                "The type is text, which does not include Null and is Unique. Values format like: ['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']",
+                "",
+                "",
+                "text",
+                "Non-Null",
+                "Unique",
+                "['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']"
+            ],
+            "landcover_upscaled.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[27.6, 27.5, 27.9]"
+            ],
+            "landcover_upscaled.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[-15.5, -15.2, -17.2]"
+            ],
+            "landcover_upscaled.ranks": [
+                "The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]",
+                "",
+                "",
+                "ARRAY",
+                "Non-Null",
+                "Non-Unique",
+                "[[[523, 10929]], [[523, 10614]], [[523, 12]]]"
+            ],
+            "meteo_elevation.id": [
+                "The type is integer, which does not include Null and is Unique. Values format like: [16, 53, 31]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Unique",
+                "[16, 53, 31]"
+            ],
+            "meteo_elevation.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[47.7298, 47.7303, 47.7301]"
+            ],
+            "meteo_elevation.longitude": [
+                "The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Unique",
+                "[5.8378, 5.8241, 5.8075]"
+            ],
+            "meteo_elevation.elevation": [
+                "The type is double precision, which does not include Null and is Unique. Values format like: [262.32, 261.07, 267.04]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Unique",
+                "[262.32, 261.07, 267.04]"
+            ],
+            "meteo_sdmax.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 0)]"
+            ],
+            "meteo_sdmax.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_sdmax.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_sdmax.latitude": [
+                "The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Non-Unique",
+                "[44.0]"
+            ],
+            "meteo_sdmax.longitude": [
+                "The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[17.4, 19.1, 23.5]"
+            ],
+            "meteo_sdmax.sdmax": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [0.1543006004608365, 0.005855887968656992, 0.1904323847336456]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[0.1543006004608365, 0.005855887968656992, 0.1904323847336456]"
+            ],
+            "meteo_ssrd.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_ssrd.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_ssrd.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[5.2, 7.2, 9.8]"
+            ],
+            "meteo_ssrd.ssrd": [
+                "The type is double precision, which does not include Null and is Unique. Values format like: [2455904.0, 3285964.0, 3006604.0]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Unique",
+                "[2455904.0, 3285964.0, 3006604.0]"
+            ],
+            "meteo_tmax.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_tmax.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tmax.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_tmax.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tmax.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[8.9, 9.600000000000001, 9.3]"
+            ],
+            "meteo_tmax.tmax": [
+                "The type is real, which does not include Null and is Non-Unique. Values format like: [278.1831, 276.86865, 280.3921]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Non-Unique",
+                "[278.1831, 276.86865, 280.3921]"
+            ],
+            "meteo_tmean.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_tmean.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tmean.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_tmean.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tmean.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[7.2, 5.1, 9.8]"
+            ],
+            "meteo_tmean.tmean": [
+                "The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[275.80954, 274.16214, 276.67957]"
+            ],
+            "meteo_tmin.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_tmin.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tmin.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_tmin.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tmin.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[5.9, 5.0, 6.3]"
+            ],
+            "meteo_tmin.tmin": [
+                "The type is real, which does not include Null and is Non-Unique. Values format like: [275.60016, 275.70953, 274.0431]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Non-Unique",
+                "[275.60016, 275.70953, 274.0431]"
+            ],
+            "meteo_tp.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tp.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tp.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[6.6, 9.4, 6.4]"
+            ],
+            "meteo_tp.tp": [
+                "The type is real, which does not include Null and is Unique. Values format like: [0.0043916972, 0.0024763464, 0.005056289]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[0.0043916972, 0.0024763464, 0.005056289]"
+            ],
+            "meteo_windspeedmax.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_windspeedmax.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_windspeedmax.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_windspeedmax.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_windspeedmax.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[10.600000000000001, 5.9, 10.7]"
+            ],
+            "meteo_windspeedmax.windspeedmax": [
+                "The type is real, which does not include Null and is Unique. Values format like: [4.6727343, 4.60072, 5.389693]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[4.6727343, 4.60072, 5.389693]"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "extract_col_value",
+        "key_col_des_raw": "\n#reason: The question requires calculating the average temperature in Zurich for 2018. Relevant columns include meteo_tmean.tmean (temperature data), meteo_tmean.time (to filter by year 2018), and geographic coordinates (latitude/longitude) to identify Zurich's location. Since city names are not stored in the schema, latitude/longitude filtering is necessary but exact values for Zurich are unknown. The year 2018 is a filter value.\n#columns: meteo_tmean.tmean, meteo_tmean.time, meteo_tmean.latitude, meteo_tmean.longitude\n#values: \"2018\"\n",
+        "status": "success"
+    },
+    {
+        "node_type": "extract_query_noun",
+        "values": [
+            "city of Zurich",
+            "average temperature",
+            "city",
+            "Zurich",
+            "temperature",
+            "2018"
+        ],
+        "col": "meteo_tmean.tmean, meteo_tmean.time, meteo_tmean.latitude, meteo_tmean.longitude",
+        "status": "success"
+    },
+    {
+        "node_type": "column_retrieve_and_other_info",
+        "status": "error",
+        "error": "<class 'IndexError'>: <list index out of range>"
+    },
+    {
+        "node_type": "implicit_context_enhance",
+        "geo_context": {
+            "place": "City of Zurich",
+            "points": [
+                {
+                    "lon": "8.5",
+                    "lat": "47.4"
+                }
+            ],
+            "resolution": "places_dict"
+        },
+        "ontology_grounded_function": {
+            "schema_version": "ontology_grounded_function.v1",
+            "question": "What is the average temperature in city of Zurich in 2018? None",
+            "anchor": "appliesToVariable",
+            "target_variable": "",
+            "hops": null,
+            "semantic_chain": [],
+            "function_specs": [
+                {
+                    "name": "Threshold",
+                    "inputs": [
+                        "Variable"
+                    ],
+                    "semantics": "Apply explicit operator from ontology threshold config.",
+                    "pseudo_code_template": "ThresholdMatch := (Variable >= threshold_value)"
+                }
+            ],
+            "composition_order": [
+                "Threshold"
+            ],
+            "constraints": [
+                "operator sourced from hasOperator",
+                "threshold unit sourced from hasThresholdUnit",
+                "duration sourced from hasDuration"
+            ]
+        },
+        "enhancement_status": "success",
+        "enhancement_errors": [],
+        "enhancement_config": {
+            "enable_geo_context": true,
+            "enable_ontology_grounding": true,
+            "geo_anchor_mode": "points"
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generate",
+        "status": "error",
+        "error": "<class 'KeyError'>: <'column'>"
+    },
+    {
+        "node_type": "align_correct",
+        "status": "error",
+        "error": "<class 'KeyError'>: <'column'>"
+    },
+    {
+        "node_type": "vote",
+        "status": "error",
+        "error": "<class 'KeyError'>: <'vote'>"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generate": {
+            "exec_res": "generation error",
+            "exec_err": "<class 'KeyError'>: <'column'>",
+            "Question": "What is the average temperature in city of Zurich in 2018?",
+            "Evidence": "None",
+            "GOLD_SQL": null,
+            "PREDICTED_SQL": "--"
+        },
+        "align_correct": {
+            "exec_res": "generation error",
+            "exec_err": "<class 'KeyError'>: <'column'>",
+            "Question": "What is the average temperature in city of Zurich in 2018?",
+            "Evidence": "None",
+            "GOLD_SQL": null,
+            "PREDICTED_SQL": "--"
+        },
+        "vote": {
+            "exec_res": "generation error",
+            "exec_err": "<class 'KeyError'>: <'vote'>",
+            "Question": "What is the average temperature in city of Zurich in 2018?",
+            "Evidence": "None",
+            "GOLD_SQL": null,
+            "PREDICTED_SQL": "--"
+        },
+        "status": "success"
+    }
+]

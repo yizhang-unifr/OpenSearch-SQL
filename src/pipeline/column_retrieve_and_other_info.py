@@ -30,7 +30,11 @@ def column_retrieve_and_other_info(task: Any, execution_history: Dict[str, Any])
     paths = DatabaseManager()
     emb_dir = paths.emb_dir
     chat_model = model_chose(node_name, config["engine"])
-    bert_model = SentenceTransformer(config["bert_model"], device=config["device"])
+    bert_model = SentenceTransformer(
+        config["bert_model"],
+        device=config["device"],
+        local_files_only=True,
+    )
 
     all_db_col = get_last_node_result(execution_history, "generate_db_schema")["db_col_dic"]
     origin_col = get_last_node_result(execution_history, "extract_query_noun")["col"]
@@ -52,8 +56,12 @@ def column_retrieve_and_other_info(task: Any, execution_history: Dict[str, Any])
     # Simplified column retrieval (no tables.json needed for PostgreSQL)
     col_retrieve = _simple_col_retrieve(bert_model, task.question, db_keys_col)
 
-    # Foreign keys from PostgreSQL
-    foreign_keys, foreign_set = find_foreign_keys_pg()
+    # Foreign keys from PostgreSQL (fail-soft on transient DB connectivity issues)
+    try:
+        foreign_keys, foreign_set = find_foreign_keys_pg()
+    except Exception as exc:  # noqa: BLE001
+        logging.warning(f"Foreign key retrieval failed, fallback to empty: {exc}")
+        foreign_keys, foreign_set = "", set()
 
     cols = ColumnUpdater(db_col).col_pre_update(origin_col, col_retrieve, foreign_set)
 

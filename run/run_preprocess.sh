@@ -14,16 +14,18 @@
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
+PYTHON_BIN=${PYTHON_BIN:-../../.venv/bin/python}
 
 bert_model=${BERT_MODEL:-"all-mpnet-base-v2"}
 data_dir="data"
+env_file="$(cd ../.. && pwd)/.env"
 
 echo "=== Generating column-value embeddings ==="
-python3 -u src/database_process/make_emb.py \
+PYTHONPATH="src:${PYTHONPATH:-}" "${PYTHON_BIN}" -u src/database_process/make_emb.py \
     --emb_dir "${data_dir}/emb" \
     --bert_model "${bert_model}" \
     --db_name "meteo" \
-    --env_file "$(cd .. && pwd)/.env"
+    --env_file "${env_file}"
 
 echo "=== Preprocessing complete ==="
 echo "Embeddings saved to ${data_dir}/emb/"

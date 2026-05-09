@@ -1,0 +1,72 @@
+{
+    "3": [
+        "SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = 2020",
+        "SELECT NULL;",
+        "SELECT NULL;",
+        "SELECT NULL::real AS average_temperature;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020"
+    ],
+    "6": [
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1",
+        "SELECT NULL;",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1",
+        "SELECT MIN(meteo_windspeedmax.windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM meteo_windspeedmax.time) = 2021 AND EXTRACT(MONTH FROM meteo_windspeedmax.time) = 1",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = 2021 AND EXTRACT(MONTH FROM time) = 1"
+    ],
+    "1": [
+        "SELECT NULL;",
+        "SELECT NULL;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2018 AND EXTRACT(MONTH FROM meteo_tmean.time) = 7",
+        "SELECT AVG(tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = 2018 AND EXTRACT(MONTH FROM time) = 7",
+        "SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2018 AND EXTRACT(MONTH FROM meteo_tmean.time) = 7"
+    ],
+    "4": [
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE time = '2021-01-15 00:00:00'",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE time = '2021-01-15 00:00:00';",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE time >= '2021-01-15 00:00:00' AND time < '2021-01-16 00:00:00'",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE time = '2021-01-15 00:00:00'"
+    ],
+    "9": [
+        "SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = 2016 ORDER BY (tmin - 273.15) ASC LIMIT 1",
+        "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1",
+        "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1",
+        "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1",
+        "SELECT meteo_tmin.latitude, meteo_tmin.longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM meteo_tmin.time) = 2016 ORDER BY (meteo_tmin.tmin - 273.15) ASC LIMIT 1"
+    ],
+    "7": [
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = 2020",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = 2020",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = 2020",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax"
+    ],
+    "2": [
+        "SELECT NULL;",
+        "SELECT NULL;",
+        "SELECT: #SQL-like: #SQL: ```",
+        "SELECT NULL;",
+        "SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = 2020"
+    ],
+    "5": [
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(WEEK FROM time) = 15 AND EXTRACT(YEAR FROM time) = 2021",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(WEEK FROM time) = 15 AND EXTRACT(YEAR FROM time) = 2021",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(WEEK FROM time) = 15 AND EXTRACT(YEAR FROM time) = 2021",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(WEEK FROM time) = 15 AND EXTRACT(YEAR FROM time) = 2021",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(WEEK FROM time) = 15 AND EXTRACT(YEAR FROM time) = 2021"
+    ],
+    "8": [
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = 2019",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = 2019",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = 2019;",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax;"
+    ],
+    "0": [
+        "SELECT NULL;",
+        "SELECT: #SQL-like: #SQL: ```",
+        "SELECT: #SQL-like: #SQL: ```",
+        "SELECT NULL;",
+        "SELECT NULL;"
+    ]
+}

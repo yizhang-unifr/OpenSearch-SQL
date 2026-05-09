@@ -6,12 +6,15 @@ db_sqlite_path parameter (PostgreSQL connections are handled internally).
 
 import json
 import logging
+import re
 from typing import Any, Dict, List
 from pathlib import Path
 
 from sentence_transformers import SentenceTransformer
 
 from pipeline.utils import node_decorator, get_last_node_result, make_newprompt
+from pipeline.implicit_context_utils import build_implicit_context_block, get_implicit_context_payload
+from pipeline.landcover_semantic_hints import build_landcover_semantic_hint
 from pipeline.pipeline_manager import PipelineManager
 from runner.database_manager import DatabaseManager
 from llm.model import model_chose
@@ -20,17 +23,46 @@ from llm.prompts import db_check_prompts
 from runner.check_and_correct import muti_process_sql, soft_check, sql_raw_parse
 
 
+def _implicit_consistency_check(execution_history: List[Dict[str, Any]], voted_sql: str) -> Dict[str, Any]:
+    """Lightweight consistency check between final SQL and implicit payloads."""
+    payload = get_implicit_context_payload(execution_history)
+    geo_context = payload["geo_context"]
+    ontology_grounded_function = payload["ontology_grounded_function"]
+    if not geo_context and not ontology_grounded_function:
+        return {"implicit_check_status": "no_context", "implicit_check_warnings": []}
+    warnings: List[str] = []
+    vote_sql = (voted_sql or "").lower()
+
+    if geo_context:
+        has_geo_signal = any(k in vote_sql for k in ("latitude", "longitude", "st_", "bbox", "within", "intersect"))
+        if not has_geo_signal:
+            warnings.append("geo_context_present_but_sql_has_no_explicit_geo_signal")
+
+    if ontology_grounded_function:
+        has_numeric_filter = bool(re.search(r"(>=|<=|>|<|=)\s*-?\d+(\.\d+)?", vote_sql))
+        if not has_numeric_filter:
+            warnings.append("ontology_grounded_function_present_but_sql_has_no_numeric_constraint_signal")
+
+    status = "pass" if not warnings else "warn"
+    return {"implicit_check_status": status, "implicit_check_warnings": warnings}
+
+
 @node_decorator(check_schema_status=False)
 def align_correct(task: Any, execution_history: List[Dict[str, Any]]) -> Dict[str, Any]:
     config, node_name = PipelineManager().get_model_para()
     paths = DatabaseManager()
     fewshot_path = paths.db_fewshot_path
     correct_fewshot_json = paths.db_fewshot2_path
+    fewshot_enabled = str(config.get("fewshot_enabled", "True")).lower() == "true"
 
     prompts_template = db_check_prompts()
-    bert_model = SentenceTransformer(config["bert_model"], device=config["device"])
+    bert_model = SentenceTransformer(
+        config["bert_model"],
+        device=config["device"],
+        local_files_only=True,
+    )
 
-    if fewshot_path.exists():
+    if fewshot_enabled and fewshot_path.exists():
         with open(fewshot_path) as f:
             df_fewshot = json.load(f)
     else:
@@ -44,15 +76,34 @@ def align_correct(task: Any, execution_history: List[Dict[str, Any]]) -> Dict[st
     else:
         correct_dic = {"default": ""}
 
-    all_db_col = get_last_node_result(execution_history, "generate_db_schema")["db_col_dic"]
-    column = get_last_node_result(execution_history, "column_retrieve_and_other_info")["column"]
-    foreign_keys = get_last_node_result(execution_history, "column_retrieve_and_other_info")["foreign_keys"]
-    foreign_set = get_last_node_result(execution_history, "column_retrieve_and_other_info")["foreign_set"]
-    L_values = get_last_node_result(execution_history, "column_retrieve_and_other_info")["L_values"]
-    q_order = get_last_node_result(execution_history, "column_retrieve_and_other_info")["q_order"]
-    question = get_last_node_result(execution_history, "candidate_generate")["rewrite_question"]
+    schema_node = get_last_node_result(execution_history, "generate_db_schema")
+    col_node = get_last_node_result(execution_history, "column_retrieve_and_other_info")
+    cand_node = get_last_node_result(execution_history, "candidate_generate")
+    if not schema_node or schema_node.get("status") != "success":
+        raise RuntimeError(
+            "Upstream node 'generate_db_schema' failed; "
+            f"cannot run align_correct. upstream_error={schema_node.get('error') if schema_node else 'missing'}"
+        )
+    if not col_node or col_node.get("status") != "success":
+        raise RuntimeError(
+            "Upstream node 'column_retrieve_and_other_info' failed; "
+            f"cannot run align_correct. upstream_error={col_node.get('error') if col_node else 'missing'}"
+        )
+    if not cand_node or cand_node.get("status") != "success":
+        raise RuntimeError(
+            "Upstream node 'candidate_generate' failed; "
+            f"cannot run align_correct. upstream_error={cand_node.get('error') if cand_node else 'missing'}"
+        )
 
-    SQLs = get_last_node_result(execution_history, "candidate_generate")["SQL"]
+    all_db_col = schema_node["db_col_dic"]
+    column = col_node["column"]
+    foreign_keys = col_node["foreign_keys"]
+    foreign_set = col_node["foreign_set"]
+    L_values = col_node["L_values"]
+    q_order = col_node["q_order"]
+    question = cand_node["rewrite_question"]
+
+    SQLs = cand_node["SQL"]
 
     db = task.db_id
     hint = task.evidence
@@ -61,6 +112,9 @@ def align_correct(task: Any, execution_history: List[Dict[str, Any]]) -> Dict[st
     q_id_str = str(task.question_id)
     if q_id_str in df_fewshot.get("questions", {}):
         fewshot = df_fewshot["questions"][q_id_str].get("prompt", "")
+    if not fewshot:
+        question_key = task.raw_question.strip().lower()
+        fewshot = df_fewshot.get("by_question", {}).get(question_key, {}).get("prompt", "")
 
     values = [f"{x[0]}: '{x[1]}'" for x in L_values]
     key_col_des = "#Values in Database:\n" + "\n".join(values)
@@ -89,6 +143,8 @@ def align_correct(task: Any, execution_history: List[Dict[str, Any]]) -> Dict[st
         task.evidence,
         q_order,
     )
+    tmp_prompt += build_implicit_context_block(execution_history)
+    tmp_prompt += build_landcover_semantic_hint(question)
 
     Dcheck = soft_check(
         bert_model,
@@ -114,9 +170,19 @@ def align_correct(task: Any, execution_history: List[Dict[str, Any]]) -> Dict[st
         config.get("align_methods", "style_align+function_align"),
         n=config.get("n", 1),
     )
+    if not vote:
+        logging.error(
+            "align_correct vote list is empty; question_id=%s sql_candidates=%s candidate_sqls=%s align_methods=%s",
+            getattr(task, "question_id", "unknown"),
+            len(SQLs_dic),
+            list(SQLs_dic.keys()),
+            config.get("align_methods", "style_align+function_align"),
+        )
+    voted_sql = vote[0].get("sql", "") if vote else ""
 
     response = {
         "vote": vote,
         "none_case": none_case,
     }
+    response.update(_implicit_consistency_check(execution_history, voted_sql))
     return response

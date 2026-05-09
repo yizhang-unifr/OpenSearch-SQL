@@ -1,0 +1,1022 @@
+[
+    {
+        "node_type": "generate_db_schema",
+        "db_list": "Database Management System: PostgreSQL\n#Database name: meteo\n## Table landcover_type:\nid: The type is integer, which does not include Null and is Unique. Values format like: [19, 2, 34]\nlevel1_code: The type is integer, which does not include Null and is Non-Unique. Values format like: [4, 2, 5]\nlevel1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']\nlevel2_code: The type is integer, which does not include Null and is Non-Unique. Values format like: [22, 21, 24]\nlevel2_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Marine waters', 'Maritime wetlands', 'Pastures']\nlevel3_code: The type is integer, which does not include Null and is Unique. Values format like: [213, 312, 521]\nlevel3_label: The type is text, which does not include Null and is Unique. Values format like: ['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']\n\n## Table landcover_upscaled:\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]\nranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]\n\n## Table meteo_elevation:\nid: The type is integer, which does not include Null and is Unique. Values format like: [16, 53, 31]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]\nlongitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]\nelevation: The type is double precision, which does not include Null and is Unique. Values format like: [262.32, 261.07, 267.04]\n\n## Table meteo_sdmax:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]\nlongitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]\nsdmax: The type is double precision, which does not include Null and is Non-Unique. Values format like: [0.1543006004608365, 0.005855887968656992, 0.1904323847336456]\n\n## Table meteo_ssrd:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]\nssrd: The type is double precision, which does not include Null and is Unique. Values format like: [2455904.0, 3285964.0, 3006604.0]\n\n## Table meteo_tmax:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]\ntmax: The type is real, which does not include Null and is Non-Unique. Values format like: [278.1831, 276.86865, 280.3921]\n\n## Table meteo_tmean:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]\ntmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]\n\n## Table meteo_tmin:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]\ntmin: The type is real, which does not include Null and is Non-Unique. Values format like: [275.60016, 275.70953, 274.0431]\n\n## Table meteo_tp:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]\ntp: The type is real, which does not include Null and is Unique. Values format like: [0.0043916972, 0.0024763464, 0.005056289]\n\n## Table meteo_windspeedmax:\ntime: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\ntime_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\ntime_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]\nlatitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nlongitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]\nwindspeedmax: The type is real, which does not include Null and is Unique. Values format like: [4.6727343, 4.60072, 5.389693]\n\n#Foreign keys:\n\n\n#Database Description: The database encompasses meteorological and geographical data, including weather variables (temperature, precipitation, wind speed, radiation), elevation information, and land cover classifications associated with specific coordinates and timestamps.\n#Tables Descriptions:\nlandcover_type: Hierarchical classification codes and labels for different levels of land cover types.\nlandcover_upscaled: Geographic coordinates linked to arrays of land cover ranks.\nmeteo_elevation: Elevation data recorded for specific latitude and longitude coordinates.\nmeteo_sdmax: Maximum standard deviation values with time boundaries and geographic coordinates.\nmeteo_ssrd: Surface solar radiation downwards data associated with timestamps and locations.\nmeteo_tmax: Maximum temperature records including time boundaries and geographic coordinates.\nmeteo_tmean: Mean temperature records including time boundaries and geographic coordinates.\nmeteo_tmin: Minimum temperature records including time boundaries and geographic coordinates.\nmeteo_tp: Total precipitation data associated with timestamps and locations.\nmeteo_windspeedmax: Maximum wind speed records including time boundaries and geographic coordinates.\n",
+        "db_col_dic": {
+            "landcover_type.id": [
+                "The type is integer, which does not include Null and is Unique. Values format like: [19, 2, 34]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Unique",
+                "[19, 2, 34]"
+            ],
+            "landcover_type.level1_code": [
+                "The type is integer, which does not include Null and is Non-Unique. Values format like: [4, 2, 5]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Non-Unique",
+                "[4, 2, 5]"
+            ],
+            "landcover_type.level1_label": [
+                "The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']",
+                "",
+                "",
+                "text",
+                "Non-Null",
+                "Non-Unique",
+                "['Forest and semi-natural areas', 'Water bodies', 'Wetlands']"
+            ],
+            "landcover_type.level2_code": [
+                "The type is integer, which does not include Null and is Non-Unique. Values format like: [22, 21, 24]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Non-Unique",
+                "[22, 21, 24]"
+            ],
+            "landcover_type.level2_label": [
+                "The type is text, which does not include Null and is Non-Unique. Values format like: ['Marine waters', 'Maritime wetlands', 'Pastures']",
+                "",
+                "",
+                "text",
+                "Non-Null",
+                "Non-Unique",
+                "['Marine waters', 'Maritime wetlands', 'Pastures']"
+            ],
+            "landcover_type.level3_code": [
+                "The type is integer, which does not include Null and is Unique. Values format like: [213, 312, 521]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Unique",
+                "[213, 312, 521]"
+            ],
+            "landcover_type.level3_label": [
+                "The type is text, which does not include Null and is Unique. Values format like: ['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']",
+                "",
+                "",
+                "text",
+                "Non-Null",
+                "Unique",
+                "['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']"
+            ],
+            "landcover_upscaled.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[27.6, 27.5, 27.9]"
+            ],
+            "landcover_upscaled.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[-15.5, -15.2, -17.2]"
+            ],
+            "landcover_upscaled.ranks": [
+                "The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]",
+                "",
+                "",
+                "ARRAY",
+                "Non-Null",
+                "Non-Unique",
+                "[[[523, 10929]], [[523, 10614]], [[523, 12]]]"
+            ],
+            "meteo_elevation.id": [
+                "The type is integer, which does not include Null and is Unique. Values format like: [16, 53, 31]",
+                "",
+                "",
+                "integer",
+                "Non-Null",
+                "Unique",
+                "[16, 53, 31]"
+            ],
+            "meteo_elevation.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[47.7298, 47.7303, 47.7301]"
+            ],
+            "meteo_elevation.longitude": [
+                "The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Unique",
+                "[5.8378, 5.8241, 5.8075]"
+            ],
+            "meteo_elevation.elevation": [
+                "The type is double precision, which does not include Null and is Unique. Values format like: [262.32, 261.07, 267.04]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Unique",
+                "[262.32, 261.07, 267.04]"
+            ],
+            "meteo_sdmax.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 0)]"
+            ],
+            "meteo_sdmax.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_sdmax.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_sdmax.latitude": [
+                "The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Non-Unique",
+                "[44.0]"
+            ],
+            "meteo_sdmax.longitude": [
+                "The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[17.4, 19.1, 23.5]"
+            ],
+            "meteo_sdmax.sdmax": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [0.1543006004608365, 0.005855887968656992, 0.1904323847336456]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[0.1543006004608365, 0.005855887968656992, 0.1904323847336456]"
+            ],
+            "meteo_ssrd.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_ssrd.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_ssrd.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[5.2, 7.2, 9.8]"
+            ],
+            "meteo_ssrd.ssrd": [
+                "The type is double precision, which does not include Null and is Unique. Values format like: [2455904.0, 3285964.0, 3006604.0]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Unique",
+                "[2455904.0, 3285964.0, 3006604.0]"
+            ],
+            "meteo_tmax.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_tmax.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tmax.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_tmax.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tmax.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[8.9, 9.600000000000001, 9.3]"
+            ],
+            "meteo_tmax.tmax": [
+                "The type is real, which does not include Null and is Non-Unique. Values format like: [278.1831, 276.86865, 280.3921]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Non-Unique",
+                "[278.1831, 276.86865, 280.3921]"
+            ],
+            "meteo_tmean.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_tmean.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tmean.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_tmean.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tmean.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[7.2, 5.1, 9.8]"
+            ],
+            "meteo_tmean.tmean": [
+                "The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[275.80954, 274.16214, 276.67957]"
+            ],
+            "meteo_tmin.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_tmin.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tmin.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_tmin.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tmin.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[5.9, 5.0, 6.3]"
+            ],
+            "meteo_tmin.tmin": [
+                "The type is real, which does not include Null and is Non-Unique. Values format like: [275.60016, 275.70953, 274.0431]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Non-Unique",
+                "[275.60016, 275.70953, 274.0431]"
+            ],
+            "meteo_tp.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_tp.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_tp.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[6.6, 9.4, 6.4]"
+            ],
+            "meteo_tp.tp": [
+                "The type is real, which does not include Null and is Unique. Values format like: [0.0043916972, 0.0024763464, 0.005056289]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[0.0043916972, 0.0024763464, 0.005056289]"
+            ],
+            "meteo_windspeedmax.time": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 11, 30)]"
+            ],
+            "meteo_windspeedmax.time_bnds_start": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 0, 0)]"
+            ],
+            "meteo_windspeedmax.time_bnds_end": [
+                "The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]",
+                "",
+                "",
+                "timestamp without time zone",
+                "Non-Null",
+                "Non-Unique",
+                "[datetime.datetime(1991, 1, 1, 23, 0)]"
+            ],
+            "meteo_windspeedmax.latitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[48.0, 47.9]"
+            ],
+            "meteo_windspeedmax.longitude": [
+                "The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]",
+                "",
+                "",
+                "double precision",
+                "Non-Null",
+                "Non-Unique",
+                "[10.600000000000001, 5.9, 10.7]"
+            ],
+            "meteo_windspeedmax.windspeedmax": [
+                "The type is real, which does not include Null and is Unique. Values format like: [4.6727343, 4.60072, 5.389693]",
+                "",
+                "",
+                "real",
+                "Non-Null",
+                "Unique",
+                "[4.6727343, 4.60072, 5.389693]"
+            ]
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "extract_col_value",
+        "key_col_des_raw": "\n#reason: The question asks to compare average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. This requires identifying temperature data (from meteo_tmean, meteo_tmax, or meteo_tmin), filtering by year (from time column), and linking to land cover types (from landcover_type and landcover_upscaled). The dominant land cover types \"Forest and semi-natural areas\" (level1_label) and \"Urban areas\" (level1_label) are key filters. The Canton of Zurich implies geographic filtering via latitude/longitude, which can be matched via meteo_tmean and landcover_upscaled. The average temperature is computed from tmean (mean temperature), grouped by year and land cover.\n#columns: meteo_tmean.time, meteo_tmean.tmean, landcover_type.level1_label, landcover_upscaled.latitude, landcover_upscaled.longitude, landcover_upscaled.ranks\n#values: \"Forest and semi-natural areas\", \"Urban areas\", \"2015\", \"2020\"\n",
+        "status": "success"
+    },
+    {
+        "node_type": "extract_query_noun",
+        "values": [
+            "annual temperatures",
+            "dominant forest",
+            "Canton of Zurich",
+            "2015",
+            "average",
+            "2020",
+            "urban landcovers",
+            "Urban areas",
+            "Forest and semi-natural areas"
+        ],
+        "col": "meteo_tmean.time, meteo_tmean.tmean, landcover_type.level1_label, landcover_upscaled.latitude, landcover_upscaled.longitude, landcover_upscaled.ranks",
+        "status": "success"
+    },
+    {
+        "node_type": "column_retrieve_and_other_info",
+        "L_values": [
+            [
+                "landcover_type.level1_label",
+                "Forest and semi-natural areas"
+            ]
+        ],
+        "column": "landcover_type.level1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']\nlandcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]\nlandcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]\nlandcover_upscaled.ranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]\nmeteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]\nmeteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]\nmeteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]\nmeteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]\nmeteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]\nmeteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]\nmeteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nmeteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]\nmeteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\nmeteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]\nmeteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\nmeteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]\nmeteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]\nmeteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]\nmeteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]\nmeteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]\nmeteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]\nmeteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]\nmeteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]",
+        "foreign_keys": "",
+        "foreign_set": [],
+        "q_order": [
+            "the average annual temperatures"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "implicit_context_enhance",
+        "geo_context": {
+            "place": "Canton of Zurich",
+            "points": [
+                {
+                    "lon": "8.4",
+                    "lat": "47.4"
+                },
+                {
+                    "lon": "8.4",
+                    "lat": "47.5"
+                },
+                {
+                    "lon": "8.5",
+                    "lat": "47.3"
+                },
+                {
+                    "lon": "8.5",
+                    "lat": "47.4"
+                },
+                {
+                    "lon": "8.5",
+                    "lat": "47.5"
+                },
+                {
+                    "lon": "8.5",
+                    "lat": "47.6"
+                },
+                {
+                    "lon": "8.6",
+                    "lat": "47.3"
+                },
+                {
+                    "lon": "8.6",
+                    "lat": "47.4"
+                },
+                {
+                    "lon": "8.6",
+                    "lat": "47.5"
+                },
+                {
+                    "lon": "8.6",
+                    "lat": "47.6"
+                },
+                {
+                    "lon": "8.7",
+                    "lat": "47.2"
+                },
+                {
+                    "lon": "8.7",
+                    "lat": "47.3"
+                },
+                {
+                    "lon": "8.7",
+                    "lat": "47.4"
+                },
+                {
+                    "lon": "8.7",
+                    "lat": "47.5"
+                },
+                {
+                    "lon": "8.7",
+                    "lat": "47.6"
+                },
+                {
+                    "lon": "8.8",
+                    "lat": "47.3"
+                },
+                {
+                    "lon": "8.8",
+                    "lat": "47.4"
+                },
+                {
+                    "lon": "8.8",
+                    "lat": "47.5"
+                }
+            ],
+            "resolution": "places_dict"
+        },
+        "ontology_grounded_function": {
+            "schema_version": "ontology_grounded_function.v1",
+            "question": "Compare the average annual temperatures between 2015 and 2020 for the dominant forest and urban landcovers in the Canton of Zurich. None",
+            "anchor": "HeatWave",
+            "target_variable": "MaximumTemperature",
+            "hops": 3,
+            "semantic_chain": [
+                "HeatWave",
+                "HeatDay",
+                "HeatDayThreshold35C",
+                "MaximumTemperature"
+            ],
+            "function_specs": [
+                {
+                    "name": "KelvinToCelsiusRule",
+                    "inputs": [
+                        "MaximumTemperature"
+                    ],
+                    "semantics": "Apply ontology-declared unit conversion before threshold comparison (K -> DEG_C).",
+                    "pseudo_code_template": "MaximumTemperature_converted := apply_conversion(MaximumTemperature)  # value_celsius = value_kelvin - 273.15"
+                },
+                {
+                    "name": "HeatDayThreshold35C",
+                    "inputs": [
+                        "KelvinToCelsiusRule(MaximumTemperature)"
+                    ],
+                    "semantics": "Apply explicit operator from ontology threshold config.",
+                    "pseudo_code_template": "HeatDay := (MaximumTemperature_converted >= 35.0)"
+                },
+                {
+                    "name": "HeatWave",
+                    "inputs": [
+                        "HeatDaySeries",
+                        "hasDuration"
+                    ],
+                    "semantics": "Anchor event constructor from tuple semantics (consistsOf + hasDuration).",
+                    "pseudo_code_template": "HeatWave(HeatDaySeries) := consecutive(HeatDay) >= 3"
+                }
+            ],
+            "composition_order": [
+                "KelvinToCelsiusRule",
+                "HeatDayThreshold35C",
+                "HeatWave"
+            ],
+            "constraints": [
+                "operator sourced from hasOperator",
+                "threshold unit sourced from hasThresholdUnit",
+                "duration sourced from hasDuration",
+                "unit mismatch triggers conversion via UnitConversionRule graph search (rdf:type hierarchy, fromUnit/toUnit/hasSqlExpression)"
+            ]
+        },
+        "enhancement_status": "success",
+        "enhancement_errors": [],
+        "enhancement_config": {
+            "enable_geo_context": true,
+            "enable_ontology_grounding": true,
+            "geo_anchor_mode": "points"
+        },
+        "status": "success"
+    },
+    {
+        "node_type": "candidate_generate",
+        "rewrite_question": "Compare the average annual temperatures between 2015 and 2020 for the dominant forest and urban landcovers in the Canton of Zurich. None",
+        "SQL": [
+            "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;",
+            "SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN ( (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8) );",
+            "SELECT AVG((meteo_tmean.tmean - 273.15)) AS average_annual_temperature, EXTRACT(YEAR FROM meteo_tmean.time) AS year FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN ( SELECT DISTINCT unnest(ranks) AS rank_val, latitude, longitude FROM landcover_upscaled ) AS expanded_ranks ON meteo_tmean.latitude = expanded_ranks.latitude AND meteo_tmean.longitude = expanded_ranks.longitude JOIN landcover_type ON expanded_ranks.rank_val = landcover_type.level1_label WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;",
+            "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG(meteo_tmean.tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year",
+            "SELECT (AVG(meteo_tmean.tmean) - 273.15) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON (rank)[1][1] = landcover_type.level3_code WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND landcover_type.level1_label = 'Forest and semi-natural areas' AND meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8 GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)"
+        ],
+        "SQL_raw_candidates": [
+            "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. The temperature data is stored in meteo_tmean.tmean (in Kelvin), and we need to convert it to Celsius using the ontology function KelvinToCelsiusRule (subtract 273.15). The spatial constraint (Canton of Zurich) is given as a list of longitude-latitude points; we must filter meteo_tmean records that fall within these coordinates. For landcover, we need to identify dominant forest landcover, which requires expanding landcover_upscaled.ranks (which contains nested arrays of level3 codes) and joining with landcover_type.level1_label to filter for 'Forest and semi-natural areas'. However, the ontology and question mention \"urban\" landcover, but no urban label exists in landcover_type.example values — only 'Forest and semi-natural areas' is provided, so we can only filter for forest. The time filter is for years 2015 and 2020 using meteo_tmean.time. We compute average tmean (converted to Celsius) per year and compare. No join between landcover_upscaled and meteo_tmean is provided via common key; we must assume spatial alignment via latitude/longitude matching. So we join landcover_upscaled with meteo_tmean on matching latitude and longitude, expand ranks, and filter level1_label = 'Forest and semi-natural areas'.\n#columns: meteo_tmean.tmean, meteo_tmean.time, landcover_upscaled.latitude, landcover_upscaled.longitude, landcover_upscaled.ranks, landcover_type.level1_label\n#values: 'Forest and semi-natural areas' refer to landcover_type.level1_label = 'Forest and semi-natural areas', '2015' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2015, '2020' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2020, 'Canton of Zurich' refer to meteo_tmean.latitude IN (47.4, 47.5, 47.3, 47.6, 47.2) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\n#SELECT: EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius\n#SQL-like: SELECT year, avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.4, 47.5, 47.3, 47.6, 47.2) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)\n#SQL: SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius\nFROM meteo_tmean\nJOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude\nJOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE\nJOIN landcover_type ON rank = landcover_type.level3_code\nWHERE landcover_type.level1_label = 'Forest and semi-natural areas'\n  AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020)\n  AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6)\n  AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\nGROUP BY EXTRACT(YEAR FROM meteo_tmean.time)\nORDER BY year;\n```",
+            "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. The only temperature variable available in the schema is meteo_tmean.tmean (in Kelvin), and we must filter by time (2015 and 2020) and spatial bounds from GEO_CONTEXT. Landcover dominance is inferred from landcover_upscaled.ranks (which contains level3 codes), but the schema does not provide a direct mapping from level3 codes to 'Forest and semi-natural areas' or 'Urban'. Since landcover_type only has level1_label = 'Forest and semi-natural areas' and no urban class is provided, we can only filter for forest (level1_label) by assuming the dominant landcover class in ranks corresponds to level1_label via a level3-to-level1 mapping — however, no such mapping table exists. Thus, we cannot reliably join landcover_upscaled to landcover_type for urban or forest classification. Given schema constraints, we proceed only with spatial filtering for Zurich Canton and temperature averaging. We ignore landcover filtering due to insufficient schema linkage. We convert tmean from Kelvin to Celsius as per ONTOLOGY_GROUNDED_FUNCTION (KelvinToCelsiusRule). We filter time between 2015 and 2020 and spatially by the provided points in GEO_CONTEXT.\n#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time\n#values: '2015' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2015, '2020' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2020, 'Canton of Zurich' refer to (meteo_tmean.latitude, meteo_tmean.longitude) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8))\n#SELECT: the average annual temperatures refer to AVG(meteo_tmean.tmean::numeric - 273.15)\n#SQL-like: SELECT AVG(meteo_tmean.tmean::numeric - 273.15) WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN (list of Zurich points)\n#SQL: SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius\nFROM meteo_tmean\nWHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020)\n  AND (meteo_tmean.latitude, meteo_tmean.longitude) IN (\n    (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5),\n    (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6),\n    (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7),\n    (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)\n  );\n```",
+            "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. The temperature data is stored in meteo_tmean.tmean (in Kelvin), and we need to convert it to Celsius using the ontology function KelvinToCelsiusRule (i.e., tmean - 273.15). The landcover types must be identified via landcover_upscaled.ranks (which contains level3 codes) and joined with landcover_type, but only for level1_label = 'Forest and semi-natural areas' (forest). However, 'urban' landcover is not present in the provided landcover_type values — so we can only query for forest. The spatial constraint is given as a list of latitude/longitude points in the Canton of Zurich; we must filter meteo_tmean records that fall within these coordinates. We extract the year from meteo_tmean.time to filter for 2015 and 2020. Since the question asks for a comparison between years, we need to compute the average temperature per year.\n#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time, landcover_upscaled.ranks, landcover_type.level1_label\n#values: 'Forest and semi-natural areas' refer to landcover_type.level1_label = 'Forest and semi-natural areas', EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020), meteo_tmean.latitude IN (47.4, 47.5, 47.3, 47.6, 47.2), meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\n#SELECT: AVG((meteo_tmean.tmean - 273.15)) AS average_annual_temperature, EXTRACT(YEAR FROM meteo_tmean.time) AS year\n#SQL-like: SELECT AVG((tmean - 273.15)), EXTRACT(YEAR FROM time) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN landcover_type ON landcover_upscaled.ranks = landcover_type.level1_label WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM time)\n#SQL: SELECT AVG((meteo_tmean.tmean - 273.15)) AS average_annual_temperature, EXTRACT(YEAR FROM meteo_tmean.time) AS year\nFROM meteo_tmean\nJOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude\nJOIN (\n    SELECT DISTINCT unnest(ranks) AS rank_val, latitude, longitude\n    FROM landcover_upscaled\n) AS expanded_ranks ON meteo_tmean.latitude = expanded_ranks.latitude AND meteo_tmean.longitude = expanded_ranks.longitude\nJOIN landcover_type ON expanded_ranks.rank_val = landcover_type.level1_label\nWHERE landcover_type.level1_label = 'Forest and semi-natural areas'\n  AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020)\n  AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6)\n  AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\nGROUP BY EXTRACT(YEAR FROM meteo_tmean.time)\nORDER BY year;\n```",
+            "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. The temperature data is stored in meteo_tmean.tmean (in Kelvin), and we need to convert it to Celsius using the ontology function KelvinToCelsiusRule (tmean - 273.15). The landcover information is in landcover_upscaled with ranks array, which must be UNNESTed to link to landcover_type.level1_label. We must filter for 'Forest and semi-natural areas' (forest) and 'urban' landcover, but 'urban' is not in the provided landcover_type values — only 'Forest and semi-natural areas' is given. Since urban is not in the schema values, we cannot filter for it. Thus, we can only compute for forest. The GEO_CONTEXT provides a list of (lat, lon) points; we must filter meteo_tmean records whose latitude and longitude match any of these points (within the resolution). Time filter is for years 2015 and 2020. The question wants average annual temperature per year, so we group by year.\n#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time, landcover_upscaled.ranks, landcover_type.level1_label\n#values: 'Forest and semi-natural areas' refer to landcover_type.level1_label = 'Forest and semi-natural areas', EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020), meteo_tmean.latitude IN (47.4, 47.5, 47.3, 47.6, 47.2), meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\n#SELECT: EXTRACT(YEAR FROM meteo_tmean.time), AVG(meteo_tmean.tmean - 273.15)\n#SQL-like: SELECT EXTRACT(YEAR FROM time) AS year, AVG(tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM time) ORDER BY year\n#SQL: SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG(meteo_tmean.tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year\n```",
+            "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. However, the schema does not contain a landcover type labeled 'Urban' — only 'Forest and semi-natural areas' is provided as a known value in landcover_type.level1_label. Additionally, the ontology grounded function defines a heatwave chain (KelvinToCelsiusRule → HeatDayThreshold35C → HeatWave), but the target variable \"MaximumTemperature\" is not directly available; instead, we have meteo_tmax.tmean (mean temperature) and other temperature variables. Since the question asks for \"average annual temperatures\" and not heatwaves, we ignore the ontology function as it is misaligned with the requested metric. We use meteo_tmean.tmean (mean temperature in Kelvin) and convert it to Celsius. We filter for the years 2015 and 2020 and for landcover type 'Forest and semi-natural areas' using landcover_upscaled.ranks expanded and joined with landcover_type. We use the GEO_CONTEXT points to filter spatially by latitude and longitude bounds. The question does not mention urban, so we only query forest.\n#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time, landcover_upscaled.ranks, landcover_type.level1_label\n#values: '2015' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2015, '2020' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2020, 'Forest and semi-natural areas' refer to landcover_type.level1_label = 'Forest and semi-natural areas', lat/lon bounds refer to meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8\n#SELECT: AVG(meteo_tmean.tmean)\n#SQL-like: SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank[1][1] = landcover_type.level3_code WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND landcover_type.level1_label = 'Forest and semi-natural areas' AND meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8 GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)\n#SQL: SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON (rank)[1][1] = landcover_type.level3_code WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND landcover_type.level1_label = 'Forest and semi-natural areas' AND meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8 GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)\n```"
+        ],
+        "SQL_structured_candidates": [
+            {
+                "sql": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;",
+                "reasoning": "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. The temperature data is stored in meteo_tmean.tmean (in Kelvin), and we need to convert it to Celsius using the ontology function KelvinToCelsiusRule (subtract 273.15). The spatial constraint (Canton of Zurich) is given as a list of longitude-latitude points; we must filter meteo_tmean records that fall within these coordinates. For landcover, we need to identify dominant forest landcover, which requires expanding landcover_upscaled.ranks (which contains nested arrays of level3 codes) and joining with landcover_type.level1_label to filter for 'Forest and semi-natural areas'. However, the ontology and question mention \"urban\" landcover, but no urban label exists in landcover_type.example values — only 'Forest and semi-natural areas' is provided, so we can only filter for forest. The time filter is for years 2015 and 2020 using meteo_tmean.time. We compute average tmean (converted to Celsius) per year and compare. No join between landcover_upscaled and meteo_tmean is provided via common key; we must assume spatial alignment via latitude/longitude matching. So we join landcover_upscaled with meteo_tmean on matching latitude and longitude, expand ranks, and filter level1_label = 'Forest and semi-natural areas'.\n#columns: meteo_tmean.tmean, meteo_tmean.time, landcover_upscaled.latitude, landcover_upscaled.longitude, landcover_upscaled.ranks, landcover_type.level1_label\n#values: 'Forest and semi-natural areas' refer to landcover_type.level1_label = 'Forest and semi-natural areas', '2015' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2015, '2020' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2020, 'Canton of Zurich' refer to meteo_tmean.latitude IN (47.4, 47.5, 47.3, 47.6, 47.2) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\n#SELECT: EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius\n#SQL-like: SELECT year, avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.4, 47.5, 47.3, 47.6, 47.2) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)",
+                "raw": "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. The temperature data is stored in meteo_tmean.tmean (in Kelvin), and we need to convert it to Celsius using the ontology function KelvinToCelsiusRule (subtract 273.15). The spatial constraint (Canton of Zurich) is given as a list of longitude-latitude points; we must filter meteo_tmean records that fall within these coordinates. For landcover, we need to identify dominant forest landcover, which requires expanding landcover_upscaled.ranks (which contains nested arrays of level3 codes) and joining with landcover_type.level1_label to filter for 'Forest and semi-natural areas'. However, the ontology and question mention \"urban\" landcover, but no urban label exists in landcover_type.example values — only 'Forest and semi-natural areas' is provided, so we can only filter for forest. The time filter is for years 2015 and 2020 using meteo_tmean.time. We compute average tmean (converted to Celsius) per year and compare. No join between landcover_upscaled and meteo_tmean is provided via common key; we must assume spatial alignment via latitude/longitude matching. So we join landcover_upscaled with meteo_tmean on matching latitude and longitude, expand ranks, and filter level1_label = 'Forest and semi-natural areas'.\n#columns: meteo_tmean.tmean, meteo_tmean.time, landcover_upscaled.latitude, landcover_upscaled.longitude, landcover_upscaled.ranks, landcover_type.level1_label\n#values: 'Forest and semi-natural areas' refer to landcover_type.level1_label = 'Forest and semi-natural areas', '2015' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2015, '2020' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2020, 'Canton of Zurich' refer to meteo_tmean.latitude IN (47.4, 47.5, 47.3, 47.6, 47.2) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\n#SELECT: EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius\n#SQL-like: SELECT year, avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.4, 47.5, 47.3, 47.6, 47.2) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)\n#SQL: SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius\nFROM meteo_tmean\nJOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude\nJOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE\nJOIN landcover_type ON rank = landcover_type.level3_code\nWHERE landcover_type.level1_label = 'Forest and semi-natural areas'\n  AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020)\n  AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6)\n  AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\nGROUP BY EXTRACT(YEAR FROM meteo_tmean.time)\nORDER BY year;\n```"
+            },
+            {
+                "sql": "SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN ( (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8) );",
+                "reasoning": "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. The only temperature variable available in the schema is meteo_tmean.tmean (in Kelvin), and we must filter by time (2015 and 2020) and spatial bounds from GEO_CONTEXT. Landcover dominance is inferred from landcover_upscaled.ranks (which contains level3 codes), but the schema does not provide a direct mapping from level3 codes to 'Forest and semi-natural areas' or 'Urban'. Since landcover_type only has level1_label = 'Forest and semi-natural areas' and no urban class is provided, we can only filter for forest (level1_label) by assuming the dominant landcover class in ranks corresponds to level1_label via a level3-to-level1 mapping — however, no such mapping table exists. Thus, we cannot reliably join landcover_upscaled to landcover_type for urban or forest classification. Given schema constraints, we proceed only with spatial filtering for Zurich Canton and temperature averaging. We ignore landcover filtering due to insufficient schema linkage. We convert tmean from Kelvin to Celsius as per ONTOLOGY_GROUNDED_FUNCTION (KelvinToCelsiusRule). We filter time between 2015 and 2020 and spatially by the provided points in GEO_CONTEXT.\n#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time\n#values: '2015' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2015, '2020' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2020, 'Canton of Zurich' refer to (meteo_tmean.latitude, meteo_tmean.longitude) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8))\n#SELECT: the average annual temperatures refer to AVG(meteo_tmean.tmean::numeric - 273.15)\n#SQL-like: SELECT AVG(meteo_tmean.tmean::numeric - 273.15) WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN (list of Zurich points)",
+                "raw": "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. The only temperature variable available in the schema is meteo_tmean.tmean (in Kelvin), and we must filter by time (2015 and 2020) and spatial bounds from GEO_CONTEXT. Landcover dominance is inferred from landcover_upscaled.ranks (which contains level3 codes), but the schema does not provide a direct mapping from level3 codes to 'Forest and semi-natural areas' or 'Urban'. Since landcover_type only has level1_label = 'Forest and semi-natural areas' and no urban class is provided, we can only filter for forest (level1_label) by assuming the dominant landcover class in ranks corresponds to level1_label via a level3-to-level1 mapping — however, no such mapping table exists. Thus, we cannot reliably join landcover_upscaled to landcover_type for urban or forest classification. Given schema constraints, we proceed only with spatial filtering for Zurich Canton and temperature averaging. We ignore landcover filtering due to insufficient schema linkage. We convert tmean from Kelvin to Celsius as per ONTOLOGY_GROUNDED_FUNCTION (KelvinToCelsiusRule). We filter time between 2015 and 2020 and spatially by the provided points in GEO_CONTEXT.\n#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time\n#values: '2015' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2015, '2020' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2020, 'Canton of Zurich' refer to (meteo_tmean.latitude, meteo_tmean.longitude) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8))\n#SELECT: the average annual temperatures refer to AVG(meteo_tmean.tmean::numeric - 273.15)\n#SQL-like: SELECT AVG(meteo_tmean.tmean::numeric - 273.15) WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN (list of Zurich points)\n#SQL: SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius\nFROM meteo_tmean\nWHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020)\n  AND (meteo_tmean.latitude, meteo_tmean.longitude) IN (\n    (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5),\n    (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6),\n    (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7),\n    (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)\n  );\n```"
+            },
+            {
+                "sql": "SELECT AVG((meteo_tmean.tmean - 273.15)) AS average_annual_temperature, EXTRACT(YEAR FROM meteo_tmean.time) AS year FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN ( SELECT DISTINCT unnest(ranks) AS rank_val, latitude, longitude FROM landcover_upscaled ) AS expanded_ranks ON meteo_tmean.latitude = expanded_ranks.latitude AND meteo_tmean.longitude = expanded_ranks.longitude JOIN landcover_type ON expanded_ranks.rank_val = landcover_type.level1_label WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;",
+                "reasoning": "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. The temperature data is stored in meteo_tmean.tmean (in Kelvin), and we need to convert it to Celsius using the ontology function KelvinToCelsiusRule (i.e., tmean - 273.15). The landcover types must be identified via landcover_upscaled.ranks (which contains level3 codes) and joined with landcover_type, but only for level1_label = 'Forest and semi-natural areas' (forest). However, 'urban' landcover is not present in the provided landcover_type values — so we can only query for forest. The spatial constraint is given as a list of latitude/longitude points in the Canton of Zurich; we must filter meteo_tmean records that fall within these coordinates. We extract the year from meteo_tmean.time to filter for 2015 and 2020. Since the question asks for a comparison between years, we need to compute the average temperature per year.\n#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time, landcover_upscaled.ranks, landcover_type.level1_label\n#values: 'Forest and semi-natural areas' refer to landcover_type.level1_label = 'Forest and semi-natural areas', EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020), meteo_tmean.latitude IN (47.4, 47.5, 47.3, 47.6, 47.2), meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\n#SELECT: AVG((meteo_tmean.tmean - 273.15)) AS average_annual_temperature, EXTRACT(YEAR FROM meteo_tmean.time) AS year\n#SQL-like: SELECT AVG((tmean - 273.15)), EXTRACT(YEAR FROM time) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN landcover_type ON landcover_upscaled.ranks = landcover_type.level1_label WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM time)",
+                "raw": "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. The temperature data is stored in meteo_tmean.tmean (in Kelvin), and we need to convert it to Celsius using the ontology function KelvinToCelsiusRule (i.e., tmean - 273.15). The landcover types must be identified via landcover_upscaled.ranks (which contains level3 codes) and joined with landcover_type, but only for level1_label = 'Forest and semi-natural areas' (forest). However, 'urban' landcover is not present in the provided landcover_type values — so we can only query for forest. The spatial constraint is given as a list of latitude/longitude points in the Canton of Zurich; we must filter meteo_tmean records that fall within these coordinates. We extract the year from meteo_tmean.time to filter for 2015 and 2020. Since the question asks for a comparison between years, we need to compute the average temperature per year.\n#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time, landcover_upscaled.ranks, landcover_type.level1_label\n#values: 'Forest and semi-natural areas' refer to landcover_type.level1_label = 'Forest and semi-natural areas', EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020), meteo_tmean.latitude IN (47.4, 47.5, 47.3, 47.6, 47.2), meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\n#SELECT: AVG((meteo_tmean.tmean - 273.15)) AS average_annual_temperature, EXTRACT(YEAR FROM meteo_tmean.time) AS year\n#SQL-like: SELECT AVG((tmean - 273.15)), EXTRACT(YEAR FROM time) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN landcover_type ON landcover_upscaled.ranks = landcover_type.level1_label WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM time)\n#SQL: SELECT AVG((meteo_tmean.tmean - 273.15)) AS average_annual_temperature, EXTRACT(YEAR FROM meteo_tmean.time) AS year\nFROM meteo_tmean\nJOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude\nJOIN (\n    SELECT DISTINCT unnest(ranks) AS rank_val, latitude, longitude\n    FROM landcover_upscaled\n) AS expanded_ranks ON meteo_tmean.latitude = expanded_ranks.latitude AND meteo_tmean.longitude = expanded_ranks.longitude\nJOIN landcover_type ON expanded_ranks.rank_val = landcover_type.level1_label\nWHERE landcover_type.level1_label = 'Forest and semi-natural areas'\n  AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020)\n  AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6)\n  AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\nGROUP BY EXTRACT(YEAR FROM meteo_tmean.time)\nORDER BY year;\n```"
+            },
+            {
+                "sql": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG(meteo_tmean.tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year",
+                "reasoning": "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. The temperature data is stored in meteo_tmean.tmean (in Kelvin), and we need to convert it to Celsius using the ontology function KelvinToCelsiusRule (tmean - 273.15). The landcover information is in landcover_upscaled with ranks array, which must be UNNESTed to link to landcover_type.level1_label. We must filter for 'Forest and semi-natural areas' (forest) and 'urban' landcover, but 'urban' is not in the provided landcover_type values — only 'Forest and semi-natural areas' is given. Since urban is not in the schema values, we cannot filter for it. Thus, we can only compute for forest. The GEO_CONTEXT provides a list of (lat, lon) points; we must filter meteo_tmean records whose latitude and longitude match any of these points (within the resolution). Time filter is for years 2015 and 2020. The question wants average annual temperature per year, so we group by year.\n#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time, landcover_upscaled.ranks, landcover_type.level1_label\n#values: 'Forest and semi-natural areas' refer to landcover_type.level1_label = 'Forest and semi-natural areas', EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020), meteo_tmean.latitude IN (47.4, 47.5, 47.3, 47.6, 47.2), meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\n#SELECT: EXTRACT(YEAR FROM meteo_tmean.time), AVG(meteo_tmean.tmean - 273.15)\n#SQL-like: SELECT EXTRACT(YEAR FROM time) AS year, AVG(tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM time) ORDER BY year",
+                "raw": "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. The temperature data is stored in meteo_tmean.tmean (in Kelvin), and we need to convert it to Celsius using the ontology function KelvinToCelsiusRule (tmean - 273.15). The landcover information is in landcover_upscaled with ranks array, which must be UNNESTed to link to landcover_type.level1_label. We must filter for 'Forest and semi-natural areas' (forest) and 'urban' landcover, but 'urban' is not in the provided landcover_type values — only 'Forest and semi-natural areas' is given. Since urban is not in the schema values, we cannot filter for it. Thus, we can only compute for forest. The GEO_CONTEXT provides a list of (lat, lon) points; we must filter meteo_tmean records whose latitude and longitude match any of these points (within the resolution). Time filter is for years 2015 and 2020. The question wants average annual temperature per year, so we group by year.\n#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time, landcover_upscaled.ranks, landcover_type.level1_label\n#values: 'Forest and semi-natural areas' refer to landcover_type.level1_label = 'Forest and semi-natural areas', EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020), meteo_tmean.latitude IN (47.4, 47.5, 47.3, 47.6, 47.2), meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8)\n#SELECT: EXTRACT(YEAR FROM meteo_tmean.time), AVG(meteo_tmean.tmean - 273.15)\n#SQL-like: SELECT EXTRACT(YEAR FROM time) AS year, AVG(tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM time) ORDER BY year\n#SQL: SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG(meteo_tmean.tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND meteo_tmean.latitude IN (47.2, 47.3, 47.4, 47.5, 47.6) AND meteo_tmean.longitude IN (8.4, 8.5, 8.6, 8.7, 8.8) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year\n```"
+            },
+            {
+                "sql": "SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON (rank)[1][1] = landcover_type.level3_code WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND landcover_type.level1_label = 'Forest and semi-natural areas' AND meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8 GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)",
+                "reasoning": "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. However, the schema does not contain a landcover type labeled 'Urban' — only 'Forest and semi-natural areas' is provided as a known value in landcover_type.level1_label. Additionally, the ontology grounded function defines a heatwave chain (KelvinToCelsiusRule → HeatDayThreshold35C → HeatWave), but the target variable \"MaximumTemperature\" is not directly available; instead, we have meteo_tmax.tmean (mean temperature) and other temperature variables. Since the question asks for \"average annual temperatures\" and not heatwaves, we ignore the ontology function as it is misaligned with the requested metric. We use meteo_tmean.tmean (mean temperature in Kelvin) and convert it to Celsius. We filter for the years 2015 and 2020 and for landcover type 'Forest and semi-natural areas' using landcover_upscaled.ranks expanded and joined with landcover_type. We use the GEO_CONTEXT points to filter spatially by latitude and longitude bounds. The question does not mention urban, so we only query forest.\n#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time, landcover_upscaled.ranks, landcover_type.level1_label\n#values: '2015' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2015, '2020' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2020, 'Forest and semi-natural areas' refer to landcover_type.level1_label = 'Forest and semi-natural areas', lat/lon bounds refer to meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8\n#SELECT: AVG(meteo_tmean.tmean)\n#SQL-like: SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank[1][1] = landcover_type.level3_code WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND landcover_type.level1_label = 'Forest and semi-natural areas' AND meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8 GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)",
+                "raw": "```\n#reason: The question asks to compare the average annual temperatures between 2015 and 2020 for dominant forest and urban landcovers in the Canton of Zurich. However, the schema does not contain a landcover type labeled 'Urban' — only 'Forest and semi-natural areas' is provided as a known value in landcover_type.level1_label. Additionally, the ontology grounded function defines a heatwave chain (KelvinToCelsiusRule → HeatDayThreshold35C → HeatWave), but the target variable \"MaximumTemperature\" is not directly available; instead, we have meteo_tmax.tmean (mean temperature) and other temperature variables. Since the question asks for \"average annual temperatures\" and not heatwaves, we ignore the ontology function as it is misaligned with the requested metric. We use meteo_tmean.tmean (mean temperature in Kelvin) and convert it to Celsius. We filter for the years 2015 and 2020 and for landcover type 'Forest and semi-natural areas' using landcover_upscaled.ranks expanded and joined with landcover_type. We use the GEO_CONTEXT points to filter spatially by latitude and longitude bounds. The question does not mention urban, so we only query forest.\n#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time, landcover_upscaled.ranks, landcover_type.level1_label\n#values: '2015' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2015, '2020' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2020, 'Forest and semi-natural areas' refer to landcover_type.level1_label = 'Forest and semi-natural areas', lat/lon bounds refer to meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8\n#SELECT: AVG(meteo_tmean.tmean)\n#SQL-like: SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank[1][1] = landcover_type.level3_code WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND landcover_type.level1_label = 'Forest and semi-natural areas' AND meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8 GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)\n#SQL: SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON (rank)[1][1] = landcover_type.level3_code WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND landcover_type.level1_label = 'Forest and semi-natural areas' AND meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8 GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)\n```"
+            }
+        ],
+        "plugin_trace": [
+            {
+                "candidate_index": 0,
+                "trace": [
+                    {
+                        "plugin": "landcover_array_join",
+                        "applied": true,
+                        "changed": false,
+                        "warnings": [],
+                        "metadata": {
+                            "hard_constraints": [
+                                "Do not treat landcover_upscaled.ranks as scalar columns.",
+                                "When joining landcover_upscaled to landcover_type, expand ranks first.",
+                                "Use rank_pair[1] as landcover level3_code join key."
+                            ],
+                            "templates": {
+                                "expansion_template": "CROSS JOIN LATERAL UNNEST(<u_alias>.ranks) WITH ORDINALITY AS rank_item(rank_pair, rank_idx)",
+                                "join_template": "JOIN landcover_type <lt_alias> ON <lt_alias>.level3_code = rank_item.rank_pair[1]"
+                            }
+                        }
+                    },
+                    {
+                        "plugin": "geo_pair_constraint",
+                        "applied": true,
+                        "changed": true,
+                        "warnings": [],
+                        "metadata": {
+                            "pair_count": 18
+                        }
+                    },
+                    {
+                        "plugin": "ontology_unit_constraint",
+                        "applied": true,
+                        "changed": false,
+                        "warnings": [],
+                        "metadata": {}
+                    }
+                ]
+            },
+            {
+                "candidate_index": 1,
+                "trace": [
+                    {
+                        "plugin": "landcover_array_join",
+                        "applied": true,
+                        "changed": false,
+                        "warnings": [],
+                        "metadata": {}
+                    },
+                    {
+                        "plugin": "geo_pair_constraint",
+                        "applied": true,
+                        "changed": false,
+                        "warnings": [
+                            "geo_pair_constraint_not_applied_pattern_not_found"
+                        ],
+                        "metadata": {}
+                    },
+                    {
+                        "plugin": "ontology_unit_constraint",
+                        "applied": true,
+                        "changed": false,
+                        "warnings": [],
+                        "metadata": {}
+                    }
+                ]
+            },
+            {
+                "candidate_index": 2,
+                "trace": [
+                    {
+                        "plugin": "landcover_array_join",
+                        "applied": true,
+                        "changed": false,
+                        "warnings": [],
+                        "metadata": {
+                            "hard_constraints": [
+                                "Do not treat landcover_upscaled.ranks as scalar columns.",
+                                "When joining landcover_upscaled to landcover_type, expand ranks first.",
+                                "Use rank_pair[1] as landcover level3_code join key."
+                            ],
+                            "templates": {
+                                "expansion_template": "CROSS JOIN LATERAL UNNEST(<u_alias>.ranks) WITH ORDINALITY AS rank_item(rank_pair, rank_idx)",
+                                "join_template": "JOIN landcover_type <lt_alias> ON <lt_alias>.level3_code = rank_item.rank_pair[1]"
+                            }
+                        }
+                    },
+                    {
+                        "plugin": "geo_pair_constraint",
+                        "applied": true,
+                        "changed": true,
+                        "warnings": [],
+                        "metadata": {
+                            "pair_count": 18
+                        }
+                    },
+                    {
+                        "plugin": "ontology_unit_constraint",
+                        "applied": true,
+                        "changed": false,
+                        "warnings": [],
+                        "metadata": {}
+                    }
+                ]
+            },
+            {
+                "candidate_index": 3,
+                "trace": [
+                    {
+                        "plugin": "landcover_array_join",
+                        "applied": true,
+                        "changed": false,
+                        "warnings": [],
+                        "metadata": {
+                            "hard_constraints": [
+                                "Do not treat landcover_upscaled.ranks as scalar columns.",
+                                "When joining landcover_upscaled to landcover_type, expand ranks first.",
+                                "Use rank_pair[1] as landcover level3_code join key."
+                            ],
+                            "templates": {
+                                "expansion_template": "CROSS JOIN LATERAL UNNEST(<u_alias>.ranks) WITH ORDINALITY AS rank_item(rank_pair, rank_idx)",
+                                "join_template": "JOIN landcover_type <lt_alias> ON <lt_alias>.level3_code = rank_item.rank_pair[1]"
+                            }
+                        }
+                    },
+                    {
+                        "plugin": "geo_pair_constraint",
+                        "applied": true,
+                        "changed": true,
+                        "warnings": [],
+                        "metadata": {
+                            "pair_count": 18
+                        }
+                    },
+                    {
+                        "plugin": "ontology_unit_constraint",
+                        "applied": true,
+                        "changed": false,
+                        "warnings": [],
+                        "metadata": {}
+                    }
+                ]
+            },
+            {
+                "candidate_index": 4,
+                "trace": [
+                    {
+                        "plugin": "landcover_array_join",
+                        "applied": true,
+                        "changed": false,
+                        "warnings": [],
+                        "metadata": {
+                            "hard_constraints": [
+                                "Do not treat landcover_upscaled.ranks as scalar columns.",
+                                "When joining landcover_upscaled to landcover_type, expand ranks first.",
+                                "Use rank_pair[1] as landcover level3_code join key."
+                            ],
+                            "templates": {
+                                "expansion_template": "CROSS JOIN LATERAL UNNEST(<u_alias>.ranks) WITH ORDINALITY AS rank_item(rank_pair, rank_idx)",
+                                "join_template": "JOIN landcover_type <lt_alias> ON <lt_alias>.level3_code = rank_item.rank_pair[1]"
+                            }
+                        }
+                    },
+                    {
+                        "plugin": "geo_pair_constraint",
+                        "applied": true,
+                        "changed": false,
+                        "warnings": [
+                            "geo_pair_constraint_not_applied_pattern_not_found"
+                        ],
+                        "metadata": {}
+                    },
+                    {
+                        "plugin": "ontology_unit_constraint",
+                        "applied": true,
+                        "changed": true,
+                        "warnings": [],
+                        "metadata": {
+                            "unit_conversion": "kelvin_to_celsius"
+                        }
+                    }
+                ]
+            }
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "align_correct",
+        "vote": [
+            {
+                "sql_history": {
+                    "style_align": "SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN ( (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8) );",
+                    "function_align": "SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN ( (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8) );"
+                },
+                "sql": "SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN ( (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8) );",
+                "answer": [
+                    [
+                        "10.0820748594011248"
+                    ]
+                ],
+                "count": 1,
+                "time_cost": 0.08820319175720215,
+                "align_sql": "SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN ( (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8) );",
+                "align_ans": null,
+                "correct_sql": "SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN ( (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8) );",
+                "correct_ans": null
+            },
+            {
+                "sql_history": {
+                    "style_align": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG(meteo_tmean.tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year",
+                    "function_align": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG(meteo_tmean.tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year"
+                },
+                "sql": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG(meteo_tmean.tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year",
+                "answer": [
+                    [
+                        "2015",
+                        10.001200242195576
+                    ],
+                    [
+                        "2020",
+                        10.158128525893613
+                    ]
+                ],
+                "count": 1,
+                "time_cost": 0.16870784759521484,
+                "align_sql": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG(meteo_tmean.tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year",
+                "align_ans": null,
+                "correct_sql": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG(meteo_tmean.tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year",
+                "correct_ans": null
+            },
+            {
+                "sql_history": {
+                    "style_align": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;",
+                    "function_align": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;"
+                },
+                "sql": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;",
+                "answer": [
+                    [
+                        "2015",
+                        "10.00120024219268003"
+                    ],
+                    [
+                        "2020",
+                        "10.158128525890578971"
+                    ]
+                ],
+                "count": 1,
+                "time_cost": 0.20090293884277344,
+                "align_sql": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;",
+                "align_ans": null,
+                "correct_sql": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;",
+                "correct_ans": null
+            },
+            {
+                "sql_history": {
+                    "style_align": "SELECT (AVG(meteo_tmean.tmean) - 273.15) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON (rank)[1][1] = landcover_type.level3_code WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND landcover_type.level1_label = 'Forest and semi-natural areas' AND meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8 GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)",
+                    "function_align": "SELECT (AVG(meteo_tmean.tmean) - 273.15) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON (rank)[1][1] = landcover_type.level3_code WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND landcover_type.level1_label = 'Forest and semi-natural areas' AND meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8 GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)"
+                },
+                "sql": "SELECT EXTRACT(YEAR FROM t.time) AS year, AVG(t.tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean t JOIN ( SELECT latitude, longitude, (UNNEST(ranks))[1][1] AS dominant_landcover_code FROM landcover_upscaled WHERE latitude BETWEEN 47.2 AND 47.6 AND longitude BETWEEN 8.4 AND 8.8 ) lc ON t.latitude = lc.latitude AND t.longitude = lc.longitude JOIN landcover_type lt ON lc.dominant_landcover_code = lt.level3_code -- assuming level3_code exists and maps to ranks[1][1] WHERE lt.level1_label IN ('Forest and semi-natural areas', 'Urban areas') AND EXTRACT(YEAR FROM t.time) IN (2015, 2020) GROUP BY EXTRACT(YEAR FROM t.time) ORDER BY year;",
+                "answer": [],
+                "count": 1,
+                "time_cost": 100000,
+                "align_sql": "SELECT (AVG(meteo_tmean.tmean) - 273.15) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON (rank)[1][1] = landcover_type.level3_code WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND landcover_type.level1_label = 'Forest and semi-natural areas' AND meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8 GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)",
+                "align_ans": null,
+                "correct_sql": "SELECT (AVG(meteo_tmean.tmean) - 273.15) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON (rank)[1][1] = landcover_type.level3_code WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND landcover_type.level1_label = 'Forest and semi-natural areas' AND meteo_tmean.latitude BETWEEN 47.2 AND 47.6 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.8 GROUP BY EXTRACT(YEAR FROM meteo_tmean.time)",
+                "correct_ans": null
+            },
+            {
+                "sql_history": {
+                    "style_align": "SELECT AVG((meteo_tmean.tmean - 273.15)) AS average_annual_temperature, EXTRACT(YEAR FROM meteo_tmean.time) AS year FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN ( SELECT DISTINCT unnest(ranks) AS rank_val, latitude, longitude FROM landcover_upscaled ) AS expanded_ranks ON meteo_tmean.latitude = expanded_ranks.latitude AND meteo_tmean.longitude = expanded_ranks.longitude JOIN landcover_type ON expanded_ranks.rank_val = landcover_type.level1_label WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;",
+                    "function_align": "SELECT AVG((meteo_tmean.tmean - 273.15)) AS average_annual_temperature, EXTRACT(YEAR FROM meteo_tmean.time) AS year FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN ( SELECT DISTINCT unnest(ranks) AS rank_val, latitude, longitude FROM landcover_upscaled ) AS expanded_ranks ON meteo_tmean.latitude = expanded_ranks.latitude AND meteo_tmean.longitude = expanded_ranks.longitude JOIN landcover_type ON expanded_ranks.rank_val = landcover_type.level1_label WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;"
+                },
+                "sql": "SELECT EXTRACT(YEAR FROM t.time) AS year, AVG(t.tmean - 273.15) AS avg_temp_celsius FROM meteo_tmean t JOIN ( SELECT latitude, longitude, (UNNEST(ranks))[1][1] AS landcover_code FROM landcover_upscaled WHERE latitude BETWEEN 47.2 AND 47.6 AND longitude BETWEEN 8.4 AND 8.8 ) lc ON t.latitude = lc.latitude AND t.longitude = lc.longitude JOIN landcover_type lt ON lc.landcover_code = lt.level3_code -- assuming level3_code exists and maps to first element of ranks WHERE lt.level1_label IN ('Forest and semi-natural areas', 'Urban') AND EXTRACT(YEAR FROM t.time) IN (2015, 2020) GROUP BY EXTRACT(YEAR FROM t.time) ORDER BY year;",
+                "answer": [],
+                "count": 1,
+                "time_cost": 100000,
+                "align_sql": "SELECT AVG((meteo_tmean.tmean - 273.15)) AS average_annual_temperature, EXTRACT(YEAR FROM meteo_tmean.time) AS year FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN ( SELECT DISTINCT unnest(ranks) AS rank_val, latitude, longitude FROM landcover_upscaled ) AS expanded_ranks ON meteo_tmean.latitude = expanded_ranks.latitude AND meteo_tmean.longitude = expanded_ranks.longitude JOIN landcover_type ON expanded_ranks.rank_val = landcover_type.level1_label WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;",
+                "align_ans": null,
+                "correct_sql": "SELECT AVG((meteo_tmean.tmean - 273.15)) AS average_annual_temperature, EXTRACT(YEAR FROM meteo_tmean.time) AS year FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN ( SELECT DISTINCT unnest(ranks) AS rank_val, latitude, longitude FROM landcover_upscaled ) AS expanded_ranks ON meteo_tmean.latitude = expanded_ranks.latitude AND meteo_tmean.longitude = expanded_ranks.longitude JOIN landcover_type ON expanded_ranks.rank_val = landcover_type.level1_label WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;",
+                "correct_ans": null
+            }
+        ],
+        "none_case": true,
+        "implicit_check_status": "warn",
+        "implicit_check_warnings": [
+            "ontology_grounded_function_present_but_sql_has_no_numeric_constraint_signal"
+        ],
+        "status": "success"
+    },
+    {
+        "node_type": "vote",
+        "SQL": "SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN ( (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8) );",
+        "SQL_correct_vote": "SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN ( (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8) );",
+        "nonecase": false,
+        "status": "success"
+    },
+    {
+        "node_type": "evaluation",
+        "candidate_generate": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Compare the average annual temperatures between 2015 and 2020 for the dominant forest and urban landcovers in the Canton of Zurich.",
+            "Evidence": "None",
+            "GOLD_SQL": "WITH forest_level2 AS (\n  SELECT DISTINCT\n    lt1.level2_code AS level2_code\n  FROM landcover_type AS lt1\n  WHERE\n    lt1.level2_label ILIKE '%forest%'\n), urban_level2 AS (\n  SELECT DISTINCT\n    lt2.level2_code AS level2_code\n  FROM landcover_type AS lt2\n  WHERE\n    lt2.level2_label ILIKE '%urban%'\n), dominant_grids AS (\n  SELECT\n    u.latitude AS latitude,\n    u.longitude AS longitude,\n    CASE\n      WHEN dom.level2_code IN (\n        SELECT\n          forest_level2.level2_code AS level2_code\n        FROM forest_level2\n      )\n      THEN 'Forest'\n      WHEN dom.level2_code IN (\n        SELECT\n          urban_level2.level2_code AS level2_code\n        FROM urban_level2\n      )\n      THEN 'Urban'\n      ELSE 'Other'\n    END AS landcover_group\n  FROM landcover_upscaled AS u\n  CROSS JOIN LATERAL (\n    SELECT\n      lt.level2_code AS level2_code,\n      SUM(u.ranks[i][2]) AS total_count\n    FROM GENERATE_SUBSCRIPTS(u.ranks, 1) AS i\n    JOIN landcover_type AS lt\n      ON lt.level3_code = u.ranks[i][1]\n    GROUP BY\n      lt.level2_code\n    ORDER BY\n      total_count DESC\n    LIMIT 1\n  ) AS dom\n  WHERE\n    (ROUND(CAST(u.latitude AS DECIMAL), 1), ROUND(CAST(u.longitude AS DECIMAL), 1)) IN (\n      (39.5, 21.2),\n      (39.6, 21.2),\n      (39.7, 21.2),\n      (39.4, 21.3),\n      (39.5, 21.3),\n      (39.6, 21.3),\n      (39.7, 21.3),\n      (39.8, 21.3),\n      (39.2, 21.4),\n      (39.4, 21.4),\n      (39.5, 21.4),\n      (39.6, 21.4),\n      (39.7, 21.4),\n      (39.8, 21.4),\n      (39.3, 21.5),\n      (39.4, 21.5),\n      (39.5, 21.5),\n      (39.6, 21.5),\n      (39.7, 21.5),\n      (39.8, 21.5),\n      (39.3, 21.6),\n      (39.4, 21.6),\n      (39.5, 21.6),\n      (39.6, 21.6),\n      (39.7, 21.6),\n      (39.8, 21.6),\n      (39.2, 21.7),\n      (39.3, 21.7),\n      (39.4, 21.7),\n      (39.5, 21.7),\n      (39.6, 21.7),\n      (39.7, 21.7),\n      (39.8, 21.7),\n      (39.2, 21.8),\n      (39.3, 21.8),\n      (39.4, 21.8),\n      (39.5, 21.8),\n      (39.6, 21.8),\n      (39.7, 21.8),\n      (39.8, 21.8),\n      (39.2, 21.9),\n      (39.3, 21.9),\n      (39.4, 21.9),\n      (39.5, 21.9),\n      (39.6, 21.9),\n      (39.7, 21.9),\n      (39.8, 21.9),\n      (39.1, 22.0),\n      (39.2, 22.0),\n      (39.3, 22.0),\n      (39.4, 22.0),\n      (39.5, 22.0),\n      (39.6, 22.0),\n      (39.7, 22.0),\n      (39.8, 22.0),\n      (39.9, 22.0),\n      (40.0, 22.0),\n      (39.1, 22.1),\n      (39.2, 22.1),\n      (39.3, 22.1),\n      (39.4, 22.1),\n      (39.5, 22.1),\n      (39.6, 22.1),\n      (39.7, 22.1),\n      (39.8, 22.1),\n      (39.9, 22.1),\n      (40.0, 22.1),\n      (39.2, 22.2),\n      (39.3, 22.2),\n      (39.4, 22.2),\n      (39.5, 22.2),\n      (39.6, 22.2),\n      (39.7, 22.2),\n      (39.8, 22.2),\n      (39.9, 22.2),\n      (40.0, 22.2),\n      (39.3, 22.3),\n      (39.4, 22.3),\n      (39.5, 22.3),\n      (39.6, 22.3),\n      (39.7, 22.3),\n      (39.8, 22.3),\n      (39.9, 22.3),\n      (40.0, 22.3),\n      (39.3, 22.4),\n      (39.4, 22.4),\n      (39.5, 22.4),\n      (39.6, 22.4),\n      (39.7, 22.4),\n      (39.8, 22.4),\n      (39.9, 22.4),\n      (40.0, 22.4),\n      (39.1, 22.5),\n      (39.2, 22.5),\n      (39.3, 22.5),\n      (39.4, 22.5),\n      (39.5, 22.5),\n      (39.6, 22.5),\n      (39.7, 22.5),\n      (39.8, 22.5),\n      (39.9, 22.5),\n      (39.1, 22.6),\n      (39.2, 22.6),\n      (39.3, 22.6),\n      (39.4, 22.6),\n      (39.5, 22.6),\n      (39.6, 22.6),\n      (39.7, 22.6),\n      (39.8, 22.6),\n      (39.9, 22.6),\n      (39.1, 22.7),\n      (39.2, 22.7),\n      (39.3, 22.7),\n      (39.4, 22.7),\n      (39.5, 22.7),\n      (39.6, 22.7),\n      (39.7, 22.7),\n      (39.8, 22.7),\n      (39.9, 22.7),\n      (40.0, 22.7),\n      (39.0, 22.8),\n      (39.1, 22.8),\n      (39.2, 22.8),\n      (39.3, 22.8),\n      (39.4, 22.8),\n      (39.5, 22.8),\n      (39.6, 22.8),\n      (39.7, 22.8),\n      (39.8, 22.8),\n      (39.9, 22.8),\n      (39.0, 22.9),\n      (39.1, 22.9),\n      (39.2, 22.9),\n      (39.3, 22.9),\n      (39.4, 22.9),\n      (39.5, 22.9),\n      (39.6, 22.9),\n      (39.7, 22.9),\n      (39.8, 22.9),\n      (39.0, 23.0),\n      (39.1, 23.0),\n      (39.2, 23.0),\n      (39.3, 23.0),\n      (39.4, 23.0),\n      (39.5, 23.0),\n      (39.6, 23.0),\n      (39.1, 23.1),\n      (39.2, 23.1),\n      (39.3, 23.1),\n      (39.4, 23.1),\n      (39.5, 23.1),\n      (39.1, 23.2),\n      (39.2, 23.2),\n      (39.3, 23.2),\n      (39.4, 23.2),\n      (39.5, 23.2),\n      (39.1, 23.3),\n      (39.2, 23.3),\n      (39.3, 23.3),\n      (39.4, 23.3),\n      (39.1, 23.4),\n      (39.2, 23.4),\n      (39.1, 23.5),\n      (39.2, 23.5),\n      (39.1, 23.6),\n      (39.2, 23.6),\n      (39.0, 23.7),\n      (39.1, 23.7),\n      (39.2, 23.7),\n      (39.1, 23.8),\n      (39.2, 23.8),\n      (39.0, 23.9),\n      (39.1, 23.9),\n      (39.2, 23.9),\n      (39.3, 23.9),\n      (39.0, 24.0),\n      (39.1, 24.0),\n      (39.2, 24.0),\n      (39.3, 24.0),\n      (39.4, 24.0),\n      (39.0, 24.1),\n      (39.1, 24.1),\n      (39.3, 24.1),\n      (39.4, 24.1),\n      (39.5, 24.1),\n      (39.1, 24.2),\n      (39.3, 24.2),\n      (39.4, 24.2),\n      (39.5, 24.2),\n      (39.3, 24.3),\n      (39.4, 24.3),\n      (39.3, 24.4),\n      (39.4, 24.4)\n    )\n    AND dom.level2_code IN (\n      SELECT\n        forest_level2.level2_code AS level2_code\n      FROM forest_level2\n      UNION\n      SELECT\n        urban_level2.level2_code AS level2_code\n      FROM urban_level2\n    )\n), annual_temps AS (\n  SELECT\n    dg.landcover_group AS landcover_group,\n    EXTRACT(YEAR FROM t.time) AS year,\n    AVG(t.tmean - 273.15) AS avg_temp_c\n  FROM meteo_tmean AS t\n  JOIN dominant_grids AS dg\n    ON dg.latitude = t.latitude AND dg.longitude = t.longitude\n  WHERE\n    EXTRACT(YEAR FROM t.time) BETWEEN 2015 AND 2020\n  GROUP BY\n    dg.landcover_group,\n    EXTRACT(YEAR FROM t.time)\n)\nSELECT\n  annual_temps.year AS year,\n  ROUND(\n    CAST(MAX(\n      CASE WHEN annual_temps.landcover_group = 'Forest' THEN annual_temps.avg_temp_c END\n    ) AS DECIMAL),\n    2\n  ) AS forest_avg_c,\n  ROUND(\n    CAST(MAX(\n      CASE WHEN annual_temps.landcover_group = 'Urban' THEN annual_temps.avg_temp_c END\n    ) AS DECIMAL),\n    2\n  ) AS urban_avg_c,\n  ROUND(\n    CAST(MAX(\n      CASE WHEN annual_temps.landcover_group = 'Urban' THEN annual_temps.avg_temp_c END\n    ) AS DECIMAL) - CAST(MAX(\n      CASE WHEN annual_temps.landcover_group = 'Forest' THEN annual_temps.avg_temp_c END\n    ) AS DECIMAL),\n    2\n  ) AS urban_minus_forest_diff_c\nFROM annual_temps\nGROUP BY\n  annual_temps.year\nORDER BY\n  year",
+            "PREDICTED_SQL": "SELECT EXTRACT(YEAR FROM meteo_tmean.time) AS year, AVG((meteo_tmean.tmean - 273.15)::numeric) AS avg_temp_celsius FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN LATERAL UNNEST(landcover_upscaled.ranks) AS rank ON TRUE JOIN landcover_type ON rank = landcover_type.level3_code WHERE landcover_type.level1_label = 'Forest and semi-natural areas' AND EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (ROUND(CAST(meteo_tmean.latitude AS DECIMAL), 1), ROUND(CAST(meteo_tmean.longitude AS DECIMAL), 1)) IN ((47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8)) GROUP BY EXTRACT(YEAR FROM meteo_tmean.time) ORDER BY year;"
+        },
+        "align_correct": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Compare the average annual temperatures between 2015 and 2020 for the dominant forest and urban landcovers in the Canton of Zurich.",
+            "Evidence": "None",
+            "GOLD_SQL": "WITH forest_level2 AS (\n  SELECT DISTINCT\n    lt1.level2_code AS level2_code\n  FROM landcover_type AS lt1\n  WHERE\n    lt1.level2_label ILIKE '%forest%'\n), urban_level2 AS (\n  SELECT DISTINCT\n    lt2.level2_code AS level2_code\n  FROM landcover_type AS lt2\n  WHERE\n    lt2.level2_label ILIKE '%urban%'\n), dominant_grids AS (\n  SELECT\n    u.latitude AS latitude,\n    u.longitude AS longitude,\n    CASE\n      WHEN dom.level2_code IN (\n        SELECT\n          forest_level2.level2_code AS level2_code\n        FROM forest_level2\n      )\n      THEN 'Forest'\n      WHEN dom.level2_code IN (\n        SELECT\n          urban_level2.level2_code AS level2_code\n        FROM urban_level2\n      )\n      THEN 'Urban'\n      ELSE 'Other'\n    END AS landcover_group\n  FROM landcover_upscaled AS u\n  CROSS JOIN LATERAL (\n    SELECT\n      lt.level2_code AS level2_code,\n      SUM(u.ranks[i][2]) AS total_count\n    FROM GENERATE_SUBSCRIPTS(u.ranks, 1) AS i\n    JOIN landcover_type AS lt\n      ON lt.level3_code = u.ranks[i][1]\n    GROUP BY\n      lt.level2_code\n    ORDER BY\n      total_count DESC\n    LIMIT 1\n  ) AS dom\n  WHERE\n    (ROUND(CAST(u.latitude AS DECIMAL), 1), ROUND(CAST(u.longitude AS DECIMAL), 1)) IN (\n      (39.5, 21.2),\n      (39.6, 21.2),\n      (39.7, 21.2),\n      (39.4, 21.3),\n      (39.5, 21.3),\n      (39.6, 21.3),\n      (39.7, 21.3),\n      (39.8, 21.3),\n      (39.2, 21.4),\n      (39.4, 21.4),\n      (39.5, 21.4),\n      (39.6, 21.4),\n      (39.7, 21.4),\n      (39.8, 21.4),\n      (39.3, 21.5),\n      (39.4, 21.5),\n      (39.5, 21.5),\n      (39.6, 21.5),\n      (39.7, 21.5),\n      (39.8, 21.5),\n      (39.3, 21.6),\n      (39.4, 21.6),\n      (39.5, 21.6),\n      (39.6, 21.6),\n      (39.7, 21.6),\n      (39.8, 21.6),\n      (39.2, 21.7),\n      (39.3, 21.7),\n      (39.4, 21.7),\n      (39.5, 21.7),\n      (39.6, 21.7),\n      (39.7, 21.7),\n      (39.8, 21.7),\n      (39.2, 21.8),\n      (39.3, 21.8),\n      (39.4, 21.8),\n      (39.5, 21.8),\n      (39.6, 21.8),\n      (39.7, 21.8),\n      (39.8, 21.8),\n      (39.2, 21.9),\n      (39.3, 21.9),\n      (39.4, 21.9),\n      (39.5, 21.9),\n      (39.6, 21.9),\n      (39.7, 21.9),\n      (39.8, 21.9),\n      (39.1, 22.0),\n      (39.2, 22.0),\n      (39.3, 22.0),\n      (39.4, 22.0),\n      (39.5, 22.0),\n      (39.6, 22.0),\n      (39.7, 22.0),\n      (39.8, 22.0),\n      (39.9, 22.0),\n      (40.0, 22.0),\n      (39.1, 22.1),\n      (39.2, 22.1),\n      (39.3, 22.1),\n      (39.4, 22.1),\n      (39.5, 22.1),\n      (39.6, 22.1),\n      (39.7, 22.1),\n      (39.8, 22.1),\n      (39.9, 22.1),\n      (40.0, 22.1),\n      (39.2, 22.2),\n      (39.3, 22.2),\n      (39.4, 22.2),\n      (39.5, 22.2),\n      (39.6, 22.2),\n      (39.7, 22.2),\n      (39.8, 22.2),\n      (39.9, 22.2),\n      (40.0, 22.2),\n      (39.3, 22.3),\n      (39.4, 22.3),\n      (39.5, 22.3),\n      (39.6, 22.3),\n      (39.7, 22.3),\n      (39.8, 22.3),\n      (39.9, 22.3),\n      (40.0, 22.3),\n      (39.3, 22.4),\n      (39.4, 22.4),\n      (39.5, 22.4),\n      (39.6, 22.4),\n      (39.7, 22.4),\n      (39.8, 22.4),\n      (39.9, 22.4),\n      (40.0, 22.4),\n      (39.1, 22.5),\n      (39.2, 22.5),\n      (39.3, 22.5),\n      (39.4, 22.5),\n      (39.5, 22.5),\n      (39.6, 22.5),\n      (39.7, 22.5),\n      (39.8, 22.5),\n      (39.9, 22.5),\n      (39.1, 22.6),\n      (39.2, 22.6),\n      (39.3, 22.6),\n      (39.4, 22.6),\n      (39.5, 22.6),\n      (39.6, 22.6),\n      (39.7, 22.6),\n      (39.8, 22.6),\n      (39.9, 22.6),\n      (39.1, 22.7),\n      (39.2, 22.7),\n      (39.3, 22.7),\n      (39.4, 22.7),\n      (39.5, 22.7),\n      (39.6, 22.7),\n      (39.7, 22.7),\n      (39.8, 22.7),\n      (39.9, 22.7),\n      (40.0, 22.7),\n      (39.0, 22.8),\n      (39.1, 22.8),\n      (39.2, 22.8),\n      (39.3, 22.8),\n      (39.4, 22.8),\n      (39.5, 22.8),\n      (39.6, 22.8),\n      (39.7, 22.8),\n      (39.8, 22.8),\n      (39.9, 22.8),\n      (39.0, 22.9),\n      (39.1, 22.9),\n      (39.2, 22.9),\n      (39.3, 22.9),\n      (39.4, 22.9),\n      (39.5, 22.9),\n      (39.6, 22.9),\n      (39.7, 22.9),\n      (39.8, 22.9),\n      (39.0, 23.0),\n      (39.1, 23.0),\n      (39.2, 23.0),\n      (39.3, 23.0),\n      (39.4, 23.0),\n      (39.5, 23.0),\n      (39.6, 23.0),\n      (39.1, 23.1),\n      (39.2, 23.1),\n      (39.3, 23.1),\n      (39.4, 23.1),\n      (39.5, 23.1),\n      (39.1, 23.2),\n      (39.2, 23.2),\n      (39.3, 23.2),\n      (39.4, 23.2),\n      (39.5, 23.2),\n      (39.1, 23.3),\n      (39.2, 23.3),\n      (39.3, 23.3),\n      (39.4, 23.3),\n      (39.1, 23.4),\n      (39.2, 23.4),\n      (39.1, 23.5),\n      (39.2, 23.5),\n      (39.1, 23.6),\n      (39.2, 23.6),\n      (39.0, 23.7),\n      (39.1, 23.7),\n      (39.2, 23.7),\n      (39.1, 23.8),\n      (39.2, 23.8),\n      (39.0, 23.9),\n      (39.1, 23.9),\n      (39.2, 23.9),\n      (39.3, 23.9),\n      (39.0, 24.0),\n      (39.1, 24.0),\n      (39.2, 24.0),\n      (39.3, 24.0),\n      (39.4, 24.0),\n      (39.0, 24.1),\n      (39.1, 24.1),\n      (39.3, 24.1),\n      (39.4, 24.1),\n      (39.5, 24.1),\n      (39.1, 24.2),\n      (39.3, 24.2),\n      (39.4, 24.2),\n      (39.5, 24.2),\n      (39.3, 24.3),\n      (39.4, 24.3),\n      (39.3, 24.4),\n      (39.4, 24.4)\n    )\n    AND dom.level2_code IN (\n      SELECT\n        forest_level2.level2_code AS level2_code\n      FROM forest_level2\n      UNION\n      SELECT\n        urban_level2.level2_code AS level2_code\n      FROM urban_level2\n    )\n), annual_temps AS (\n  SELECT\n    dg.landcover_group AS landcover_group,\n    EXTRACT(YEAR FROM t.time) AS year,\n    AVG(t.tmean - 273.15) AS avg_temp_c\n  FROM meteo_tmean AS t\n  JOIN dominant_grids AS dg\n    ON dg.latitude = t.latitude AND dg.longitude = t.longitude\n  WHERE\n    EXTRACT(YEAR FROM t.time) BETWEEN 2015 AND 2020\n  GROUP BY\n    dg.landcover_group,\n    EXTRACT(YEAR FROM t.time)\n)\nSELECT\n  annual_temps.year AS year,\n  ROUND(\n    CAST(MAX(\n      CASE WHEN annual_temps.landcover_group = 'Forest' THEN annual_temps.avg_temp_c END\n    ) AS DECIMAL),\n    2\n  ) AS forest_avg_c,\n  ROUND(\n    CAST(MAX(\n      CASE WHEN annual_temps.landcover_group = 'Urban' THEN annual_temps.avg_temp_c END\n    ) AS DECIMAL),\n    2\n  ) AS urban_avg_c,\n  ROUND(\n    CAST(MAX(\n      CASE WHEN annual_temps.landcover_group = 'Urban' THEN annual_temps.avg_temp_c END\n    ) AS DECIMAL) - CAST(MAX(\n      CASE WHEN annual_temps.landcover_group = 'Forest' THEN annual_temps.avg_temp_c END\n    ) AS DECIMAL),\n    2\n  ) AS urban_minus_forest_diff_c\nFROM annual_temps\nGROUP BY\n  annual_temps.year\nORDER BY\n  year",
+            "PREDICTED_SQL": "SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN ( (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8) );"
+        },
+        "vote": {
+            "exec_res": 0,
+            "exec_err": "incorrect answer",
+            "Question": "Compare the average annual temperatures between 2015 and 2020 for the dominant forest and urban landcovers in the Canton of Zurich.",
+            "Evidence": "None",
+            "GOLD_SQL": "WITH forest_level2 AS (\n  SELECT DISTINCT\n    lt1.level2_code AS level2_code\n  FROM landcover_type AS lt1\n  WHERE\n    lt1.level2_label ILIKE '%forest%'\n), urban_level2 AS (\n  SELECT DISTINCT\n    lt2.level2_code AS level2_code\n  FROM landcover_type AS lt2\n  WHERE\n    lt2.level2_label ILIKE '%urban%'\n), dominant_grids AS (\n  SELECT\n    u.latitude AS latitude,\n    u.longitude AS longitude,\n    CASE\n      WHEN dom.level2_code IN (\n        SELECT\n          forest_level2.level2_code AS level2_code\n        FROM forest_level2\n      )\n      THEN 'Forest'\n      WHEN dom.level2_code IN (\n        SELECT\n          urban_level2.level2_code AS level2_code\n        FROM urban_level2\n      )\n      THEN 'Urban'\n      ELSE 'Other'\n    END AS landcover_group\n  FROM landcover_upscaled AS u\n  CROSS JOIN LATERAL (\n    SELECT\n      lt.level2_code AS level2_code,\n      SUM(u.ranks[i][2]) AS total_count\n    FROM GENERATE_SUBSCRIPTS(u.ranks, 1) AS i\n    JOIN landcover_type AS lt\n      ON lt.level3_code = u.ranks[i][1]\n    GROUP BY\n      lt.level2_code\n    ORDER BY\n      total_count DESC\n    LIMIT 1\n  ) AS dom\n  WHERE\n    (ROUND(CAST(u.latitude AS DECIMAL), 1), ROUND(CAST(u.longitude AS DECIMAL), 1)) IN (\n      (39.5, 21.2),\n      (39.6, 21.2),\n      (39.7, 21.2),\n      (39.4, 21.3),\n      (39.5, 21.3),\n      (39.6, 21.3),\n      (39.7, 21.3),\n      (39.8, 21.3),\n      (39.2, 21.4),\n      (39.4, 21.4),\n      (39.5, 21.4),\n      (39.6, 21.4),\n      (39.7, 21.4),\n      (39.8, 21.4),\n      (39.3, 21.5),\n      (39.4, 21.5),\n      (39.5, 21.5),\n      (39.6, 21.5),\n      (39.7, 21.5),\n      (39.8, 21.5),\n      (39.3, 21.6),\n      (39.4, 21.6),\n      (39.5, 21.6),\n      (39.6, 21.6),\n      (39.7, 21.6),\n      (39.8, 21.6),\n      (39.2, 21.7),\n      (39.3, 21.7),\n      (39.4, 21.7),\n      (39.5, 21.7),\n      (39.6, 21.7),\n      (39.7, 21.7),\n      (39.8, 21.7),\n      (39.2, 21.8),\n      (39.3, 21.8),\n      (39.4, 21.8),\n      (39.5, 21.8),\n      (39.6, 21.8),\n      (39.7, 21.8),\n      (39.8, 21.8),\n      (39.2, 21.9),\n      (39.3, 21.9),\n      (39.4, 21.9),\n      (39.5, 21.9),\n      (39.6, 21.9),\n      (39.7, 21.9),\n      (39.8, 21.9),\n      (39.1, 22.0),\n      (39.2, 22.0),\n      (39.3, 22.0),\n      (39.4, 22.0),\n      (39.5, 22.0),\n      (39.6, 22.0),\n      (39.7, 22.0),\n      (39.8, 22.0),\n      (39.9, 22.0),\n      (40.0, 22.0),\n      (39.1, 22.1),\n      (39.2, 22.1),\n      (39.3, 22.1),\n      (39.4, 22.1),\n      (39.5, 22.1),\n      (39.6, 22.1),\n      (39.7, 22.1),\n      (39.8, 22.1),\n      (39.9, 22.1),\n      (40.0, 22.1),\n      (39.2, 22.2),\n      (39.3, 22.2),\n      (39.4, 22.2),\n      (39.5, 22.2),\n      (39.6, 22.2),\n      (39.7, 22.2),\n      (39.8, 22.2),\n      (39.9, 22.2),\n      (40.0, 22.2),\n      (39.3, 22.3),\n      (39.4, 22.3),\n      (39.5, 22.3),\n      (39.6, 22.3),\n      (39.7, 22.3),\n      (39.8, 22.3),\n      (39.9, 22.3),\n      (40.0, 22.3),\n      (39.3, 22.4),\n      (39.4, 22.4),\n      (39.5, 22.4),\n      (39.6, 22.4),\n      (39.7, 22.4),\n      (39.8, 22.4),\n      (39.9, 22.4),\n      (40.0, 22.4),\n      (39.1, 22.5),\n      (39.2, 22.5),\n      (39.3, 22.5),\n      (39.4, 22.5),\n      (39.5, 22.5),\n      (39.6, 22.5),\n      (39.7, 22.5),\n      (39.8, 22.5),\n      (39.9, 22.5),\n      (39.1, 22.6),\n      (39.2, 22.6),\n      (39.3, 22.6),\n      (39.4, 22.6),\n      (39.5, 22.6),\n      (39.6, 22.6),\n      (39.7, 22.6),\n      (39.8, 22.6),\n      (39.9, 22.6),\n      (39.1, 22.7),\n      (39.2, 22.7),\n      (39.3, 22.7),\n      (39.4, 22.7),\n      (39.5, 22.7),\n      (39.6, 22.7),\n      (39.7, 22.7),\n      (39.8, 22.7),\n      (39.9, 22.7),\n      (40.0, 22.7),\n      (39.0, 22.8),\n      (39.1, 22.8),\n      (39.2, 22.8),\n      (39.3, 22.8),\n      (39.4, 22.8),\n      (39.5, 22.8),\n      (39.6, 22.8),\n      (39.7, 22.8),\n      (39.8, 22.8),\n      (39.9, 22.8),\n      (39.0, 22.9),\n      (39.1, 22.9),\n      (39.2, 22.9),\n      (39.3, 22.9),\n      (39.4, 22.9),\n      (39.5, 22.9),\n      (39.6, 22.9),\n      (39.7, 22.9),\n      (39.8, 22.9),\n      (39.0, 23.0),\n      (39.1, 23.0),\n      (39.2, 23.0),\n      (39.3, 23.0),\n      (39.4, 23.0),\n      (39.5, 23.0),\n      (39.6, 23.0),\n      (39.1, 23.1),\n      (39.2, 23.1),\n      (39.3, 23.1),\n      (39.4, 23.1),\n      (39.5, 23.1),\n      (39.1, 23.2),\n      (39.2, 23.2),\n      (39.3, 23.2),\n      (39.4, 23.2),\n      (39.5, 23.2),\n      (39.1, 23.3),\n      (39.2, 23.3),\n      (39.3, 23.3),\n      (39.4, 23.3),\n      (39.1, 23.4),\n      (39.2, 23.4),\n      (39.1, 23.5),\n      (39.2, 23.5),\n      (39.1, 23.6),\n      (39.2, 23.6),\n      (39.0, 23.7),\n      (39.1, 23.7),\n      (39.2, 23.7),\n      (39.1, 23.8),\n      (39.2, 23.8),\n      (39.0, 23.9),\n      (39.1, 23.9),\n      (39.2, 23.9),\n      (39.3, 23.9),\n      (39.0, 24.0),\n      (39.1, 24.0),\n      (39.2, 24.0),\n      (39.3, 24.0),\n      (39.4, 24.0),\n      (39.0, 24.1),\n      (39.1, 24.1),\n      (39.3, 24.1),\n      (39.4, 24.1),\n      (39.5, 24.1),\n      (39.1, 24.2),\n      (39.3, 24.2),\n      (39.4, 24.2),\n      (39.5, 24.2),\n      (39.3, 24.3),\n      (39.4, 24.3),\n      (39.3, 24.4),\n      (39.4, 24.4)\n    )\n    AND dom.level2_code IN (\n      SELECT\n        forest_level2.level2_code AS level2_code\n      FROM forest_level2\n      UNION\n      SELECT\n        urban_level2.level2_code AS level2_code\n      FROM urban_level2\n    )\n), annual_temps AS (\n  SELECT\n    dg.landcover_group AS landcover_group,\n    EXTRACT(YEAR FROM t.time) AS year,\n    AVG(t.tmean - 273.15) AS avg_temp_c\n  FROM meteo_tmean AS t\n  JOIN dominant_grids AS dg\n    ON dg.latitude = t.latitude AND dg.longitude = t.longitude\n  WHERE\n    EXTRACT(YEAR FROM t.time) BETWEEN 2015 AND 2020\n  GROUP BY\n    dg.landcover_group,\n    EXTRACT(YEAR FROM t.time)\n)\nSELECT\n  annual_temps.year AS year,\n  ROUND(\n    CAST(MAX(\n      CASE WHEN annual_temps.landcover_group = 'Forest' THEN annual_temps.avg_temp_c END\n    ) AS DECIMAL),\n    2\n  ) AS forest_avg_c,\n  ROUND(\n    CAST(MAX(\n      CASE WHEN annual_temps.landcover_group = 'Urban' THEN annual_temps.avg_temp_c END\n    ) AS DECIMAL),\n    2\n  ) AS urban_avg_c,\n  ROUND(\n    CAST(MAX(\n      CASE WHEN annual_temps.landcover_group = 'Urban' THEN annual_temps.avg_temp_c END\n    ) AS DECIMAL) - CAST(MAX(\n      CASE WHEN annual_temps.landcover_group = 'Forest' THEN annual_temps.avg_temp_c END\n    ) AS DECIMAL),\n    2\n  ) AS urban_minus_forest_diff_c\nFROM annual_temps\nGROUP BY\n  annual_temps.year\nORDER BY\n  year",
+            "PREDICTED_SQL": "SELECT AVG(meteo_tmean.tmean::numeric - 273.15) AS avg_annual_temperature_celsius FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) IN (2015, 2020) AND (meteo_tmean.latitude, meteo_tmean.longitude) IN ( (47.4, 8.4), (47.5, 8.4), (47.3, 8.5), (47.4, 8.5), (47.5, 8.5), (47.6, 8.5), (47.3, 8.6), (47.4, 8.6), (47.5, 8.6), (47.6, 8.6), (47.2, 8.7), (47.3, 8.7), (47.4, 8.7), (47.5, 8.7), (47.6, 8.7), (47.3, 8.8), (47.4, 8.8), (47.5, 8.8) );"
+        },
+        "status": "success"
+    }
+]

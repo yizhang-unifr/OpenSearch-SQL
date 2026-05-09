@@ -13,18 +13,112 @@ import re
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from typing import Any
 
 # ---------------------------------------------------------------------------
 # Paths (for .env loading; project packages are installed via pyproject.toml)
 # ---------------------------------------------------------------------------
 _OPENSEARCH_ROOT = Path(__file__).resolve().parent.parent.parent
-_PROJECT_ROOT = _OPENSEARCH_ROOT.parent
+_PROJECT_ROOT = _OPENSEARCH_ROOT.parent.parent
 
 from dotenv import load_dotenv
 
 load_dotenv(_PROJECT_ROOT / ".env")
 
-from config.llm_factory import LLMFactory, _load_yaml
+# Add project root to sys.path so config can be imported
+import sys
+
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
+# Optional external factory. If unavailable, use the local fallback below.
+try:
+    from config.llm_factory import LLMFactory, _load_yaml  # type: ignore
+except (ModuleNotFoundError, ImportError) as e:
+    print(
+        f"⚠️  config.llm_factory import failed ({e}), using fallback", file=sys.stderr
+    )
+    try:
+        import yaml
+    except ModuleNotFoundError:  # pragma: no cover
+        yaml = None
+
+    def _load_yaml(path: Path) -> dict:
+        """Load YAML config or return a safe default."""
+        if path.exists() and yaml is not None:
+            with path.open("r", encoding="utf-8") as f:
+                data = yaml.safe_load(f) or {}
+                if isinstance(data, dict):
+                    return data
+        env_model = (
+            os.environ.get("MODEL")
+            or os.environ.get("OPENAI_MODEL")
+            or os.environ.get("LLM_MODEL")
+            or "gpt-4o-mini"
+        )
+        return {
+            "provider": os.environ.get("LLM_PROVIDER", "openai"),
+            "model": env_model,
+            "temperature": float(os.environ.get("LLM_TEMPERATURE", "0")),
+        }
+
+    class LLMFactory:
+        """Fallback factory used when `config.llm_factory` is unavailable."""
+
+        @staticmethod
+        def from_config_dict(config: dict[str, Any]):
+            provider = str(config.get("provider", "openai")).lower()
+            model = (
+                config.get("model")
+                or os.environ.get("MODEL")
+                or os.environ.get("AWS_MODEL_ID")
+                or os.environ.get("OPENAI_MODEL")
+                or os.environ.get("LLM_MODEL")
+                or "gpt-4o-mini"
+            )
+            temperature = float(config.get("temperature", 0))
+
+            if provider == "openai":
+                from langchain_openai import ChatOpenAI
+
+                return ChatOpenAI(model=model, temperature=temperature)
+            elif provider == "bedrock":
+                from langchain_aws import ChatBedrock
+
+                region_name = config.get("region_name") or os.environ.get(
+                    "AWS_REGION", "eu-west-1"
+                )
+                return ChatBedrock(
+                    model_id=model,
+                    region_name=region_name,
+                    temperature=temperature,
+                )
+            elif provider == "ollama":
+                from langchain_ollama import ChatOllama
+
+                base_url = config.get("base_url") or os.environ.get(
+                    "OLLAMA_BASE_URL", "http://localhost:11434"
+                )
+                return ChatOllama(
+                    model=model,
+                    base_url=base_url,
+                    temperature=temperature,
+                )
+            elif provider == "anthropic":
+                from langchain_anthropic import ChatAnthropic
+
+                return ChatAnthropic(
+                    model=model,
+                    temperature=temperature,
+                    api_key=os.environ.get("ANTHROPIC_API_KEY"),
+                )
+            else:
+                raise ValueError(
+                    f"Unsupported provider: {provider}. "
+                    f"Use one of: openai, bedrock, ollama, anthropic"
+                )
+
+
 from runner.logger import Logger
 from llm.prompts import prompts_fewshot_parse
 
@@ -54,6 +148,7 @@ def _get_base_config() -> dict:
 # We ignore the *engine* string and use the YAML-configured provider instead.
 # ---------------------------------------------------------------------------
 
+
 def model_chose(step: str, model: str = "gpt-4 32K"):
     """Create an LLM adapter using LLMFactory.
 
@@ -72,6 +167,7 @@ def model_chose(step: str, model: str = "gpt-4 32K"):
 # Base class – keeps fewshot_parse / convert_table / log_record identical
 # to the original so nothing downstream breaks.
 # ---------------------------------------------------------------------------
+
 
 class req:
     """Minimal base retained for interface compatibility."""
@@ -110,6 +206,7 @@ class req:
 # ---------------------------------------------------------------------------
 # The adapter – wraps a LangChain LLM and exposes get_ans()
 # ---------------------------------------------------------------------------
+
 
 class LLMFactoryAdapter(req):
     """Wraps a LangChain LLM from ``LLMFactory`` so every OpenSearch-SQL
@@ -195,7 +292,10 @@ class LLMFactoryAdapter(req):
                     # Multiple completions – invoke concurrently for speed
                     choices = self._generate_n(llm, chat_msgs, n)
                     if self.step != "prepare_train_queries":
-                        self.log_record(messages, str([c["message"]["content"][:80] for c in choices]))
+                        self.log_record(
+                            messages,
+                            str([c["message"]["content"][:80] for c in choices]),
+                        )
                     return choices
 
             except Exception as e:

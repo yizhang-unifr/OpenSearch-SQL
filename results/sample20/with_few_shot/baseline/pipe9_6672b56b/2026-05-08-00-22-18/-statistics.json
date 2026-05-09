@@ -1,0 +1,165 @@
+{
+    "counts": {
+        "candidate_generate": {
+            "correct": 3,
+            "incorrect": 7,
+            "error": 0,
+            "total": 10
+        },
+        "align_correct": {
+            "correct": 3,
+            "incorrect": 7,
+            "error": 0,
+            "total": 10
+        },
+        "vote": {
+            "correct": 3,
+            "incorrect": 7,
+            "error": 0,
+            "total": 10
+        }
+    },
+    "ids": {
+        "candidate_generate": {
+            "correct": [
+                [
+                    "meteo",
+                    4
+                ],
+                [
+                    "meteo",
+                    5
+                ],
+                [
+                    "meteo",
+                    6
+                ]
+            ],
+            "incorrect": [
+                [
+                    "meteo",
+                    0
+                ],
+                [
+                    "meteo",
+                    1
+                ],
+                [
+                    "meteo",
+                    2
+                ],
+                [
+                    "meteo",
+                    3
+                ],
+                [
+                    "meteo",
+                    7
+                ],
+                [
+                    "meteo",
+                    8
+                ],
+                [
+                    "meteo",
+                    9
+                ]
+            ],
+            "error": []
+        },
+        "align_correct": {
+            "correct": [
+                [
+                    "meteo",
+                    4
+                ],
+                [
+                    "meteo",
+                    5
+                ],
+                [
+                    "meteo",
+                    6
+                ]
+            ],
+            "incorrect": [
+                [
+                    "meteo",
+                    0
+                ],
+                [
+                    "meteo",
+                    1
+                ],
+                [
+                    "meteo",
+                    2
+                ],
+                [
+                    "meteo",
+                    3
+                ],
+                [
+                    "meteo",
+                    7
+                ],
+                [
+                    "meteo",
+                    8
+                ],
+                [
+                    "meteo",
+                    9
+                ]
+            ],
+            "error": []
+        },
+        "vote": {
+            "correct": [
+                [
+                    "meteo",
+                    4
+                ],
+                [
+                    "meteo",
+                    5
+                ],
+                [
+                    "meteo",
+                    6
+                ]
+            ],
+            "incorrect": [
+                [
+                    "meteo",
+                    0
+                ],
+                [
+                    "meteo",
+                    1
+                ],
+                [
+                    "meteo",
+                    2
+                ],
+                [
+                    "meteo",
+                    3
+                ],
+                [
+                    "meteo",
+                    7
+                ],
+                [
+                    "meteo",
+                    8
+                ],
+                [
+                    "meteo",
+                    9
+                ]
+            ],
+            "error": []
+        }
+    }
+}

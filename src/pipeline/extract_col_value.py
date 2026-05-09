@@ -14,9 +14,10 @@ def extract_col_value(task: Any, execution_history: Dict[str, Any]) -> Dict[str,
     config,node_name=PipelineManager().get_model_para()
     paths=DatabaseManager()
     fewshot_path=paths.db_fewshot_path
+    fewshot_enabled = str(config.get("fewshot_enabled", "True")).lower() == "true"
     chat_model = model_chose(node_name,config["engine"])
 
-    if fewshot_path.exists():
+    if fewshot_enabled and fewshot_path.exists():
         with open(fewshot_path) as f:
             df_fewshot = json.load(f)
     else:
@@ -53,9 +54,9 @@ def get_des_ans(chat_model,
                 hint,
                 debug,
                 temperature=1.0):
-    fewshot = fewshot.split("/* Answer the following:")[1:6]
-    fewshot = "/* Answer the following:" + "/* Answer the following:".join(
-        fewshot)
+    if fewshot:
+        fewshot_parts = fewshot.split("/* Answer the following:")[1:6]
+        fewshot = "/* Answer the following:" + "/* Answer the following:".join(fewshot_parts)
     ext_prompt = ext_prompt.format(fewshot=fewshot,
                                    db_info=db,
                                    query=question,

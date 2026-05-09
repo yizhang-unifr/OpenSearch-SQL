@@ -1,0 +1,12 @@
+{
+    "3": "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = '2020';",
+    "6": "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(WEEK FROM meteo_tmean.time) = 12 AND EXTRACT(YEAR FROM meteo_tmean.time) = '2020';",
+    "1": "SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = '2018' AND EXTRACT(MONTH FROM meteo_tmean.time) = 7",
+    "4": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE time >= '2021-01-15 00:00:00' AND time < '2021-01-16 00:00:00';",
+    "9": "SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = '2020';",
+    "7": "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(MONTH FROM meteo_tmean.time) = 7 AND EXTRACT(YEAR FROM meteo_tmean.time) = '2020'",
+    "2": "SELECT NULL;",
+    "5": "SELECT meteo_tmean.tmean FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = '2020'",
+    "8": "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = '2020';",
+    "0": "SELECT NULL;"
+}

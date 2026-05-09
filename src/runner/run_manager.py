@@ -1,5 +1,6 @@
 import os
 import json
+import hashlib
 from pathlib import Path
 from multiprocessing import Pool
 from typing import List, Dict, Any, Tuple
@@ -33,9 +34,21 @@ class RunManager:
         """
         data_mode = self.args.data_mode
         pipeline_nodes = self.args.pipeline_nodes
-        dataset_name = Path(self.args.db_root_path).stem
+        dataset_name = self._normalize_dataset_label(
+            Path(self.args.db_root_path).stem,
+            getattr(self.args, "fewshot_mode", "with_few_shot"),
+        )
+        ablation_mode = getattr(self.args, "ablation_mode", "full")
+        pipeline_tag = self._build_pipeline_tag(pipeline_nodes)
         run_folder_name = str(self.args.run_start_time)
-        run_folder_path = Path(self.RESULT_ROOT_PATH) / data_mode / pipeline_nodes / dataset_name / run_folder_name
+        run_folder_path = (
+            Path(self.RESULT_ROOT_PATH)
+            / data_mode
+            / dataset_name
+            / ablation_mode
+            / pipeline_tag
+            / run_folder_name
+        )
         
         run_folder_path.mkdir(parents=True, exist_ok=True)
         
@@ -47,6 +60,22 @@ class RunManager:
         log_folder_path.mkdir(exist_ok=True)
         
         return str(run_folder_path)
+
+    @staticmethod
+    def _build_pipeline_tag(pipeline_nodes: str) -> str:
+        node_count = len([node for node in pipeline_nodes.split("+") if node.strip()])
+        short_hash = hashlib.sha1(pipeline_nodes.encode("utf-8")).hexdigest()[:8]
+        return f"pipe{node_count}_{short_hash}"
+
+    @staticmethod
+    def _normalize_dataset_label(dataset_stem: str, fewshot_mode: str) -> str:
+        if fewshot_mode in {"with_few_shot", "no_few_shot"}:
+            return fewshot_mode
+        label_map = {
+            "data": "with_few_shot",
+            "data_nofs": "no_few_shot",
+        }
+        return label_map.get(dataset_stem, dataset_stem)
 
     def initialize_tasks(self, start,end,dataset: List[Dict[str, Any]]):
         """

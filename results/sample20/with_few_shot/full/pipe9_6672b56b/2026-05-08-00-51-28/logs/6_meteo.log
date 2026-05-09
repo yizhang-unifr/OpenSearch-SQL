@@ -1,0 +1,1056 @@
+############################## Human at step extract_col_value ##############################
+
+/* Some extract examples are provided based on similar problems: */
+/* Answer the following: Please give the name of the course in which most numbers of the students got an A. Also, list the full name of the students who got an A in this course. most number of students got an A refers MAX(COUNT(student_id WHERE grade = 'A')); full name = f_name, l_name; got an A refers to grade = 'A'; */
+#reason: The question requires display in order: "name of the course", "full name"."A" is filtering condition.
+#columns: course.name, student.f_name, student.l_name, registration.grade, registration.student_id
+#values: "A"
+
+/* Answer the following:How much more votes for episode 1 than for episode 5? more votes refers to SUBTRACT(SUM(votes when episode = 1), SUM(votes when episode = 5)) */
+#reason: The question requires display in order: "How much more vote". The definition of "more vote" is SUBTRACT(SUM(votes when episode = 1), SUM(votes when episode = 5)). 1, 5 are filtering conditions.
+#columns: Episode.episode, Vote.votes
+#values: "1", "5"
+
+/* Answer the following: What is the average score of the movie "The Fall of Berlin" in 2019? Average score refers to Avg(rating_score); */
+#reason: The question requires display in order: "average score". Average score is Avg(rating_score), "The Fall of Berlin",2019 are filtering conditions.
+#columns: ratings.rating_score, ratings.rating_id, ratings.rating_timestamp_utc, movies.movie_title
+#values: "The Fall of Berlin", "2019"
+
+/* Answer the following: How many distinct orders were there in 2003 when the quantity ordered was less than 30? "year(orderDate) = '2003'; quantityOrdered < 30;" */
+#reason:  The question requires display in order: "How many distinct orders"." in 2003", "less than 30" are filtering conditions.
+#columns: orderdetails.orderNumber, orderdetails.quantityOrdered, orders.orderDate
+#values: "30", "2003"
+
+
+
+/* Database schema */
+Database Management System: PostgreSQL
+#Database name: meteo
+## Table landcover_type:
+id: The type is integer, which does not include Null and is Unique. Values format like: [19, 2, 34]
+level1_code: The type is integer, which does not include Null and is Non-Unique. Values format like: [4, 2, 5]
+level1_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Forest and semi-natural areas', 'Water bodies', 'Wetlands']
+level2_code: The type is integer, which does not include Null and is Non-Unique. Values format like: [22, 21, 24]
+level2_label: The type is text, which does not include Null and is Non-Unique. Values format like: ['Marine waters', 'Maritime wetlands', 'Pastures']
+level3_code: The type is integer, which does not include Null and is Unique. Values format like: [213, 312, 521]
+level3_label: The type is text, which does not include Null and is Unique. Values format like: ['Glaciers and perpetual snow', 'Dump sites', 'Inland marshes']
+
+## Table landcover_upscaled:
+latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+ranks: The type is ARRAY, which does not include Null and is Non-Unique. Values format like: [[[523, 10929]], [[523, 10614]], [[523, 12]]]
+
+## Table meteo_elevation:
+id: The type is integer, which does not include Null and is Unique. Values format like: [16, 53, 31]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+elevation: The type is double precision, which does not include Null and is Unique. Values format like: [262.32, 261.07, 267.04]
+
+## Table meteo_sdmax:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+time_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+time_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]
+latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+sdmax: The type is double precision, which does not include Null and is Non-Unique. Values format like: [0.1543006004608365, 0.005855887968656992, 0.1904323847336456]
+
+## Table meteo_ssrd:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+ssrd: The type is double precision, which does not include Null and is Unique. Values format like: [2455904.0, 3285964.0, 3006604.0]
+
+## Table meteo_tmax:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+time_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+time_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+tmax: The type is real, which does not include Null and is Non-Unique. Values format like: [278.1831, 276.86865, 280.3921]
+
+## Table meteo_tmean:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+time_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+time_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+
+## Table meteo_tmin:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+time_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+time_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+tmin: The type is real, which does not include Null and is Non-Unique. Values format like: [275.60016, 275.70953, 274.0431]
+
+## Table meteo_tp:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+tp: The type is real, which does not include Null and is Unique. Values format like: [0.0043916972, 0.0024763464, 0.005056289]
+
+## Table meteo_windspeedmax:
+time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+time_bnds_start: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+time_bnds_end: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 23, 0)]
+latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+windspeedmax: The type is real, which does not include Null and is Unique. Values format like: [4.6727343, 4.60072, 5.389693]
+
+#Foreign keys:
+
+
+#Database Description: The database encompasses meteorological and geographical data, including weather variables (temperature, precipitation, wind speed, radiation), elevation information, and land cover classifications associated with specific coordinates and timestamps.
+#Tables Descriptions:
+landcover_type: Hierarchical classification codes and labels for different levels of land cover types.
+landcover_upscaled: Geographic coordinates linked to arrays of land cover ranks.
+meteo_elevation: Elevation data recorded for specific latitude and longitude coordinates.
+meteo_sdmax: Maximum standard deviation values with time boundaries and geographic coordinates.
+meteo_ssrd: Surface solar radiation downwards data associated with timestamps and locations.
+meteo_tmax: Maximum temperature records including time boundaries and geographic coordinates.
+meteo_tmean: Mean temperature records including time boundaries and geographic coordinates.
+meteo_tmin: Minimum temperature records including time boundaries and geographic coordinates.
+meteo_tp: Total precipitation data associated with timestamps and locations.
+meteo_windspeedmax: Maximum wind speed records including time boundaries and geographic coordinates.
+
+
+Attention:
+1. if the question have when\where\which, pay attention to pick table.column related to time, location and name in #columns
+2. Please answer the question in the following format without any other content:
+```
+#reason: Analysis of which columns and values might be relevant to the question. Note that when dealing with questions about time, who, which, what, etc., you should keep column related to time, names, and locations in the #column.(format: The question query xxx, the related column include table.column, the values include values)
+#columns: The top 10 columns relevant to the question( format: table.column_1, table.column_2 ...)
+#values: Potential filter values that the question might query(format: "value1", "value2" ...)
+```
+/* Answer the following: What is the minimum wind speed in Thessaly Region in January 2021? None */
+
+
+############################## AI at step extract_col_value ##############################
+
+```
+#reason: The question queries for the minimum wind speed in the Thessaly Region in January 2021. However, none of the provided tables contain information about geographic regions like "Thessaly Region" or any column that can be used to filter by region name. Additionally, while meteorological tables (e.g., meteo_windspeedmax) have time and location (latitude, longitude) data, there is no mapping from latitude/longitude to region names (e.g., Thessaly) in the schema. Thus, it is impossible to filter by "Thessaly Region" or confirm January 2021 without region-to-coordinate mapping. The required data cannot be retrieved with the given schema.
+#columns: meteo_windspeedmax.time, meteo_windspeedmax.longitude, meteo_windspeedmax.latitude, meteo_windspeedmax.windspeedmax
+#values: "2021-01"
+```
+
+############################## Human at step extract_query_noun ##############################
+
+Please extract all nouns and phrases from the following sentence, separating the results directly with a comma( format: "noun_1", "noun_2","phrases" ):
+What is the minimum wind speed in Thessaly Region in January 2021? None
+
+############################## AI at step extract_query_noun ##############################
+
+"wind speed", "Thessaly Region", "January 2021"
+
+############################## Human at step column_retrieve_and_other_info ##############################
+
+现在我们定义一个问句的语法原子单元如下:
+Q: 询问词: 如 calculate\ Include\ List\ List out\ List all\ give\ state\ Name\ In which\ How many\  which\ what\ who\ when\ provide\ Tally\ identify\ Find\ mention\ write等
+J: 判断词： 如 Do\ Did\ If\ Is\ Are等
+I: 查询内容: 查询的主体内容, 如: name, ID, date, location, item, biggest city.
+C: 条件句: 通过介词和连词引入的查询的要求或属性, 如大于、等于、排序、聚合等. 介词和连词有: of\ have\ with\ that\ by. 条件句的形式例子有: with condition\ have condition\ of attribute\ that was condition
+
+
+一个问题通过这些原子串联起来。常见的串联方式有
+QIC(询问句): List the student with score more than 80: Q: 'List' I: 'the student' C: 'with score more than 80'
+JC(判断句): State if Tom is a Cat? : J: 'State if C: is a Cat?'
+C(条件句): For all people in Beijing
+现在请你针对下面的问题, 把问题中的内容按照上述原子定义提取出来
+问题如下: What is the minimum wind speed in Thessaly Region in January 2021?
+
+请按照下面的json格式进行回答:
+
+```json
+[{"Type":"类型(QIC,JC,C)",
+"Extract":{//不存在的填null
+    "Q":"询问词",
+    "J":"判断词",
+    "I":['查询内容a', '查询内容b'],//只有查询内容用and或alongside连接时,才分成多个实体填入List
+    "C":["条件句a","属性b"]
+}},
+{}]
+```
+
+############################## AI at step column_retrieve_and_other_info ##############################
+
+```json
+[{"Type":"QIC",
+"Extract":{
+    "Q":"What",
+    "J":null,
+    "I":["minimum wind speed"],
+    "C":["in Thessaly Region", "in January 2021"]
+}}]
+```
+
+############################## Human at step candidate_generate ##############################
+
+
+
+/* Database schema */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_windspeedmax.windspeedmax: The type is real, which does not include Null and is Unique. Values format like: [4.6727343, 4.60072, 5.389693]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+# Based on the database schema and the examples above, pay attention to the following:
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
+2. "#Values in Database" display part values from the database. Please ignore the unnecessary values.
+3. If "#GEO_CONTEXT" is provided, use it as a spatial grounding constraint. Use only coordinates/bounds that appear in GEO_CONTEXT; do not invent place names or geometry values.
+4. If "#ONTOLOGY_GROUNDED_FUNCTION" is provided, treat it as an executable semantic constraint package (thresholds, temporal logic, aggregation hints). Map it only to existing schema columns/functions.
+5. When GEO/ontology context conflicts with schema feasibility, keep SQL executable and prioritize schema-valid expressions.
+6. Please refer to the examples above and answer in the following format without any other content:
+```
+#reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
+#columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
+#values: the filter in SQL (format: 'filter in question' refer to 'table.column <op> value'. e.g. 'name is not tom' refer to name <> 'tom', 'in 2007' refer to "EXTRACT(YEAR FROM Date) = 2007")
+#SELECT: SELECT content (format like: 'query in question' refer to table.column. The order of columns in the SELECT clause must be the same as the order in the question.)
+#SQL-like: SQL-like statements ignoring Join conditions
+#SQL: SQL
+```
+
+/* Answer the following: What is the minimum wind speed in Thessaly Region in January 2021? None */
+['minimum wind speed']
+#GEO_CONTEXT:
+{
+  "place": "Thessaly Region",
+  "points": [
+    {
+      "lon": "21.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.2",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.2",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.3",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.4",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.5",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.6",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.7",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.8",
+      "lat": "39.8"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.2"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.3"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.4"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.5"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.6"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.7"
+    },
+    {
+      "lon": "21.9",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.0",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.0",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.1",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.1",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.2",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.2",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.3",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.3",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.4",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.4",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.5",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.6",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.7",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.7",
+      "lat": "40.0"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.0"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.8"
+    },
+    {
+      "lon": "22.8",
+      "lat": "39.9"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.0"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.1"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.2"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.3"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.4"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.5"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.6"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.7"
+    },
+    {
+      "lon": "22.9",
+      "lat": "39.8"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.0"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.5"
+    },
+    {
+      "lon": "23.0",
+      "lat": "39.6"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.1",
+      "lat": "39.5"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.3"
+    },
+    {
+      "lon": "23.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "23.4",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.4",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.5",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.5",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.6",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.6",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.7",
+      "lat": "39.0"
+    },
+    {
+      "lon": "23.7",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.7",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.8",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.8",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.0"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.1"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.2"
+    },
+    {
+      "lon": "23.9",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.0"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.1"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.2"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.0",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.0"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.1"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.1",
+      "lat": "39.5"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.1"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.2",
+      "lat": "39.5"
+    },
+    {
+      "lon": "24.3",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.3",
+      "lat": "39.4"
+    },
+    {
+      "lon": "24.4",
+      "lat": "39.3"
+    },
+    {
+      "lon": "24.4",
+      "lat": "39.4"
+    }
+  ],
+  "resolution": "places_dict"
+}
+#ONTOLOGY_GROUNDED_FUNCTION:
+{
+  "schema_version": "ontology_grounded_function.v1",
+  "question": "What is the minimum wind speed in Thessaly Region in January 2021? None",
+  "anchor": "MaximumWindSpeed",
+  "target_variable": "",
+  "hops": null,
+  "semantic_chain": [],
+  "function_specs": [
+    {
+      "name": "Threshold",
+      "inputs": [
+        "Variable"
+      ],
+      "semantics": "Apply explicit operator from ontology threshold config.",
+      "pseudo_code_template": "ThresholdMatch := (Variable >= threshold_value)"
+    }
+  ],
+  "composition_order": [
+    "Threshold"
+  ],
+  "constraints": [
+    "operator sourced from hasOperator",
+    "threshold unit sourced from hasThresholdUnit",
+    "duration sourced from hasDuration"
+  ]
+}
+
+
+############################## AI at step candidate_generate ##############################
+
+['```\n#reason: The question asks for the minimum wind speed in the Thessaly Region', '```\n#reason: The question asks for the minimum wind speed in the Thessaly Region', '```\n#reason: The question asks for the minimum wind speed in Thessaly Region in ', '```\n#reason: The question asks for the minimum wind speed in the Thessaly Region', '```\n#reason: The question asks for the minimum wind speed in the Thessaly Region']
+

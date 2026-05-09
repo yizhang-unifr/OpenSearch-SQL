@@ -1,0 +1,171 @@
+{
+    "counts": {
+        "candidate_generate": {
+            "correct": 1,
+            "incorrect": 8,
+            "error": 1,
+            "total": 10
+        },
+        "align_correct": {
+            "correct": 1,
+            "incorrect": 8,
+            "error": 1,
+            "total": 10
+        },
+        "vote": {
+            "correct": 1,
+            "incorrect": 8,
+            "error": 1,
+            "total": 10
+        }
+    },
+    "ids": {
+        "candidate_generate": {
+            "correct": [
+                [
+                    "meteo",
+                    4
+                ]
+            ],
+            "incorrect": [
+                [
+                    "meteo",
+                    0
+                ],
+                [
+                    "meteo",
+                    1
+                ],
+                [
+                    "meteo",
+                    2
+                ],
+                [
+                    "meteo",
+                    3
+                ],
+                [
+                    "meteo",
+                    6
+                ],
+                [
+                    "meteo",
+                    7
+                ],
+                [
+                    "meteo",
+                    8
+                ],
+                [
+                    "meteo",
+                    9
+                ]
+            ],
+            "error": [
+                [
+                    "meteo",
+                    5,
+                    "column landcover_upscaled.level1_label does not exist\nLINE 1: ...ndcover_upscaled.longitude JOIN landcover_type ON landcover_...\n                                                             ^\n"
+                ]
+            ]
+        },
+        "align_correct": {
+            "correct": [
+                [
+                    "meteo",
+                    4
+                ]
+            ],
+            "incorrect": [
+                [
+                    "meteo",
+                    0
+                ],
+                [
+                    "meteo",
+                    1
+                ],
+                [
+                    "meteo",
+                    2
+                ],
+                [
+                    "meteo",
+                    3
+                ],
+                [
+                    "meteo",
+                    6
+                ],
+                [
+                    "meteo",
+                    7
+                ],
+                [
+                    "meteo",
+                    8
+                ],
+                [
+                    "meteo",
+                    9
+                ]
+            ],
+            "error": [
+                [
+                    "meteo",
+                    5,
+                    "column landcover_upscaled.level1_label does not exist\nLINE 1: ...ndcover_upscaled.longitude JOIN landcover_type ON landcover_...\n                                                             ^\n"
+                ]
+            ]
+        },
+        "vote": {
+            "correct": [
+                [
+                    "meteo",
+                    4
+                ]
+            ],
+            "incorrect": [
+                [
+                    "meteo",
+                    0
+                ],
+                [
+                    "meteo",
+                    1
+                ],
+                [
+                    "meteo",
+                    2
+                ],
+                [
+                    "meteo",
+                    3
+                ],
+                [
+                    "meteo",
+                    6
+                ],
+                [
+                    "meteo",
+                    7
+                ],
+                [
+                    "meteo",
+                    8
+                ],
+                [
+                    "meteo",
+                    9
+                ]
+            ],
+            "error": [
+                [
+                    "meteo",
+                    5,
+                    "unhashable type: 'list'"
+                ]
+            ]
+        }
+    }
+}

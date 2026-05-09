@@ -1,0 +1,1238 @@
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the average temperature in city of Zurich in 2018? None
+#Error SQL: SELECT AVG(meteo_tmean.tmean) as avg_temperature FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = '2018' AND ABS(meteo_tmean.latitude - 47.4) < 0.5 AND ABS(meteo_tmean.longitude - 8.5) < 1.0
+Error: relation "meteo_tmean" does not exist
+LINE 1: ...CT AVG(meteo_tmean.tmean) as avg_temperature FROM meteo_tmea...
+                                                             ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error indicates that PostgreSQL cannot find the table "meteo_tmean". In PostgreSQL, tables are organized within schemas. The most common cause of this error is that the table exists in a specific schema (typically 'public') but the query doesn't specify it. Adding the schema prefix 'public.' before the table name will resolve this issue, as PostgreSQL needs to know which schema contains the relation.
+#SQL: SELECT AVG(meteo_tmean.tmean) as avg_temperature FROM public.meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2018 AND ABS(meteo_tmean.latitude - 47.4) < 0.5 AND ABS(meteo_tmean.longitude - 8.5) < 1.0
+```
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the average temperature in city of Zurich in 2018? None
+#Error SQL: SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = '2018' AND meteo_tmean.latitude BETWEEN 47.3 AND 47.5 AND meteo_tmean.longitude BETWEEN 8.4 AND 8.6
+Error: relation "meteo_tmean" does not exist
+LINE 1: SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT...
+                                           ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error indicates that the relation "meteo_tmean" does not exist. In PostgreSQL, table names are case-sensitive when quoted and folded to lowercase when unquoted. The schema shows the table exists as "meteo_tmean", but it may be in a specific schema that needs to be qualified. Additionally, the query should verify table existence and use proper schema qualification if needed. The most common fix is to ensure the correct table name is used and potentially add schema prefix (typically 'public' in PostgreSQL).
+#SQL: SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = 2018 AND latitude BETWEEN 47.3 AND 47.5 AND longitude BETWEEN 8.4 AND 8.6
+```
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the average temperature in city of Zurich in 2018? None
+#Error SQL: SELECT AVG(meteo_tmean.tmean) as avg_temperature FROM public.meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2018 AND ABS(meteo_tmean.latitude - 47.4) < 0.5 AND ABS(meteo_tmean.longitude - 8.5) < 1.0
+Error: relation "meteo_tmean" does not exist
+LINE 1: ...CT AVG(meteo_tmean.tmean) as avg_temperature FROM meteo_tmea...
+                                                             ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error indicates that the table "meteo_tmean" does not exist in the database. Looking at the schema, all tables are defined without a specific schema prefix (they belong to the default 'public' schema in PostgreSQL). The query should reference the table correctly with the proper schema. Additionally, based on the schema information provided, the table structure exists and should be accessible as 'meteo_tmean' in the public schema. The error might occur because the table name needs to be properly qualified or there may be a case sensitivity issue. The corrected SQL should use the proper table reference with schema qualification.
+#SQL: SELECT AVG(meteo_tmean.tmean) as avg_temperature FROM public.meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2018 AND ABS(meteo_tmean.latitude - 47.4) < 0.5 AND ABS(meteo_tmean.longitude - 8.5) < 1.0
+```
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the average temperature in city of Zurich in 2018? None
+#Error SQL: SELECT AVG(tmean) AS average_temperature FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = '2018' AND latitude BETWEEN 47.3 AND 47.5 AND longitude BETWEEN 8.4 AND 8.6
+Error: relation "meteo_tmean" does not exist
+LINE 1: SELECT AVG(tmean) AS average_temperature FROM meteo_tmean WH...
+                                                      ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error indicates that the relation "meteo_tmean" does not exist in the database. Based on the schema documentation, this table should exist with columns tmean, latitude, longitude, and time. The most likely issue is that the actual table name in this database instance differs from what's documented, or a schema prefix is needed. Given the error and common PostgreSQL patterns, the table may be named simply "tmean" without the meteo_ prefix in this specific database. The SQL query structure is otherwise correct for calculating average temperature with proper date and location filtering.
+#SQL: SELECT AVG(tmean) AS average_temperature FROM tmean WHERE EXTRACT(YEAR FROM time) = 2018 AND latitude BETWEEN 47.3 AND 47.5 AND longitude BETWEEN 8.4 AND 8.6
+```
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the average temperature in city of Zurich in 2018? None
+#Error SQL: SELECT AVG(tmean) AS average_temperature FROM tmean WHERE EXTRACT(YEAR FROM time) = 2018 AND latitude BETWEEN 47.3 AND 47.5 AND longitude BETWEEN 8.4 AND 8.6
+Error: relation "tmean" does not exist
+LINE 1: SELECT AVG(tmean) AS average_temperature FROM tmean WHERE EX...
+                                                      ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error occurs because the table name is incorrect. According to the database schema, the correct table name is 'meteo_tmean', not 'tmean'. The SQL query needs to reference the full table name as defined in the schema.
+#SQL: SELECT AVG(tmean) AS average_temperature FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = 2018 AND latitude BETWEEN 47.3 AND 47.5 AND longitude BETWEEN 8.4 AND 8.6
+```
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the average temperature in city of Zurich in 2018? None
+#Error SQL: SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = 2018 AND latitude BETWEEN 47.3 AND 47.5 AND longitude BETWEEN 8.4 AND 8.6
+Error: relation "meteo_tmean" does not exist
+LINE 1: SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM t...
+                               ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error indicates that the table 'meteo_tmean' does not exist in the current schema search path. In PostgreSQL, tables need to be properly qualified with their schema name (typically 'public' for default schemas). The table exists according to the database schema description, so adding the schema prefix 'public.' should resolve this issue.
+#SQL: SELECT AVG(tmean) FROM public.meteo_tmean WHERE EXTRACT(YEAR FROM time) = 2018 AND latitude BETWEEN 47.3 AND 47.5 AND longitude BETWEEN 8.4 AND 8.6
+```
+
+############################## Human at step align_correct ##############################
+
+You are an SQL expert, and now I would like you to write SQL based on the question.
+
+
+/* Database schema */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Based on the database schema and the question, pay attention to the following */
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
+2. #values in db display part values from the database. Please ignore the unnecessary values.
+3. If "#GEO_CONTEXT" is provided, use it as a spatial grounding constraint. Use only coordinates/bounds that appear in GEO_CONTEXT; do not invent place names or geometry values.
+4. If "#ONTOLOGY_GROUNDED_FUNCTION" is provided, treat it as an executable semantic constraint package (thresholds, temporal logic, aggregation hints). Map it only to existing schema columns/functions.
+5. When GEO/ontology context conflicts with schema feasibility, keep SQL executable and prioritize schema-valid expressions.
+
+Please rewrite the question to SQL-like query in the format: "Show #SELECT (table.column), WHERE condition are xxx (refer to #values), Group by/Order By (refer to columns). Here are 3 example: 
+
+#SQL-like: Show top 5 cards.id, where condition is cards.spend>100, order by cards.spend. 
+#SQL: SELECT id FROM cards WHERE spend > 100 ORDER BY spend LIMIT 5
+
+#SQL-like: Show Count(PaperAuthor.Name), Where condition is Paper.Year = 0
+#SQL: SELECT COUNT(T2.Name) FROM Paper AS T1 INNER JOIN PaperAuthor AS T2 ON T1.Id = T2.PaperId WHERE T1.Year = 0
+
+#SQL-like: Show Author.Name, Where condition is Author.Affiliation = 'University of Oxford', Group By Author.Name Order By Author.spent
+#SQL: SELECT Name FROM Author WHERE Affiliation = 'University of Oxford' Group By Name ORDER BY spent ASC
+
+/* Answer the following: What is the average temperature in city of Zurich in 2018? None */
+Please answer the question in the following format without any other content:
+```
+#reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
+#columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
+#values: the filter in SQL (format: 'filter in question' refer to table.column: value. e.g. 'name is not tom' refer to name <> "tom", 2007 refer to EXTRACT(YEAR FROM Date) = 2007)
+#SELECT: SELECT content (display in the order asked by the questions, do not display content not specified by the questions).
+#SQL-like: SQL-like statements ignoring Join conditions
+#SQL: SQL
+```
+#GEO_CONTEXT:
+{
+  "place": "City of Zurich",
+  "points": [
+    {
+      "lon": "8.5",
+      "lat": "47.4"
+    }
+  ],
+  "resolution": "places_dict"
+}
+#ONTOLOGY_GROUNDED_FUNCTION:
+{
+  "schema_version": "ontology_grounded_function.v1",
+  "question": "What is the average temperature in city of Zurich in 2018? None",
+  "anchor": "appliesToVariable",
+  "target_variable": "",
+  "hops": null,
+  "semantic_chain": [],
+  "function_specs": [
+    {
+      "name": "Threshold",
+      "inputs": [
+        "Variable"
+      ],
+      "semantics": "Apply explicit operator from ontology threshold config.",
+      "pseudo_code_template": "ThresholdMatch := (Variable >= threshold_value)"
+    }
+  ],
+  "composition_order": [
+    "Threshold"
+  ],
+  "constraints": [
+    "operator sourced from hasOperator",
+    "threshold unit sourced from hasThresholdUnit",
+    "duration sourced from hasDuration"
+  ]
+}
+
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The question wants to find the average temperature in Zurich for 2018. Based on the schema, meteo_tmean table contains temperature mean data (tmean column) with latitude, longitude, and time columns. I need to filter by Zurich coordinates (lat ~47.4, lon ~8.5 from GEO_CONTEXT) and year 2018 from the time column, then calculate AVG(tmean).
+#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time
+#values: 'city of Zurich' refer to latitude BETWEEN 47.3 AND 47.5, longitude BETWEEN 8.4 AND 8.6; '2018' refer to EXTRACT(YEAR FROM time) = 2018
+#SELECT: AVG(tmean)
+#SQL-like: Show AVG(meteo_tmean.tmean), Where condition is meteo_tmean.latitude around 47.4, meteo_tmean.longitude around 8.5, EXTRACT(YEAR FROM meteo_tmean.time) = 2018
+#SQL: SELECT AVG(tmean) FROM meteo_tmean WHERE latitude BETWEEN 47.3 AND 47.5 AND longitude BETWEEN 8.4 AND 8.6 AND EXTRACT(YEAR FROM time) = 2018
+```
+
+############################## Human at step align_correct ##############################
+
+You are an SQL expert, and now I would like you to write SQL based on the question.
+
+
+/* Database schema */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Based on the database schema and the question, pay attention to the following */
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
+2. #values in db display part values from the database. Please ignore the unnecessary values.
+3. If "#GEO_CONTEXT" is provided, use it as a spatial grounding constraint. Use only coordinates/bounds that appear in GEO_CONTEXT; do not invent place names or geometry values.
+4. If "#ONTOLOGY_GROUNDED_FUNCTION" is provided, treat it as an executable semantic constraint package (thresholds, temporal logic, aggregation hints). Map it only to existing schema columns/functions.
+5. When GEO/ontology context conflicts with schema feasibility, keep SQL executable and prioritize schema-valid expressions.
+
+Please rewrite the question to SQL-like query in the format: "Show #SELECT (table.column), WHERE condition are xxx (refer to #values), Group by/Order By (refer to columns). Here are 3 example: 
+
+#SQL-like: Show top 5 cards.id, where condition is cards.spend>100, order by cards.spend. 
+#SQL: SELECT id FROM cards WHERE spend > 100 ORDER BY spend LIMIT 5
+
+#SQL-like: Show Count(PaperAuthor.Name), Where condition is Paper.Year = 0
+#SQL: SELECT COUNT(T2.Name) FROM Paper AS T1 INNER JOIN PaperAuthor AS T2 ON T1.Id = T2.PaperId WHERE T1.Year = 0
+
+#SQL-like: Show Author.Name, Where condition is Author.Affiliation = 'University of Oxford', Group By Author.Name Order By Author.spent
+#SQL: SELECT Name FROM Author WHERE Affiliation = 'University of Oxford' Group By Name ORDER BY spent ASC
+
+/* Answer the following: What is the average temperature in city of Zurich in 2018? None */
+Please answer the question in the following format without any other content:
+```
+#reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
+#columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
+#values: the filter in SQL (format: 'filter in question' refer to table.column: value. e.g. 'name is not tom' refer to name <> "tom", 2007 refer to EXTRACT(YEAR FROM Date) = 2007)
+#SELECT: SELECT content (display in the order asked by the questions, do not display content not specified by the questions).
+#SQL-like: SQL-like statements ignoring Join conditions
+#SQL: SQL
+```
+#GEO_CONTEXT:
+{
+  "place": "City of Zurich",
+  "points": [
+    {
+      "lon": "8.5",
+      "lat": "47.4"
+    }
+  ],
+  "resolution": "places_dict"
+}
+#ONTOLOGY_GROUNDED_FUNCTION:
+{
+  "schema_version": "ontology_grounded_function.v1",
+  "question": "What is the average temperature in city of Zurich in 2018? None",
+  "anchor": "appliesToVariable",
+  "target_variable": "",
+  "hops": null,
+  "semantic_chain": [],
+  "function_specs": [
+    {
+      "name": "Threshold",
+      "inputs": [
+        "Variable"
+      ],
+      "semantics": "Apply explicit operator from ontology threshold config.",
+      "pseudo_code_template": "ThresholdMatch := (Variable >= threshold_value)"
+    }
+  ],
+  "composition_order": [
+    "Threshold"
+  ],
+  "constraints": [
+    "operator sourced from hasOperator",
+    "threshold unit sourced from hasThresholdUnit",
+    "duration sourced from hasDuration"
+  ]
+}
+
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: Analyze how to generate SQL based on question. The question wants to find the average temperature in Zurich city for year 2018, so the SQL SELECT AVG(tmean) from meteo_tmean table and WHERE conditions filter by year 2018 (EXTRACT(YEAR FROM time) = 2018) and location near Zurich coordinates (latitude around 47.4, longitude around 8.5 based on GEO_CONTEXT).
+#columns: meteo_tmean.tmean, meteo_tmean.time, meteo_tmean.latitude, meteo_tmean.longitude
+#values: '2018' refer to EXTRACT(YEAR FROM time) = 2018, 'Zurich' refer to latitude BETWEEN 47.3 AND 47.5, longitude BETWEEN 8.4 AND 8.6
+#SELECT: AVG(tmean)
+#SQL-like: Show AVG(meteo_tmean.tmean), Where condition is EXTRACT(YEAR FROM meteo_tmean.time) = 2018 and latitude near 47.4 and longitude near 8.5
+#SQL: SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = 2018 AND latitude BETWEEN 47.3 AND 47.5 AND longitude BETWEEN 8.4 AND 8.6
+```
+
+############################## Human at step align_correct ##############################
+
+You are an SQL expert, and now I would like you to write SQL based on the question.
+
+
+/* Database schema */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Based on the database schema and the question, pay attention to the following */
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
+2. #values in db display part values from the database. Please ignore the unnecessary values.
+3. If "#GEO_CONTEXT" is provided, use it as a spatial grounding constraint. Use only coordinates/bounds that appear in GEO_CONTEXT; do not invent place names or geometry values.
+4. If "#ONTOLOGY_GROUNDED_FUNCTION" is provided, treat it as an executable semantic constraint package (thresholds, temporal logic, aggregation hints). Map it only to existing schema columns/functions.
+5. When GEO/ontology context conflicts with schema feasibility, keep SQL executable and prioritize schema-valid expressions.
+
+Please rewrite the question to SQL-like query in the format: "Show #SELECT (table.column), WHERE condition are xxx (refer to #values), Group by/Order By (refer to columns). Here are 3 example: 
+
+#SQL-like: Show top 5 cards.id, where condition is cards.spend>100, order by cards.spend. 
+#SQL: SELECT id FROM cards WHERE spend > 100 ORDER BY spend LIMIT 5
+
+#SQL-like: Show Count(PaperAuthor.Name), Where condition is Paper.Year = 0
+#SQL: SELECT COUNT(T2.Name) FROM Paper AS T1 INNER JOIN PaperAuthor AS T2 ON T1.Id = T2.PaperId WHERE T1.Year = 0
+
+#SQL-like: Show Author.Name, Where condition is Author.Affiliation = 'University of Oxford', Group By Author.Name Order By Author.spent
+#SQL: SELECT Name FROM Author WHERE Affiliation = 'University of Oxford' Group By Name ORDER BY spent ASC
+
+/* Answer the following: What is the average temperature in city of Zurich in 2018? None */
+Please answer the question in the following format without any other content:
+```
+#reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
+#columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
+#values: the filter in SQL (format: 'filter in question' refer to table.column: value. e.g. 'name is not tom' refer to name <> "tom", 2007 refer to EXTRACT(YEAR FROM Date) = 2007)
+#SELECT: SELECT content (display in the order asked by the questions, do not display content not specified by the questions).
+#SQL-like: SQL-like statements ignoring Join conditions
+#SQL: SQL
+```
+#GEO_CONTEXT:
+{
+  "place": "City of Zurich",
+  "points": [
+    {
+      "lon": "8.5",
+      "lat": "47.4"
+    }
+  ],
+  "resolution": "places_dict"
+}
+#ONTOLOGY_GROUNDED_FUNCTION:
+{
+  "schema_version": "ontology_grounded_function.v1",
+  "question": "What is the average temperature in city of Zurich in 2018? None",
+  "anchor": "appliesToVariable",
+  "target_variable": "",
+  "hops": null,
+  "semantic_chain": [],
+  "function_specs": [
+    {
+      "name": "Threshold",
+      "inputs": [
+        "Variable"
+      ],
+      "semantics": "Apply explicit operator from ontology threshold config.",
+      "pseudo_code_template": "ThresholdMatch := (Variable >= threshold_value)"
+    }
+  ],
+  "composition_order": [
+    "Threshold"
+  ],
+  "constraints": [
+    "operator sourced from hasOperator",
+    "threshold unit sourced from hasThresholdUnit",
+    "duration sourced from hasDuration"
+  ]
+}
+
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The question wants to find the average temperature in Zurich for 2018, so the SQL SELECT AVG(tmean) from meteo_tmean table (which contains mean temperature data), WHERE conditions filter by latitude/longitude near Zurich coordinates (47.4, 8.5) from GEO_CONTEXT and year 2018 from the time column
+#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time
+#values: 'Zurich' refer to latitude BETWEEN 47.0 AND 48.0, longitude BETWEEN 7.2 AND 9.8; '2018' refer to EXTRACT(YEAR FROM time) = 2018
+#SELECT: AVG(meteo_tmean.tmean)
+#SQL-like: Show AVG(meteo_tmean.tmean), Where condition is meteo_tmean.latitude near 47.4, meteo_tmean.longitude near 8.5, EXTRACT(YEAR FROM meteo_tmean.time) = 2018
+#SQL: SELECT AVG(tmean) FROM meteo_tmean WHERE latitude BETWEEN 47.0 AND 48.0 AND longitude BETWEEN 7.2 AND 9.8 AND EXTRACT(YEAR FROM time) = 2018
+```
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the average temperature in city of Zurich in 2018? None
+#Error SQL: SELECT AVG(meteo_tmean.tmean) AS average_temperature FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = '2018' AND meteo_tmean.latitude IN (47.9, 48.0)
+Error: relation "meteo_tmean" does not exist
+LINE 1: ...VG(meteo_tmean.tmean) AS average_temperature FROM meteo_tmea...
+                                                             ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+#reason: The error message indicates that the relation "meteo_tmean" does not exist. Although the schema description uses the prefix "meteo_" for column definitions (e.g., meteo_tmean.latitude), in this specific database context, the actual table name is "tmean" without the prefix. The query must be updated to reference the correct table name "tmean".
+#SQL: SELECT AVG(tmean.tmean) AS average_temperature FROM tmean WHERE EXTRACT(YEAR FROM tmean.time) = '2018' AND tmean.latitude IN (47.9, 48.0)
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the average temperature in city of Zurich in 2018? None
+#Error SQL: SELECT AVG(tmean.tmean) AS average_temperature FROM tmean WHERE EXTRACT(YEAR FROM tmean.time) = '2018' AND tmean.latitude IN (47.9, 48.0)
+Error: relation "tmean" does not exist
+LINE 1: ...LECT AVG(tmean.tmean) AS average_temperature FROM tmean WHER...
+                                                             ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error occurs because the table name 'tmean' does not exist in the database. According to the schema, the correct table name is 'meteo_tmean'. The query needs to reference this full table name instead of the shortened version.
+#SQL: SELECT AVG(meteo_tmean.tmean) AS average_temperature FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2018 AND meteo_tmean.latitude IN (47.9, 48.0)
+```
+
+############################## Human at step align_correct ##############################
+
+You are an SQL expert, and now I would like you to write SQL based on the question.
+
+
+/* Database schema */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Based on the database schema and the question, pay attention to the following */
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
+2. #values in db display part values from the database. Please ignore the unnecessary values.
+3. If "#GEO_CONTEXT" is provided, use it as a spatial grounding constraint. Use only coordinates/bounds that appear in GEO_CONTEXT; do not invent place names or geometry values.
+4. If "#ONTOLOGY_GROUNDED_FUNCTION" is provided, treat it as an executable semantic constraint package (thresholds, temporal logic, aggregation hints). Map it only to existing schema columns/functions.
+5. When GEO/ontology context conflicts with schema feasibility, keep SQL executable and prioritize schema-valid expressions.
+
+Please rewrite the question to SQL-like query in the format: "Show #SELECT (table.column), WHERE condition are xxx (refer to #values), Group by/Order By (refer to columns). Here are 3 example: 
+
+#SQL-like: Show top 5 cards.id, where condition is cards.spend>100, order by cards.spend. 
+#SQL: SELECT id FROM cards WHERE spend > 100 ORDER BY spend LIMIT 5
+
+#SQL-like: Show Count(PaperAuthor.Name), Where condition is Paper.Year = 0
+#SQL: SELECT COUNT(T2.Name) FROM Paper AS T1 INNER JOIN PaperAuthor AS T2 ON T1.Id = T2.PaperId WHERE T1.Year = 0
+
+#SQL-like: Show Author.Name, Where condition is Author.Affiliation = 'University of Oxford', Group By Author.Name Order By Author.spent
+#SQL: SELECT Name FROM Author WHERE Affiliation = 'University of Oxford' Group By Name ORDER BY spent ASC
+
+/* Answer the following: What is the average temperature in city of Zurich in 2018? None */
+Please answer the question in the following format without any other content:
+```
+#reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
+#columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
+#values: the filter in SQL (format: 'filter in question' refer to table.column: value. e.g. 'name is not tom' refer to name <> "tom", 2007 refer to EXTRACT(YEAR FROM Date) = 2007)
+#SELECT: SELECT content (display in the order asked by the questions, do not display content not specified by the questions).
+#SQL-like: SQL-like statements ignoring Join conditions
+#SQL: SQL
+```
+#GEO_CONTEXT:
+{
+  "place": "City of Zurich",
+  "points": [
+    {
+      "lon": "8.5",
+      "lat": "47.4"
+    }
+  ],
+  "resolution": "places_dict"
+}
+#ONTOLOGY_GROUNDED_FUNCTION:
+{
+  "schema_version": "ontology_grounded_function.v1",
+  "question": "What is the average temperature in city of Zurich in 2018? None",
+  "anchor": "appliesToVariable",
+  "target_variable": "",
+  "hops": null,
+  "semantic_chain": [],
+  "function_specs": [
+    {
+      "name": "Threshold",
+      "inputs": [
+        "Variable"
+      ],
+      "semantics": "Apply explicit operator from ontology threshold config.",
+      "pseudo_code_template": "ThresholdMatch := (Variable >= threshold_value)"
+    }
+  ],
+  "composition_order": [
+    "Threshold"
+  ],
+  "constraints": [
+    "operator sourced from hasOperator",
+    "threshold unit sourced from hasThresholdUnit",
+    "duration sourced from hasDuration"
+  ]
+}
+
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
+The question wants to find the average temperature in Zurich city for year 2018. Based on the schema, meteo_tmean table contains temperature data with tmean column for mean/average temperature. I need to filter by location (Zurich coordinates from GEO_CONTEXT: lat=47.4, lon=8.5) and year 2018 from the time column, then calculate AVG(tmean).
+
+#columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
+meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time
+
+#values: the filter in SQL (format: 'filter in question' refer to table.column: value. e.g. 'name is not tom' refer to name <> "tom", 2007 refer to EXTRACT(YEAR FROM Date) = 2007)
+'Zurich city' refer to meteo_tmean.latitude: 47.4, meteo_tmean.longitude: 8.5
+'2018' refer to EXTRACT(YEAR FROM meteo_tmean.time) = 2018
+
+#SELECT: SELECT content (display in the order asked by the questions, do not display content not specified by the questions).
+AVG(meteo_tmean.tmean)
+
+#SQL-like: SQL-like statements ignoring Join conditions
+Show AVG(meteo_tmean.tmean), Where condition is meteo_tmean.latitude near 47.4, meteo_tmean.longitude near 8.5, EXTRACT(YEAR FROM meteo_tmean.time) = 2018
+
+#SQL: SQL
+SELECT AVG(tmean) FROM meteo_tmean WHERE latitude BETWEEN 47.3 AND 47.5 AND longitude BETWEEN 8.4 AND 8.6 AND EXTRACT(YEAR FROM time) = 2018
+```
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the average temperature in city of Zurich in 2018? None
+#Error SQL: SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE meteo_tmean.latitude >= 47.3 AND meteo_tmean.latitude <= 47.5 AND meteo_tmean.longitude >= 8.4 AND meteo_tmean.longitude <= 8.6 AND EXTRACT(YEAR FROM meteo_tmean.time) = '2018'
+Error: relation "meteo_tmean" does not exist
+LINE 1: SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE meteo_t...
+                                           ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+#reason: The error message "relation 'meteo_tmean' does not exist" indicates that the table name used in the query is incorrect. Based on the database schema provided, while columns are listed with a `meteo_` prefix (e.g., `meteo_tmean.latitude`), the actual physical table name in this PostgreSQL database is likely just `tmean`. The prefix appears to be part of the logical naming convention in the documentation rather than the physical table name. Therefore, the table reference `meteo_tmean` should be changed to `tmean`, and column references should correspondingly remove the table prefix or use the new table name.
+#SQL: SELECT AVG(tmean) FROM tmean WHERE latitude >= 47.3 AND latitude <= 47.5 AND longitude >= 8.4 AND longitude <= 8.6 AND EXTRACT(YEAR FROM time) = '2018'
+
+############################## Human at step align_correct ##############################
+
+You are an expert in SQL. Here are some examples of fix SQL
+
+
+/* Database schema is as follows: */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Now Please fix the following error SQL */
+#question: What is the average temperature in city of Zurich in 2018? None
+#Error SQL: SELECT AVG(tmean) FROM tmean WHERE latitude >= 47.3 AND latitude <= 47.5 AND longitude >= 8.4 AND longitude <= 8.6 AND EXTRACT(YEAR FROM time) = '2018'
+Error: relation "tmean" does not exist
+LINE 1: SELECT AVG(tmean) FROM tmean WHERE latitude >= 47.3 AND lati...
+                               ^
+
+
+
+Please answer according to the format below and do not output any other content.:
+```
+#reason: Analysis of How to fix the error
+#SQL: right SQL
+```
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The error "relation 'tmean' does not exist" indicates that the table name specified in the FROM clause is incorrect. According to the provided database schema, the correct table containing the 'tmean' column and meteorological temperature data is named 'meteo_tmean'. The SQL query must be updated to reference this correct table name. Additionally, comparing the result of EXTRACT(YEAR FROM time) to an integer (2018) is preferred over a string ('2018') for type consistency in PostgreSQL.
+#SQL: SELECT AVG(tmean) FROM meteo_tmean WHERE latitude >= 47.3 AND latitude <= 47.5 AND longitude >= 8.4 AND longitude <= 8.6 AND EXTRACT(YEAR FROM time) = 2018
+```
+
+############################## Human at step align_correct ##############################
+
+You are an SQL expert, and now I would like you to write SQL based on the question.
+
+
+/* Database schema */
+Database Management System: PostgreSQL
+#Database name: meteo
+landcover_upscaled.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [27.6, 27.5, 27.9]
+landcover_upscaled.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [-15.5, -15.2, -17.2]
+meteo_elevation.latitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [47.7298, 47.7303, 47.7301]
+meteo_elevation.longitude: The type is double precision, which does not include Null and is Unique. Values format like: [5.8378, 5.8241, 5.8075]
+meteo_sdmax.latitude: The type is real, which does not include Null and is Non-Unique. Value of this column must in: [44.0]
+meteo_sdmax.longitude: The type is real, which does not include Null and is Unique. Values format like: [17.4, 19.1, 23.5]
+meteo_sdmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 0)]
+meteo_ssrd.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_ssrd.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.2, 7.2, 9.8]
+meteo_ssrd.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_tmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [8.9, 9.600000000000001, 9.3]
+meteo_tmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmean.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [7.2, 5.1, 9.8]
+meteo_tmean.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tmean.tmean: The type is real, which does not include Null and is Unique. Values format like: [275.80954, 274.16214, 276.67957]
+meteo_tmin.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tmin.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [5.9, 5.0, 6.3]
+meteo_tmin.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+meteo_tp.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_tp.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [6.6, 9.4, 6.4]
+meteo_tp.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 0, 0)]
+meteo_windspeedmax.latitude: The type is double precision, which does not include Null and is Non-Unique. Value of this column must in: [48.0, 47.9]
+meteo_windspeedmax.longitude: The type is double precision, which does not include Null and is Non-Unique. Values format like: [10.600000000000001, 5.9, 10.7]
+meteo_windspeedmax.time: The type is timestamp without time zone, which does not include Null and is Non-Unique. Value of this column must in: [datetime.datetime(1991, 1, 1, 11, 30)]
+
+#Foreign keys:
+
+
+#Values in Database:
+
+
+/* Based on the database schema and the question, pay attention to the following */
+1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
+2. #values in db display part values from the database. Please ignore the unnecessary values.
+3. If "#GEO_CONTEXT" is provided, use it as a spatial grounding constraint. Use only coordinates/bounds that appear in GEO_CONTEXT; do not invent place names or geometry values.
+4. If "#ONTOLOGY_GROUNDED_FUNCTION" is provided, treat it as an executable semantic constraint package (thresholds, temporal logic, aggregation hints). Map it only to existing schema columns/functions.
+5. When GEO/ontology context conflicts with schema feasibility, keep SQL executable and prioritize schema-valid expressions.
+
+Please rewrite the question to SQL-like query in the format: "Show #SELECT (table.column), WHERE condition are xxx (refer to #values), Group by/Order By (refer to columns). Here are 3 example: 
+
+#SQL-like: Show top 5 cards.id, where condition is cards.spend>100, order by cards.spend. 
+#SQL: SELECT id FROM cards WHERE spend > 100 ORDER BY spend LIMIT 5
+
+#SQL-like: Show Count(PaperAuthor.Name), Where condition is Paper.Year = 0
+#SQL: SELECT COUNT(T2.Name) FROM Paper AS T1 INNER JOIN PaperAuthor AS T2 ON T1.Id = T2.PaperId WHERE T1.Year = 0
+
+#SQL-like: Show Author.Name, Where condition is Author.Affiliation = 'University of Oxford', Group By Author.Name Order By Author.spent
+#SQL: SELECT Name FROM Author WHERE Affiliation = 'University of Oxford' Group By Name ORDER BY spent ASC
+
+/* Answer the following: What is the average temperature in city of Zurich in 2018? None */
+Please answer the question in the following format without any other content:
+```
+#reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
+#columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
+#values: the filter in SQL (format: 'filter in question' refer to table.column: value. e.g. 'name is not tom' refer to name <> "tom", 2007 refer to EXTRACT(YEAR FROM Date) = 2007)
+#SELECT: SELECT content (display in the order asked by the questions, do not display content not specified by the questions).
+#SQL-like: SQL-like statements ignoring Join conditions
+#SQL: SQL
+```
+#GEO_CONTEXT:
+{
+  "place": "City of Zurich",
+  "points": [
+    {
+      "lon": "8.5",
+      "lat": "47.4"
+    }
+  ],
+  "resolution": "places_dict"
+}
+#ONTOLOGY_GROUNDED_FUNCTION:
+{
+  "schema_version": "ontology_grounded_function.v1",
+  "question": "What is the average temperature in city of Zurich in 2018? None",
+  "anchor": "appliesToVariable",
+  "target_variable": "",
+  "hops": null,
+  "semantic_chain": [],
+  "function_specs": [
+    {
+      "name": "Threshold",
+      "inputs": [
+        "Variable"
+      ],
+      "semantics": "Apply explicit operator from ontology threshold config.",
+      "pseudo_code_template": "ThresholdMatch := (Variable >= threshold_value)"
+    }
+  ],
+  "composition_order": [
+    "Threshold"
+  ],
+  "constraints": [
+    "operator sourced from hasOperator",
+    "threshold unit sourced from hasThresholdUnit",
+    "duration sourced from hasDuration"
+  ]
+}
+
+
+############################## AI at step align_correct ##############################
+
+```
+#reason: The question wants to find the average temperature in Zurich for 2018. Based on the schema, meteo_tmean table contains temperature mean data (tmean column) with latitude, longitude, and time columns. The GEO_CONTEXT provides Zurich coordinates (lat=47.4, lon=8.5). So the SQL SELECT AVG(tmean) from meteo_tmean table, WHERE latitude and longitude are near Zurich coordinates AND EXTRACT(YEAR FROM time) = 2018.
+#columns: meteo_tmean.tmean, meteo_tmean.latitude, meteo_tmean.longitude, meteo_tmean.time
+#values: 'Zurich' refer to latitude BETWEEN 47.3 AND 47.5, longitude BETWEEN 8.4 AND 8.6; '2018' refer to EXTRACT(YEAR FROM time) = 2018
+#SELECT: AVG(tmean)
+#SQL-like: Show AVG(meteo_tmean.tmean), WHERE condition is meteo_tmean.latitude near 47.4, meteo_tmean.longitude near 8.5, EXTRACT(YEAR FROM meteo_tmean.time) = 2018
+#SQL: SELECT AVG(tmean) FROM meteo_tmean WHERE latitude BETWEEN 47.3 AND 47.5 AND longitude BETWEEN 8.4 AND 8.6 AND EXTRACT(YEAR FROM time) = 2018
+```
+

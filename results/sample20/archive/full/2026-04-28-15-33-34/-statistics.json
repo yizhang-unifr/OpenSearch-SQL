@@ -1,0 +1,57 @@
+{
+    "counts": {
+        "candidate_generate": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 1,
+            "total": 1
+        },
+        "align_correct": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 1,
+            "total": 1
+        },
+        "vote": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 1,
+            "total": 1
+        }
+    },
+    "ids": {
+        "candidate_generate": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "relation \"meteo_tmean\" does not exist\nLINE 1: ...CT AVG(meteo_tmean.tmean) as avg_temperature FROM meteo_tmea...\n                                                             ^\n"
+                ]
+            ]
+        },
+        "align_correct": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "list index out of range"
+                ]
+            ]
+        },
+        "vote": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'ValueError'>: <max() iterable argument is empty>"
+                ]
+            ]
+        }
+    }
+}

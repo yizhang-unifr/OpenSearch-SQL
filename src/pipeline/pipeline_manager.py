@@ -39,6 +39,7 @@ class PipelineManager:
         self.extract_col_value = pipeline_setup.get("extract_col_value", {})
         self.extract_query_noun = pipeline_setup.get("extract_query_noun", {})
         self.column_retrieve_and_other_info = pipeline_setup.get("column_retrieve_and_other_info", {})
+        self.implicit_context_enhance = pipeline_setup.get("implicit_context_enhance", {})
         self.candidate_generate = pipeline_setup.get("candidate_generate", {})
         self.align_correct = pipeline_setup.get("align_correct", {})
         self.vote = pipeline_setup.get("vote", {})

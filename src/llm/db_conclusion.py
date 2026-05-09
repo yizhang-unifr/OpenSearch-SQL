@@ -9,15 +9,8 @@ import re
 
 import pandas as pd
 
+from database_process.table_whitelist import is_table_allowed, filter_allowed_tables
 from runner.execution import _get_pg_connection
-
-
-def _excluded_tables() -> set[str]:
-    """Return the set of table names to exclude (from EXCLUDE_TABLES env var)."""
-    raw = os.environ.get("EXCLUDE_TABLES", "")
-    if not raw:
-        return set()
-    return {t.strip() for t in raw.split(",") if t.strip()}
 
 
 def find_foreign_keys_pg() -> tuple:
@@ -53,11 +46,10 @@ def find_foreign_keys_pg() -> tuple:
     finally:
         conn.close()
 
-    excluded = _excluded_tables()
     output = []
     col_set = set()
     for from_table, from_col, to_table, to_col in rows:
-        if from_table in excluded or to_table in excluded:
+        if not is_table_allowed(from_table) or not is_table_allowed(to_table):
             continue
         output.append(f"{from_table}.{from_col} = {to_table}.{to_col}")
         col_set.add(f"{from_table}.{from_col}")
@@ -69,6 +61,11 @@ def quote_field(field_name: str) -> str:
     if re.search(r"\W", field_name):
         return f'"{field_name}"'
     return field_name
+
+
+def _quote_ident(ident: str) -> str:
+    """Safely quote a PostgreSQL identifier."""
+    return '"' + ident.replace('"', '""') + '"'
 
 
 class db_agent:
@@ -113,8 +110,10 @@ class db_agent:
         )
         columns_info = cur.fetchall()
 
-        # Sample rows (limited for large tables)
-        cur.execute(f'SELECT * FROM "{table_name}" LIMIT 100;')
+        # Sample rows (limited for large tables) from the configured schema
+        cur.execute(
+            f"SELECT * FROM {_quote_ident(schema)}.{_quote_ident(table_name)} LIMIT 100;"
+        )
         sample_rows = cur.fetchall()
         col_names = [desc[0] for desc in cur.description]
         df = pd.DataFrame(sample_rows, columns=col_names)
@@ -165,8 +164,7 @@ class db_agent:
             """,
             (schema,),
         )
-        excluded = _excluded_tables()
-        tables = [row[0] for row in cur.fetchall() if row[0] not in excluded]
+        tables = filter_allowed_tables([row[0] for row in cur.fetchall()])
         cur.close()
 
         db_info = []
@@ -219,7 +217,9 @@ class db_agent_string(db_agent):
         )
         columns_info = cur.fetchall()
 
-        cur.execute(f'SELECT * FROM "{table_name}" LIMIT 100;')
+        cur.execute(
+            f"SELECT * FROM {_quote_ident(schema)}.{_quote_ident(table_name)} LIMIT 100;"
+        )
         sample_rows = cur.fetchall()
         col_names = [desc[0] for desc in cur.description]
         df = pd.DataFrame(sample_rows, columns=col_names)

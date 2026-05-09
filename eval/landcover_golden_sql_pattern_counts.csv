@@ -1,0 +1,11 @@
+pattern,matched_rows,ratio
+join_landcover_upscaled,2853,0.9961592178770949
+join_landcover_type,2852,0.9958100558659218
+extract_function,2447,0.8543994413407822
+round_function,2381,0.8313547486033519
+cast_function,2375,0.8292597765363129
+array_subscript,2031,0.7091480446927374
+cross_join_lateral,1742,0.6082402234636871
+unnest,833,0.29085195530726254
+with_ordinality,833,0.29085195530726254
+tuple_in_filter,0,0.0

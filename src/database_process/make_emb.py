@@ -8,6 +8,7 @@ import os
 import re
 import gzip
 import pickle
+import json
 import logging
 import argparse
 
@@ -18,6 +19,10 @@ import torch
 from sentence_transformers import SentenceTransformer
 
 from dotenv import load_dotenv
+try:
+    from database_process.table_whitelist import filter_allowed_tables
+except ModuleNotFoundError:  # script entrypoint fallback
+    from table_whitelist import filter_allowed_tables
 
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -30,6 +35,14 @@ uuid_pattern = re.compile(
 def _get_pg_connection():
     """Create a PostgreSQL connection from environment variables."""
     import psycopg2
+    required_keys = ("DB_HOST", "DB_NAME", "DB_USER", "DB_PORT", "DB_PASS")
+    missing = [k for k in required_keys if not os.environ.get(k)]
+    if missing:
+        raise RuntimeError(
+            "Missing DB env vars for embedding generation: "
+            + ", ".join(missing)
+            + ". Check --env_file path and .env contents."
+        )
     return psycopg2.connect(
         host=os.environ.get("DB_HOST"),
         dbname=os.environ.get("DB_NAME"),
@@ -40,7 +53,12 @@ def _get_pg_connection():
 
 
 def filter_column(table_df, col, exclude_num=True, num_shold=6000):
-    cols = table_df[col].unique()
+    series = table_df[col].apply(
+        lambda x: json.dumps(x, ensure_ascii=False, sort_keys=True)
+        if isinstance(x, (list, dict, set))
+        else x
+    )
+    cols = series.unique()
     if len(cols) > num_shold and exclude_num:
         try:
             table_df[col].dropna().astype(float)
@@ -69,20 +87,18 @@ def make_emb_pg(db_name, DB_emb, col_values, bert_model, exclude_int=True):
         """,
         (schema,),
     )
-    excluded_raw = os.environ.get("EXCLUDE_TABLES", "")
-    excluded = {t.strip() for t in excluded_raw.split(",") if t.strip()}
-    tables = [row[0] for row in cur.fetchall() if row[0] not in excluded]
-    if excluded:
-        logging.info(f"Database: {db_name}, tables: {len(tables)} (excluded {len(excluded)}: {excluded})")
-    else:
-        logging.info(f"Database: {db_name}, tables: {len(tables)}")
+    tables = filter_allowed_tables([row[0] for row in cur.fetchall()])
+    logging.info(f"Database: {db_name}, whitelisted tables: {len(tables)}")
 
     for table_name in tables:
         logging.info(f"Processing table: {table_name}")
         # Sample rows (limit to keep embedding manageable)
         try:
+            table_sql = '"' + table_name.replace('"', '""') + '"'
+            schema_sql = '"' + schema.replace('"', '""') + '"'
             df = pd.read_sql_query(
-                f'SELECT * FROM "{table_name}" LIMIT 10000;', conn
+                f"SELECT * FROM {schema_sql}.{table_sql} LIMIT 10000;",
+                conn,
             )
         except Exception as e:
             logging.warning(f"Error reading {table_name}: {e}")
@@ -124,6 +140,11 @@ def make_emb_all(emb_dir, bert_model_name, db_name="meteo"):
     DB_emb = {}
     col_values = {}
     make_emb_pg(db_name, DB_emb, col_values, bert_model)
+    if not DB_emb:
+        raise RuntimeError(
+            "No embedding entries were generated. "
+            "Check DB_SCHEMA/search_path and whitelist table availability."
+        )
     save_emb(DB_emb, db_name, emb_dir)
     save_emb(col_values, f"{db_name}_value", emb_dir)
     logging.info(f"Embeddings saved to {emb_dir}")

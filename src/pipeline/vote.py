@@ -1,6 +1,5 @@
 import logging
 from typing import Any, Dict
-from pathlib import Path
 from pipeline.utils import node_decorator,get_last_node_result
 from runner.check_and_correct import sql_raw_parse
 
@@ -55,6 +54,14 @@ def vote(task: Any, execution_history: Dict[str, Any]) -> Dict[str, Any]:
 
     vote = get_last_node_result(execution_history, "align_correct")["vote"]
     SQLs=get_last_node_result(execution_history, "candidate_generate")["SQL"]# 兜底
+    if not vote:
+        logging.error(
+            "vote node received empty vote list; question_id=%s candidate_count=%s candidates=%s",
+            getattr(task, "question_id", "unknown"),
+            len(SQLs) if isinstance(SQLs, list) else 0,
+            SQLs,
+        )
+        raise ValueError("align_correct returned empty vote list")
 
     ans_correct,maxm,min_t,vote_M=vote_single(vote,"correct_ans",SQLs)
     # align_ans,maxm,min_t,vote_M=vote_single(vote,"align_ans",SQLs)

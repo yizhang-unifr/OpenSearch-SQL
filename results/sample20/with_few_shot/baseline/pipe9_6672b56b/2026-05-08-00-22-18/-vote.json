@@ -1,0 +1,12 @@
+{
+    "3": "SELECT NULL;",
+    "6": "SELECT NULL;",
+    "1": "SELECT NULL;",
+    "4": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE time >= '2021-01-15 00:00:00' AND time < '2021-01-16 00:00:00';",
+    "9": "SELECT latitude, longitude FROM meteo_tmin WHERE EXTRACT(YEAR FROM time) = '2016' AND tmin IS NOT NULL ORDER BY (tmin - 273.15) ASC LIMIT 1",
+    "7": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = '2020'",
+    "2": "SELECT NULL;",
+    "5": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(WEEK FROM time) = 15 AND EXTRACT(YEAR FROM time) = '2021'",
+    "8": "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE EXTRACT(YEAR FROM time) = '2019';",
+    "0": "SELECT NULL;"
+}

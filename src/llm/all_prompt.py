@@ -511,6 +511,10 @@ new_prompt3="""You are an SQL expert, and now I would like you to write SQL base
 /* Based on the database schema and the question, pay attention to the following */
 1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. #values in db display part values from the database. Please ignore the unnecessary values.
+3. If "#GEO_CONTEXT" is provided, use it as a spatial grounding constraint. Use only coordinates/bounds that appear in GEO_CONTEXT; do not invent place names or geometry values.
+4. If "#ONTOLOGY_GROUNDED_FUNCTION" is provided, treat it as an executable semantic constraint package (thresholds, temporal logic, aggregation hints). Map it only to existing schema columns/functions.
+5. When GEO/ontology context conflicts with schema feasibility, keep SQL executable and prioritize schema-valid expressions.
+6. For landcover questions, never join landcover_upscaled to landcover_type directly on latitude/longitude. Expand landcover_upscaled.ranks first (UNNEST or generate_subscripts), then join level3 code.
 
 Please rewrite the question to SQL-like query in the format: "Show #SELECT (table.column), WHERE condition are xxx (refer to #values), Group by/Order By (refer to columns). Here are 3 example: 
 
@@ -559,7 +563,11 @@ new_prompt_O="""{fewshot}
 # Based on the database schema and the examples above, pay attention to the following:
 1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. "#Values in Database" display part values from the database. Please ignore the unnecessary values.
-3. Please refer to the examples above and answer in the following format without any other content:
+3. If "#GEO_CONTEXT" is provided, use it as a spatial grounding constraint. Use only coordinates/bounds that appear in GEO_CONTEXT; do not invent place names or geometry values.
+4. If "#ONTOLOGY_GROUNDED_FUNCTION" is provided, treat it as an executable semantic constraint package (thresholds, temporal logic, aggregation hints). Map it only to existing schema columns/functions.
+5. When GEO/ontology context conflicts with schema feasibility, keep SQL executable and prioritize schema-valid expressions.
+6. For landcover questions, never join landcover_upscaled to landcover_type directly on latitude/longitude. Expand landcover_upscaled.ranks first (UNNEST or generate_subscripts), then join level3 code.
+7. Please refer to the examples above and answer in the following format without any other content:
 ```
 #reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
 #columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)
@@ -581,7 +589,11 @@ new_prompt_O1="""{fewshot}
 # Based on the database schema and the examples above, pay attention to the following:
 1. For parts involving division that contain integer types, CAST them to NUMERIC (e.g., CAST(col AS NUMERIC) or col::numeric).
 2. "#Values in Database" display part values from the database. Please ignore the unnecessary values.
-3. Please refer to the examples above and answer in the following format without any other content:
+3. If "#GEO_CONTEXT" is provided, use it as a spatial grounding constraint. Use only coordinates/bounds that appear in GEO_CONTEXT; do not invent place names or geometry values.
+4. If "#ONTOLOGY_GROUNDED_FUNCTION" is provided, treat it as an executable semantic constraint package (thresholds, temporal logic, aggregation hints). Map it only to existing schema columns/functions.
+5. When GEO/ontology context conflicts with schema feasibility, keep SQL executable and prioritize schema-valid expressions.
+6. For landcover questions, never join landcover_upscaled to landcover_type directly on latitude/longitude. Expand landcover_upscaled.ranks first (UNNEST or generate_subscripts), then join level3 code.
+7. Please refer to the examples above and answer in the following format without any other content:
 ```
 #reason: Analyze how to generate SQL based on the question.(format: the question want to ..., so the SQL SELECT ... and ...)
 #columns: All columns ultimately used in SQL(format: table.column_1, table.column_2)

@@ -1,0 +1,72 @@
+{
+    "counts": {
+        "candidate_generate": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 2,
+            "total": 2
+        },
+        "align_correct": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 2,
+            "total": 2
+        },
+        "vote": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 2,
+            "total": 2
+        }
+    },
+    "ids": {
+        "candidate_generate": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'KeyError'>: <'column'>"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "<class 'KeyError'>: <'column'>"
+                ]
+            ]
+        },
+        "align_correct": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'KeyError'>: <'column'>"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "<class 'KeyError'>: <'column'>"
+                ]
+            ]
+        },
+        "vote": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'KeyError'>: <'vote'>"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "<class 'KeyError'>: <'vote'>"
+                ]
+            ]
+        }
+    }
+}

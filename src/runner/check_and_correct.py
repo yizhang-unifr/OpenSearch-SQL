@@ -618,7 +618,25 @@ def muti_process_sql(Dcheck, SQLs, L_values, values, question, new_db_info, hint
                 none_case = True
     except TimeoutError:
         print(f"Error: muti_process_sql overall timeout ({_overall_timeout}s) – returning partial results")
+        for future, (count, tmp_SQL) in future_to_sql.items():
+            if future.done():
+                continue
+            vote.append({
+                "sql_history": tmp_SQL,
+                "sql": tmp_SQL,
+                "answer": [],
+                "count": count,
+                "time_cost": time_cost,
+                "align_sql": tmp_SQL,
+                "correct_sql": tmp_SQL,
+                "align_ans": [],
+                "correct_ans": [],
+            })
         none_case = True
     finally:
+        print(
+            f"muti_process_sql summary: input={len(SQLs)} vote_items={len(vote)} "
+            f"none_case={none_case} align_methods={align_methods}"
+        )
         executor.shutdown(wait=False, cancel_futures=True)
     return vote, none_case

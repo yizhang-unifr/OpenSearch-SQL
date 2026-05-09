@@ -29,13 +29,18 @@ def _get_pg_connection(statement_timeout_ms: int | None = None):
     """
     if statement_timeout_ms is None:
         statement_timeout_ms = _sql_statement_timeout_ms()
+    
+    # Set search_path to the configured schema (default: era5_land2)
+    schema = os.environ.get("DB_SCHEMA", "era5_land2")
+    options = f"-c statement_timeout={statement_timeout_ms} -c search_path={schema}"
+    
     conn = psycopg2.connect(
         host=os.environ.get("DB_HOST"),
         dbname=os.environ.get("DB_NAME"),
         user=os.environ.get("DB_USER"),
         port=os.environ.get("DB_PORT"),
         password=os.environ.get("DB_PASS"),
-        options=f"-c statement_timeout={statement_timeout_ms}",
+        options=options,
     )
     return conn
 

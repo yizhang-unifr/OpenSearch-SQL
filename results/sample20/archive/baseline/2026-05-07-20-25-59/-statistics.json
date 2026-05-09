@@ -1,0 +1,102 @@
+{
+    "counts": {
+        "candidate_generate": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 4,
+            "total": 4
+        },
+        "align_correct": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 4,
+            "total": 4
+        },
+        "vote": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 4,
+            "total": 4
+        }
+    },
+    "ids": {
+        "candidate_generate": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "cannot access local variable 'conn' where it is not associated with a value"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "cannot access local variable 'conn' where it is not associated with a value"
+                ],
+                [
+                    "meteo",
+                    2,
+                    "cannot access local variable 'conn' where it is not associated with a value"
+                ],
+                [
+                    "meteo",
+                    3,
+                    "cannot access local variable 'conn' where it is not associated with a value"
+                ]
+            ]
+        },
+        "align_correct": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "cannot access local variable 'conn' where it is not associated with a value"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "cannot access local variable 'conn' where it is not associated with a value"
+                ],
+                [
+                    "meteo",
+                    2,
+                    "cannot access local variable 'conn' where it is not associated with a value"
+                ],
+                [
+                    "meteo",
+                    3,
+                    "cannot access local variable 'conn' where it is not associated with a value"
+                ]
+            ]
+        },
+        "vote": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "cannot access local variable 'conn' where it is not associated with a value"
+                ],
+                [
+                    "meteo",
+                    1,
+                    "cannot access local variable 'conn' where it is not associated with a value"
+                ],
+                [
+                    "meteo",
+                    2,
+                    "cannot access local variable 'conn' where it is not associated with a value"
+                ],
+                [
+                    "meteo",
+                    3,
+                    "cannot access local variable 'conn' where it is not associated with a value"
+                ]
+            ]
+        }
+    }
+}

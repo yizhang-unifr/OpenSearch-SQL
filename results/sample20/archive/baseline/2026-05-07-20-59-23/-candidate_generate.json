@@ -1,0 +1,72 @@
+{
+    "3": [
+        "SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = 2020;",
+        "SELECT NULL;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020"
+    ],
+    "6": [
+        "SELECT AVG(tmean::numeric) FROM meteo_tmean WHERE EXTRACT(WEEK FROM time) = 12 AND EXTRACT(YEAR FROM time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(WEEK FROM meteo_tmean.time) = 12 AND EXTRACT(YEAR FROM meteo_tmean.time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(WEEK FROM meteo_tmean.time) = 12 AND EXTRACT(YEAR FROM meteo_tmean.time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(WEEK FROM meteo_tmean.time) = 12 AND EXTRACT(YEAR FROM meteo_tmean.time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(WEEK FROM meteo_tmean.time) = 12 AND EXTRACT(YEAR FROM meteo_tmean.time) = 2020;"
+    ],
+    "1": [
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2018 AND EXTRACT(MONTH FROM meteo_tmean.time) = 7",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2018 AND EXTRACT(MONTH FROM meteo_tmean.time) = 7",
+        "SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2018 AND EXTRACT(MONTH FROM meteo_tmean.time) = 7",
+        "SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2018 AND EXTRACT(MONTH FROM meteo_tmean.time) = 7",
+        "SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2018 AND EXTRACT(MONTH FROM meteo_tmean.time) = 7"
+    ],
+    "4": [
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE time >= '2021-01-15 00:00:00' AND time < '2021-01-16 00:00:00';",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE time = '2021-01-15 00:00:00'",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE time = '2021-01-15 00:00:00'",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE time = '2021-01-15 00:00:00';",
+        "SELECT MIN(windspeedmax) FROM meteo_windspeedmax WHERE time >= '2021-01-15 00:00:00' AND time < '2021-01-16 00:00:00'"
+    ],
+    "9": [
+        "SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean JOIN landcover_upscaled ON ABS(meteo_tmean.latitude - landcover_upscaled.latitude) < 0.01 AND ABS(meteo_tmean.longitude - landcover_upscaled.longitude) < 0.01 JOIN landcover_type ON landcover_upscaled.level1_label = landcover_type.level1_label WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020 AND landcover_type.level1_label = 'Water bodies';"
+    ],
+    "7": [
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(MONTH FROM meteo_tmean.time) = 7 AND EXTRACT(YEAR FROM meteo_tmean.time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(MONTH FROM meteo_tmean.time) = 7 AND EXTRACT(YEAR FROM meteo_tmean.time) = 2020;",
+        "SELECT AVG(tmean::numeric) FROM meteo_tmean WHERE EXTRACT(MONTH FROM time) = 7 AND EXTRACT(YEAR FROM time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(MONTH FROM meteo_tmean.time) = 7 AND EXTRACT(YEAR FROM meteo_tmean.time) = 2020",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(MONTH FROM meteo_tmean.time) = 7 AND EXTRACT(YEAR FROM meteo_tmean.time) = 2020;"
+    ],
+    "2": [
+        "SELECT NULL;",
+        "SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = 2020",
+        "SELECT NULL;",
+        "SELECT: #SQL-like: #SQL: ```",
+        "SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020 AND FALSE;"
+    ],
+    "5": [
+        "SELECT NULL;",
+        "SELECT meteo_tmean.tmean FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020",
+        "SELECT meteo_tmean.tmean FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020",
+        "SELECT meteo_tmean.tmean FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020",
+        "SELECT meteo_tmean.tmean"
+    ],
+    "8": [
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020;",
+        "SELECT AVG(tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020;",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN landcover_type ON landcover_upscaled.level3_label = landcover_type.level3_label WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020 AND landcover_type.level1_label = 'Water bodies';",
+        "SELECT AVG(meteo_tmean.tmean::numeric) FROM meteo_tmean JOIN landcover_upscaled ON meteo_tmean.latitude = landcover_upscaled.latitude AND meteo_tmean.longitude = landcover_upscaled.longitude JOIN landcover_type ON landcover_upscaled.level1_label = landcover_type.level1_label WHERE EXTRACT(YEAR FROM meteo_tmean.time) = 2020 AND landcover_type.level1_label = 'Water bodies';"
+    ],
+    "0": [
+        "SELECT NULL;",
+        "SELECT NULL;",
+        "SELECT NULL;",
+        "SELECT: #SQL-like: #SQL: ```",
+        "SELECT: #SQL-like: #SQL: ```"
+    ]
+}

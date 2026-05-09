@@ -5,6 +5,7 @@ from pipeline.generate_db_schema import generate_db_schema
 from pipeline.extract_col_value import extract_col_value
 from pipeline.extract_query_noun import extract_query_noun
 from pipeline.column_retrieve_and_other_info import column_retrieve_and_other_info
+from pipeline.implicit_context_enhance import implicit_context_enhance
 from pipeline.candidate_generate import candidate_generate
 from pipeline.align_correct import align_correct
 from pipeline.vote import vote

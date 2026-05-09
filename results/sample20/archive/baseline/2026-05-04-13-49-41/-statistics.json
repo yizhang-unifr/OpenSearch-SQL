@@ -1,0 +1,56 @@
+{
+    "counts": {
+        "candidate_generate": {
+            "correct": 0,
+            "incorrect": 1,
+            "error": 0,
+            "total": 1
+        },
+        "align_correct": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 1,
+            "total": 1
+        },
+        "vote": {
+            "correct": 0,
+            "incorrect": 0,
+            "error": 1,
+            "total": 1
+        }
+    },
+    "ids": {
+        "candidate_generate": {
+            "correct": [],
+            "incorrect": [
+                [
+                    "meteo",
+                    0
+                ]
+            ],
+            "error": []
+        },
+        "align_correct": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'BrokenPipeError'>: <[Errno 32] Broken pipe>"
+                ]
+            ]
+        },
+        "vote": {
+            "correct": [],
+            "incorrect": [],
+            "error": [
+                [
+                    "meteo",
+                    0,
+                    "<class 'KeyError'>: <'vote'>"
+                ]
+            ]
+        }
+    }
+}

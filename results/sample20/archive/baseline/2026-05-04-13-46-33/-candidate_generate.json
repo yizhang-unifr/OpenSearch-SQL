@@ -1,0 +1,16 @@
+{
+    "1": [
+        "SELECT NULL;",
+        "SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(WEEK FROM time) = 15 AND EXTRACT(YEAR FROM time) = 2018;",
+        "SELECT NULL;",
+        "SELECT NULL;",
+        "SELECT AVG(meteo_tmean.tmean) FROM meteo_tmean WHERE EXTRACT(WEEK FROM meteo_tmean.time) = 15 AND EXTRACT(YEAR FROM meteo_tmean.time) = 2018"
+    ],
+    "0": [
+        "SELECT NULL;",
+        "SELECT NULL;",
+        "SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(WEEK FROM time) = 15 AND EXTRACT(YEAR FROM time) = 2018;",
+        "SELECT NULL;",
+        "SELECT AVG(tmean) FROM meteo_tmean WHERE EXTRACT(WEEK FROM time) = 15 AND EXTRACT(YEAR FROM time) = 2018"
+    ]
+}
