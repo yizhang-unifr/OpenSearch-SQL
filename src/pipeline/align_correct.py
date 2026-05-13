@@ -13,9 +13,10 @@ from pathlib import Path
 from sentence_transformers import SentenceTransformer
 
 from pipeline.utils import node_decorator, get_last_node_result, make_newprompt
-from pipeline.implicit_context_utils import build_implicit_context_block, get_implicit_context_payload
-from pipeline.landcover_semantic_hints import build_landcover_semantic_hint
-from pipeline.pipeline_manager import PipelineManager
+from pipeline.context.implicit_context_utils import build_implicit_context_block, get_implicit_context_payload, geo_is_meaningful
+from pipeline.context.landcover_semantic_hints import build_landcover_semantic_hint
+from pipeline.context.landcover_entity_hint import build_landcover_entity_hint
+from pipeline.pipeline_manager import PipelineManager, get_bool
 from runner.database_manager import DatabaseManager
 from llm.model import model_chose
 from llm.db_conclusion import find_foreign_keys_pg
@@ -23,25 +24,45 @@ from llm.prompts import db_check_prompts
 from runner.check_and_correct import muti_process_sql, soft_check, sql_raw_parse
 
 
+def _extract_ogf_thresholds(ogf: Dict[str, Any]) -> set:
+    """Extract explicit numeric threshold values from OGF function_specs pseudo_code_templates.
+
+    These are the domain-specific values (e.g. 35 for a heat-day threshold) that
+    the ontology dictates should appear in the SQL. Using them avoids the previous
+    false-pass where any comparison operator in the SQL satisfied the check.
+    """
+    values: set = set()
+    for spec in ogf.get("function_specs", []):
+        template = spec.get("pseudo_code_template", "")
+        for m in re.finditer(r"(?:>=|<=|>|<)\s*(-?\d+(?:\.\d+)?)", template):
+            values.add(m.group(1))
+    return values
+
+
 def _implicit_consistency_check(execution_history: List[Dict[str, Any]], voted_sql: str) -> Dict[str, Any]:
     """Lightweight consistency check between final SQL and implicit payloads."""
     payload = get_implicit_context_payload(execution_history)
     geo_context = payload["geo_context"]
     ontology_grounded_function = payload["ontology_grounded_function"]
-    if not geo_context and not ontology_grounded_function:
+    if not geo_is_meaningful(geo_context) and not ontology_grounded_function:
         return {"implicit_check_status": "no_context", "implicit_check_warnings": []}
     warnings: List[str] = []
     vote_sql = (voted_sql or "").lower()
 
-    if geo_context:
+    if geo_is_meaningful(geo_context):
         has_geo_signal = any(k in vote_sql for k in ("latitude", "longitude", "st_", "bbox", "within", "intersect"))
         if not has_geo_signal:
             warnings.append("geo_context_present_but_sql_has_no_explicit_geo_signal")
 
     if ontology_grounded_function:
-        has_numeric_filter = bool(re.search(r"(>=|<=|>|<|=)\s*-?\d+(\.\d+)?", vote_sql))
-        if not has_numeric_filter:
-            warnings.append("ontology_grounded_function_present_but_sql_has_no_numeric_constraint_signal")
+        thresholds = _extract_ogf_thresholds(ontology_grounded_function)
+        if thresholds:
+            if not any(t in vote_sql for t in thresholds):
+                warnings.append(
+                    f"ogf_thresholds_not_found_in_sql: expected one of {sorted(thresholds)}"
+                )
+        elif not re.search(r"(>=|<=|>|<)\s*-?\d+", vote_sql):
+            warnings.append("ontology_grounded_function_present_but_sql_has_no_comparison_operator")
 
     status = "pass" if not warnings else "warn"
     return {"implicit_check_status": status, "implicit_check_warnings": warnings}
@@ -53,7 +74,7 @@ def align_correct(task: Any, execution_history: List[Dict[str, Any]]) -> Dict[st
     paths = DatabaseManager()
     fewshot_path = paths.db_fewshot_path
     correct_fewshot_json = paths.db_fewshot2_path
-    fewshot_enabled = str(config.get("fewshot_enabled", "True")).lower() == "true"
+    fewshot_enabled = get_bool(config, "fewshot_enabled", default=True)
 
     prompts_template = db_check_prompts()
     bert_model = SentenceTransformer(
@@ -145,6 +166,7 @@ def align_correct(task: Any, execution_history: List[Dict[str, Any]]) -> Dict[st
     )
     tmp_prompt += build_implicit_context_block(execution_history)
     tmp_prompt += build_landcover_semantic_hint(question)
+    tmp_prompt += build_landcover_entity_hint(question)
 
     Dcheck = soft_check(
         bert_model,

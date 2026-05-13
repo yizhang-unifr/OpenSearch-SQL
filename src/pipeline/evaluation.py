@@ -1,10 +1,11 @@
 import logging
-from typing import Dict, Any
+from typing import Any, Dict
 
-from runner.logger import Logger
-from runner.database_manager import DatabaseManager
-from pipeline.utils import node_decorator, get_last_node_result
+from pipeline.utils import get_last_node_result, node_decorator
 from runner.check_and_correct import sql_raw_parse
+from runner.database_manager import DatabaseManager
+from runner.execution import execute_sql
+from runner.logger import Logger
 
 @node_decorator(check_schema_status=False)
 def evaluation(task: Any, execution_history: Dict[str, Any]) -> Dict[str, Any]:
@@ -22,6 +23,14 @@ def evaluation(task: Any, execution_history: Dict[str, Any]) -> Dict[str, Any]:
     # logging.info("Starting evaluation")
 
     ground_truth_sql = task.SQL
+
+    # Execute the gold SQL once so every node's evaluation can include the reference result.
+    gold_result = None
+    try:
+        gold_result = list(execute_sql(ground_truth_sql, fetch="all", timeout_s=180))
+    except Exception as _e:
+        gold_result = f"gold_exec_error: {_e}"
+
     to_evaluate = {
         "candidate_generate": get_last_node_result(execution_history, "candidate_generate"), 
         "align_correct": get_last_node_result(execution_history, "align_correct"),#align+纠错 
@@ -58,11 +67,13 @@ def evaluation(task: Any, execution_history: Dict[str, Any]) -> Dict[str, Any]:
                 evaluation_result.update({
                     "exec_res": response["exec_res"],
                     "exec_err": response["exec_err"],
+                    "ves": response.get("ves", 0.0),
                 })
             else:
                 evaluation_result.update({
                     "exec_res": "generation error",
                     "exec_err": node_result["error"],
+                    "ves": 0.0,
                 })
         except Exception as e:
             Logger().log(
@@ -72,13 +83,23 @@ def evaluation(task: Any, execution_history: Dict[str, Any]) -> Dict[str, Any]:
             evaluation_result.update({
                 "exec_res": "error",
                 "exec_err": str(e),
+                "ves": 0.0,
             })
+
+        # Also execute the predicted SQL and include the raw result for inspection.
+        predicted_result = None
+        try:
+            predicted_result = list(execute_sql(predicted_sql, fetch="all", timeout_s=30))
+        except Exception as _pe:
+            predicted_result = f"pred_exec_error: {_pe}"
 
         evaluation_result.update({
             "Question": task.raw_question,
             "Evidence": task.evidence,
             "GOLD_SQL": ground_truth_sql,
-            "PREDICTED_SQL": predicted_sql
+            "GOLD_RESULT": gold_result,
+            "PREDICTED_SQL": predicted_sql,
+            "PREDICTED_RESULT": predicted_result,
         })
         result[evaluation_for] = evaluation_result
 

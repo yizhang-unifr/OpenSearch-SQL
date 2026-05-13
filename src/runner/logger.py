@@ -1,8 +1,9 @@
 import logging
 import json
+from datetime import datetime
 from threading import Lock
 from pathlib import Path
-from typing import Any, List, Dict, Union
+from typing import Any, List, Dict, Optional, Union
 
 class Logger:
     _instance = None
@@ -33,17 +34,10 @@ class Logger:
             return cls._instance
 
     def _init(self, db_id: str, question_id: str, result_directory: str):
-        """
-        Initializes the Logger instance with the provided parameters.
-
-        Args:
-            db_id (str): The database ID.
-            question_id (str): The question ID.
-            result_directory (str): The directory to store results.
-        """
         self.db_id = db_id
         self.question_id = question_id
         self.result_directory = Path(result_directory)
+        self._llm_call_counters: Dict[str, int] = {}
 
     def _set_log_level(self, log_level: str):
         """
@@ -97,6 +91,36 @@ class Logger:
             elif isinstance(text, bool):
                 file.write(str(text))
             file.write("\n\n")
+
+    def log_llm_call(
+        self,
+        node: str,
+        prompt: str,
+        output: str,
+        duration_ms: Optional[float] = None,
+        model_info: Optional[Dict[str, Any]] = None,
+    ):
+        """Write one LLM call to logs/{q}_{db}/{node}/call_NNN.json."""
+        idx = self._llm_call_counters.get(node, 0) + 1
+        self._llm_call_counters[node] = idx
+
+        call_dir = self.result_directory / "logs" / f"{self.question_id}_{self.db_id}" / node
+        call_dir.mkdir(parents=True, exist_ok=True)
+
+        payload: Dict[str, Any] = {
+            "call_index": idx,
+            "node": node,
+            "timestamp": datetime.now().isoformat(),
+            "duration_ms": duration_ms,
+        }
+        if model_info:
+            payload.update(model_info)
+        payload["input"] = prompt
+        payload["output"] = output
+
+        call_file = call_dir / f"call_{idx:03d}.json"
+        with call_file.open("w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=2, ensure_ascii=False)
 
     def dump_history_to_file(self, execution_history: List[Dict[str, Any]]):
         """

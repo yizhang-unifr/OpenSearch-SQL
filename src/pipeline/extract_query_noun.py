@@ -25,8 +25,15 @@ def parse_des(pre_col_values, nouns, debug):
     pre_col_values = pre_col_values.split("/*")[0].strip()
     if debug:
         print(pre_col_values)
-    col, values = pre_col_values.split('#values:')
-    _, col = col.split("#columns:")
+    # rsplit to handle models that repeat the markers inside reasoning text
+    val_parts = pre_col_values.rsplit('#values:', 1)
+    if len(val_parts) != 2:
+        raise ValueError(f"Expected '#values:' marker in extract_col_value output")
+    col_section, values = val_parts
+    col_parts = col_section.rsplit('#columns:', 1)
+    if len(col_parts) != 2:
+        raise ValueError(f"Expected '#columns:' marker in extract_col_value output")
+    _, col = col_parts
     col = strip_char(col)
     values = strip_char(values)
 

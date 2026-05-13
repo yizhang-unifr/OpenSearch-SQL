@@ -1,19 +1,16 @@
-"""Candidate SQL generation node – PostgreSQL version.
-
-Changed "SQLite" to "PostgreSQL" in the DB info string and updated
-the division hint for PostgreSQL syntax.
-"""
+"""Candidate SQL generation node – PostgreSQL version."""
 
 import json
 import logging
 from typing import Any, Dict, List
 
 from pipeline.utils import node_decorator, get_last_node_result, make_newprompt
-from pipeline.implicit_context_utils import build_implicit_context_block, get_implicit_context_payload
-from pipeline.landcover_semantic_hints import build_landcover_semantic_hint
-from pipeline.sql_candidate_parser import parse_sql_candidates
-from pipeline.pipeline_manager import PipelineManager
-from plugins import PluginContext, PluginRegistry
+from pipeline.context.implicit_context_utils import build_implicit_context_block, get_implicit_context_payload
+from pipeline.context.landcover_semantic_hints import build_landcover_semantic_hint
+from pipeline.context.landcover_entity_hint import build_landcover_entity_hint
+from pipeline.sql_audit.sql_candidate_parser import parse_sql_candidates
+from pipeline.sql_audit.constraint_validator import validate_sql_candidates
+from pipeline.pipeline_manager import PipelineManager, get_bool
 from runner.database_manager import DatabaseManager
 from llm.model import model_chose
 from llm.db_conclusion import find_foreign_keys_pg
@@ -26,7 +23,12 @@ def candidate_generate(task: Any, execution_history: List[Dict[str, Any]]) -> Di
     config, node_name = PipelineManager().get_model_para()
     paths = DatabaseManager()
     fewshot_path = paths.db_fewshot_path
-    fewshot_enabled = str(config.get("fewshot_enabled", "True")).lower() == "true"
+    fewshot_enabled = get_bool(config, "fewshot_enabled", default=True)
+
+    # Ablation flags – all default True so existing "full" runs are unchanged
+    enable_entity_hint   = get_bool(config, "enable_entity_hint",   default=True)
+    enable_semantic_hint = get_bool(config, "enable_semantic_hint", default=True)
+    enable_validator     = get_bool(config, "enable_validator",     default=True)
 
     if fewshot_enabled and fewshot_path.exists():
         with open(fewshot_path) as f:
@@ -77,10 +79,13 @@ def candidate_generate(task: Any, execution_history: List[Dict[str, Any]]) -> Di
         q_order,
     )
     new_prompt += build_implicit_context_block(execution_history)
-    new_prompt += build_landcover_semantic_hint(question)
+    if enable_semantic_hint:
+        new_prompt += build_landcover_semantic_hint(question)
+    if enable_entity_hint:
+        new_prompt += build_landcover_entity_hint(question)
 
-    single = str(config.get("single", "True")).lower() == "true"
-    return_question = str(config.get("return_question", "True")).lower() == "true"
+    single = get_bool(config, "single", default=True)
+    return_question = get_bool(config, "return_question", default=True)
     SQL, _ = get_sql(
         chat_model,
         new_prompt,
@@ -101,24 +106,32 @@ def candidate_generate(task: Any, execution_history: List[Dict[str, Any]]) -> Di
             getattr(task, "question_id", "unknown"),
             len(raw_candidates),
         )
-    implicit_payload = get_implicit_context_payload(execution_history)
-    plugin_registry = PluginRegistry(config.get("plugins", {}))
-    plugin_context = PluginContext(
-        question=question,
-        geo_context=implicit_payload["geo_context"],
-        ontology_grounded_function=implicit_payload["ontology_grounded_function"],
-        config=config.get("plugins", {}),
-    )
-    plugin_sql_candidates, plugin_trace = plugin_registry.apply(sql_candidates, plugin_context)
 
-    response = {
+    implicit_payload = get_implicit_context_payload(execution_history)
+    schema_node = get_last_node_result(execution_history, "generate_db_schema")
+    column_contracts = schema_node.get("column_contracts", {}) if schema_node else {}
+
+    if enable_validator and sql_candidates:
+        validated_candidates, validation_trace = validate_sql_candidates(
+            chat_model,
+            sql_candidates,
+            column_contracts,
+            implicit_payload,
+            question,
+        )
+    else:
+        validated_candidates = sql_candidates
+        validation_trace = []
+
+    return {
         "rewrite_question": question,
-        "SQL": plugin_sql_candidates,
+        "SQL": validated_candidates,
         "SQL_raw_candidates": raw_candidates,
         "SQL_structured_candidates": structured_candidates,
-        "plugin_trace": plugin_trace,
+        "validation_trace": validation_trace,
+        # legacy key kept for XLSX export compatibility
+        "plugin_trace": validation_trace,
     }
-    return response
 
 
 def rewrite_question(question):

@@ -108,31 +108,74 @@ def _compare_sqls_outcomes(predicted_sql: str, ground_truth_sql: str) -> int:
         raise
 
 
-def compare_sqls(predicted_sql: str, ground_truth_sql: str, meta_time_out: int | None = None) -> Dict[str, Union[int, str]]:
-    """Compare predicted SQL with ground truth SQL within a timeout.
+def _compare_sqls_with_timing(
+    predicted_sql: str, ground_truth_sql: str
+) -> tuple[int, str, float]:
+    """Execute both SQLs, compare result sets, and return (exec_res, exec_err, ves).
 
-    Args:
-        predicted_sql: The predicted SQL query.
-        ground_truth_sql: The ground truth SQL query.
-        meta_time_out: Timeout in seconds for the comparison.
+    VES (Valid Efficiency Score, BIRD benchmark):
+        ves = sqrt(min(t_gold / t_pred, 1.0))  if result sets are equal
+        ves = 0.0                               otherwise
 
     Returns:
-        Dict with 'exec_res' (1=correct, 0=incorrect) and 'exec_err'.
+        (exec_res, exec_err, ves)
+    """
+    import math
+
+    try:
+        gold_res, t_gold = sql_exec(ground_truth_sql)
+    except Exception as e:
+        return 0, f"gold_sql_error: {e}", 0.0
+
+    try:
+        pred_res, t_pred = sql_exec(predicted_sql)
+    except Exception as e:
+        return 0, str(e), 0.0
+
+    correct = int(pred_res == gold_res)
+    error = "--" if correct else "incorrect answer"
+
+    if correct and t_pred > 0:
+        ratio = min(t_gold / t_pred, 1.0)
+        ves = math.sqrt(ratio)
+    elif correct:
+        ves = 1.0
+    else:
+        ves = 0.0
+
+    return correct, error, ves
+
+
+def compare_sqls(
+    predicted_sql: str,
+    ground_truth_sql: str,
+    meta_time_out: int | None = None,
+) -> Dict[str, Union[int, str, float]]:
+    """Compare predicted SQL with ground truth SQL within a timeout.
+
+    Returns:
+        Dict with 'exec_res' (1=correct, 0=incorrect), 'exec_err', and
+        'ves' (Valid Efficiency Score per BIRD benchmark).
     """
     if meta_time_out is None:
         meta_time_out = int(os.environ.get("SQL_COMPARE_TIMEOUT", "60"))
     try:
-        res = func_timeout(meta_time_out, _compare_sqls_outcomes, args=(predicted_sql, ground_truth_sql))
-        error = "incorrect answer" if res == 0 else "--"
+        res, error, ves = func_timeout(
+            meta_time_out,
+            _compare_sqls_with_timing,
+            args=(predicted_sql, ground_truth_sql),
+        )
     except FunctionTimedOut:
         logging.warning("Comparison timed out.")
         error = "timeout"
         res = 0
+        ves = 0.0
     except Exception as e:
         logging.error(f"Error in compare_sqls: {e}")
         error = str(e)
         res = 0
-    return {"exec_res": res, "exec_err": error}
+        ves = 0.0
+    return {"exec_res": res, "exec_err": error, "ves": ves}
 
 
 def validate_sql_query(sql: str, max_returned_rows: int = 30) -> Dict[str, Any]:

@@ -166,7 +166,7 @@ class RunManager:
         evaluation_result = state["keys"]['execution_history'][-1]
         if evaluation_result.get("node_type") == "evaluation":
             for evaluation_for, result in evaluation_result.items():
-                if evaluation_for in ['node_type', 'status']:
+                if evaluation_for in ['node_type', 'status', 'duration_s'] or not isinstance(result, dict):
                     continue
                 self.statistics_manager.update_stats(db_id, question_id, evaluation_for, result)
             self.statistics_manager.dump_statistics_to_file()

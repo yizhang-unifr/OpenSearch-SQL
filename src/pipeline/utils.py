@@ -1,3 +1,4 @@
+import time
 from functools import wraps
 from typing import Dict, List, Any, Callable
 from runner.logger import Logger
@@ -19,6 +20,7 @@ def node_decorator(check_schema_status: bool = False) -> Callable:
             node_name = func.__name__
             Logger().log(f"---{node_name.upper()}---")
             result = {"node_type": node_name}
+            _t0 = None
 
             try:
                 task = state["keys"]["task"]
@@ -26,12 +28,14 @@ def node_decorator(check_schema_status: bool = False) -> Callable:
                 for x in execution_history:
                     if x["node_type"]==node_name:
                         return state
+                _t0 = time.time()
                 output = func(task,execution_history)
+                result["duration_s"] = round(time.time() - _t0, 3)
                 result.update(output)
                 result["status"] = "success"
             except Exception as e:
+                result["duration_s"] = round(time.time() - _t0, 3) if _t0 is not None else None
                 Logger().log(f"Node '{node_name}': {task.db_id}_{task.question_id}\n{type(e)}: {e}\n", "error")
-                # Logger().log(f"Vote content: {vote}, Type: {type(vote)}", "error")  # 打印 vote 内容
                 result.update({
                     "status": "error",
                     "error": f"{type(e)}: <{e}>",

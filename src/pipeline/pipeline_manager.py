@@ -2,6 +2,15 @@ import inspect
 from threading import Lock
 from typing import Any, Dict, Tuple
 
+
+def get_bool(config: dict, key: str, default: bool = True) -> bool:
+    """Parse a config value as bool, handling string representations from shell scripts."""
+    val = config.get(key, default)
+    if isinstance(val, bool):
+        return val
+    return str(val).strip().lower() in ("true", "1", "yes")
+
+
 class PipelineManager:
     _instance = None
     _lock = Lock()
@@ -43,25 +52,19 @@ class PipelineManager:
         self.candidate_generate = pipeline_setup.get("candidate_generate", {})
         self.align_correct = pipeline_setup.get("align_correct", {})
         self.vote = pipeline_setup.get("vote", {})
-    
-    def get_model_para(self, **kwargs: Any) -> dict:
+
+    def get_model_para(self, node_name: str | None = None) -> tuple[dict, str]:
+        """Return (node_config, node_name) for the calling pipeline node.
+
+        Pass ``node_name`` explicitly when the call site is not the top-level
+        node function (e.g. called from a helper or wrapped context) so that
+        stack inspection is not needed.
         """
-        Retrieves the prompt, engine, and parser for the current node based on the pipeline setup.
+        if node_name is None:
+            frame = inspect.currentframe()
+            caller_frame = frame.f_back
+            node_name = caller_frame.f_code.co_name
 
-        Args:
-            **kwargs: Additional keyword arguments for the prompt.
-
-        Returns:
-            Tuple[Any, Any, Any]: The prompt, engine, and parser instances.
-
-        Raises:
-            ValueError: If the engine is not specified for the node.
-        """
-        frame = inspect.currentframe()
-        caller_frame = frame.f_back
-        node_name = caller_frame.f_code.co_name
-        
         node_setup = self.pipeline_setup.get(node_name, {})
-                
-        return node_setup,node_name
+        return node_setup, node_name
     

@@ -32,12 +32,14 @@ class Task:
     question_toks: List[str] = field(default_factory=list)
     query: str = field(init=False, default="")
     category: Optional[str] = field(init=False, default=None)
+    geo_filter_mode: str = field(init=False, default="points")
 
     def __init__(self, task_data: Dict[str, Any]):
         self.question_id = task_data.get("question_id", 0)
         # In Meteo all questions share the same database
         self.db_id = task_data.get("db_id", "meteo")
         self.category = task_data.get("category") or task_data.get("Category")
+        self.geo_filter_mode = task_data.get("geo_filter_mode", "points")
 
         # Question text
         raw_q = (

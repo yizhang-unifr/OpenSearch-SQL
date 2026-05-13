@@ -8,6 +8,7 @@ All pipeline nodes continue to use the same interface:
     response = chat_model.get_ans(prompt, temperature, ...)
 """
 
+import json
 import os
 import re
 import time
@@ -177,13 +178,13 @@ class req:
         self.model = model
         self.step = step
 
-    def log_record(self, prompt_text, output):
+    def log_record(self, prompt_text, output, duration_ms=None, model_info=None):
         try:
             logger = Logger()
             logger.log_conversation(prompt_text, "Human", self.step)
             logger.log_conversation(output, "AI", self.step)
+            logger.log_llm_call(self.step, prompt_text, output, duration_ms=duration_ms, model_info=model_info)
         except (ValueError, AttributeError):
-            # Logger singleton not yet initialised (standalone usage) – skip
             pass
 
     def fewshot_parse(self, question, evidence, sql):
@@ -221,6 +222,25 @@ class LLMFactoryAdapter(req):
 
     # -- internal helpers ---------------------------------------------------
 
+    @staticmethod
+    def _parse_thinking(text: str) -> tuple[str, str]:
+        """Strip <think>...</think> reasoning from model output.
+
+        Several models emit chain-of-thought inside <think> tags before their
+        actual answer (Qwen3, DeepSeek-R1, QwQ, and others). This function
+        splits the two so the pipeline always receives clean structured output
+        while the reasoning block is preserved in the call log for inspection.
+
+        Returns (thinking_content, final_answer) as stripped strings.
+        If no <think> block is present the function is a no-op:
+        returns ("", original_text).
+        """
+        import re
+        match = re.search(r"<think>(.*?)</think>\s*(.*)", text, re.DOTALL)
+        if match:
+            return match.group(1).strip(), match.group(2).strip()
+        return "", text
+
     def _get_llm(self, temperature: float | None = None):
         """Return a (possibly cached) LLM for the given temperature."""
         config = dict(self._base_config)
@@ -232,15 +252,22 @@ class LLMFactoryAdapter(req):
             self._llm_cache[temp_key] = LLMFactory.from_config_dict(config)
         return self._llm_cache[temp_key]
 
-    @staticmethod
-    def _build_messages(prompt_text: str):
-        """Build LangChain message objects from a plain-text prompt."""
+    def _build_messages(self, prompt_text: str):
+        """Build LangChain message objects from a plain-text prompt.
+
+        When enable_thinking is false (the default), appends /no_think to the
+        system message. This is the reliable cross-backend control token for
+        models that support chain-of-thought reasoning (Qwen3, QwQ, etc.),
+        and is a no-op for models that don't recognise it.
+        """
         from langchain_core.messages import HumanMessage, SystemMessage
 
+        system_base = "You are an SQL expert, skilled in handling various SQL-related issues."
+        enable_thinking = self._base_config.get("enable_thinking", False)
+        system_content = system_base if enable_thinking else f"{system_base} /no_think"
+
         return [
-            SystemMessage(
-                content="You are an SQL expert, skilled in handling various SQL-related issues."
-            ),
+            SystemMessage(content=system_content),
             HumanMessage(content=prompt_text),
         ]
 
@@ -276,25 +303,42 @@ class LLMFactoryAdapter(req):
 
         llm = self._get_llm(temperature=temperature)
         chat_msgs = self._build_messages(messages)
+        model_info = {
+            "model": getattr(self, "_base_config", {}).get("model", "unknown"),
+            "temperature": temperature,
+            "n": n,
+        }
 
         max_retries = int(os.environ.get("LLM_MAX_RETRIES", "2"))
         last_error = None
 
         for attempt in range(1, max_retries + 1):
             try:
+                _t0 = time.time()
                 if n == 1 or single:
                     result = llm.invoke(chat_msgs)
-                    response_clean = result.content
+                    duration_ms = round((time.time() - _t0) * 1000, 1)
+                    thinking, response_clean = self._parse_thinking(result.content)
+                    if thinking:
+                        model_info["thinking"] = thinking
                     if self.step != "prepare_train_queries":
-                        self.log_record(messages, response_clean)
+                        self.log_record(messages, response_clean, duration_ms=duration_ms, model_info=model_info)
                     return response_clean
                 else:
-                    # Multiple completions – invoke concurrently for speed
                     choices = self._generate_n(llm, chat_msgs, n)
+                    duration_ms = round((time.time() - _t0) * 1000, 1)
+                    for c in choices:
+                        thinking, answer = self._parse_thinking(c["message"]["content"])
+                        c["message"]["content"] = answer
+                        if thinking:
+                            c["thinking"] = thinking
                     if self.step != "prepare_train_queries":
+                        full_output = [c["message"]["content"] for c in choices]
                         self.log_record(
                             messages,
-                            str([c["message"]["content"][:80] for c in choices]),
+                            json.dumps(full_output, ensure_ascii=False),
+                            duration_ms=duration_ms,
+                            model_info=model_info,
                         )
                     return choices
 

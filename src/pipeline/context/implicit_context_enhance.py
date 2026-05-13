@@ -15,7 +15,35 @@ from pathlib import Path
 from typing import Any, Dict
 
 from pipeline.utils import node_decorator
-from pipeline.pipeline_manager import PipelineManager
+from pipeline.pipeline_manager import PipelineManager, get_bool
+from pipeline.context.implicit_context_utils import geo_is_meaningful
+
+
+def _inject_sql_filter(geo_context: dict, anchor_mode: str) -> None:
+    """Add a pre-formatted sql_filter hint so the LLM knows the exact WHERE clause to use."""
+    if anchor_mode == "points":
+        points = geo_context.get("points") or []
+        if not points:
+            return
+        pairs = ", ".join(
+            f"({p['lat']}, {p['lon']})" for p in points
+        )
+        geo_context["sql_filter"] = (
+            "(ROUND(CAST(<alias>.latitude AS DECIMAL), 1), "
+            f"ROUND(CAST(<alias>.longitude AS DECIMAL), 1)) IN ({pairs})"
+        )
+    elif anchor_mode == "bbox":
+        bbox = geo_context.get("bbox") or {}
+        min_lat = bbox.get("min_lat") or bbox.get("lat_min")
+        max_lat = bbox.get("max_lat") or bbox.get("lat_max")
+        min_lon = bbox.get("min_lon") or bbox.get("lon_min")
+        max_lon = bbox.get("max_lon") or bbox.get("lon_max")
+        if None in (min_lat, max_lat, min_lon, max_lon):
+            return
+        geo_context["sql_filter"] = (
+            f"<alias>.latitude BETWEEN {min_lat} AND {max_lat} "
+            f"AND <alias>.longitude BETWEEN {min_lon} AND {max_lon}"
+        )
 
 
 def _ensure_project_src_in_path() -> None:
@@ -30,10 +58,12 @@ def _ensure_project_src_in_path() -> None:
 
 @node_decorator(check_schema_status=False)
 def implicit_context_enhance(task: Any, execution_history: Dict[str, Any]) -> Dict[str, Any]:
-    config, _node_name = PipelineManager().get_model_para()
-    enable_geo = str(config.get("enable_geo_context", "True")).lower() == "true"
-    enable_ontology = str(config.get("enable_ontology_grounding", "True")).lower() == "true"
-    anchor_mode = str(config.get("geo_anchor_mode", "points"))
+    # Pass the node name explicitly so get_model_para does not rely on stack inspection.
+    config, _node_name = PipelineManager().get_model_para("implicit_context_enhance")
+    enable_geo = get_bool(config, "enable_geo_context", default=True)
+    enable_ontology = get_bool(config, "enable_ontology_grounding", default=True)
+    # Per-task geo_filter_mode overrides the global geo_anchor_mode config.
+    anchor_mode = getattr(task, "geo_filter_mode", None) or str(config.get("geo_anchor_mode", "points"))
 
     geo_context: Dict[str, Any] = {}
     ontology_grounded_function: Dict[str, Any] = {}
@@ -48,6 +78,7 @@ def implicit_context_enhance(task: Any, execution_history: Dict[str, Any]) -> Di
 
             geo_raw = resolve_city_geo_for_question(task.question, anchor_mode=anchor_mode)
             geo_context = json.loads(geo_raw) if isinstance(geo_raw, str) else (geo_raw or {})
+            _inject_sql_filter(geo_context, anchor_mode)
         except Exception as exc:  # noqa: BLE001
             errors.append(f"geo_context_error: {exc}")
             geo_context = {}
@@ -63,7 +94,8 @@ def implicit_context_enhance(task: Any, execution_history: Dict[str, Any]) -> Di
             errors.append(f"ontology_grounded_function_error: {exc}")
             ontology_grounded_function = {}
 
-    if geo_context or ontology_grounded_function:
+    # A geo_context with place=None or no coordinates is not meaningful grounding.
+    if geo_is_meaningful(geo_context) or ontology_grounded_function:
         enhancement_status = "success"
     elif errors:
         enhancement_status = "fallback"
