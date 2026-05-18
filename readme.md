@@ -10,22 +10,61 @@ A comprehensive Text-to-SQL framework that achieved first place on [BIRD](https:
 
 ## Pipeline
 
+### Overall flowchart with domain extensions highlighted:
 ```mermaid
 flowchart TD
-    A([Input question]) --> B[generate_db_schema]
-    B --> C[extract_col_value]
-    C --> D[extract_query_noun]
-    D --> E[column_retrieve_and_other_info]
-    E --> F[implicit_context_enhance]:::enhanced
-    F --> G[candidate_generate]:::enhanced
-    G --> SA[sql_audit]:::enhanced
-    SA --> OPT[query_optimizer]:::enhanced
-    OPT --> H[align_correct]
-    H --> I[vote]
-    I --> J[evaluation]
-    J --> K([Result])
+    A([Input question])
 
-    classDef enhanced fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    subgraph PRE [Preprocessing]
+        direction LR
+        p1[generate_db_schema] --> p2[extract_col_value] --> p3[extract_query_noun] --> p4[column_retrieve_and_other_info]
+    end
+
+    subgraph POST [Postprocessing]
+        direction LR
+        q1[align_correct] --> q2[vote] --> q3[evaluation]
+    end
+
+    subgraph LEGEND [Legend]
+        direction LR
+        L1[new node]:::new
+        L2[extended node]:::mod
+        L3[original node]
+    end
+
+    A --> p1
+    p4 --> F[implicit_context_enhance]:::new
+    F --> G[candidate_generate]:::mod
+    G --> H[query_optimizer]:::new
+    H --> q1
+    q3 --> Z([Result])
+
+    classDef new fill:#d4edda,stroke:#28a745,stroke-width:3px,color:#000
+    classDef mod fill:#fff3cd,stroke:#ffa500,stroke-width:3px,color:#000
+```
+
+### Detailed chart of enhanced `candidate_generate` node:
+
+```mermaid
+flowchart TD
+    subgraph LEGEND [Legend]
+        direction LR
+        L1[new injection]:::new
+        L2[original content]
+    end
+
+    A1[schema · columns · FK] --> P
+    A2[geo_context block]:::new --> P
+    A3[OGF block]:::new --> P
+    A4[entity hint]:::new --> P
+    A5[semantic hint]:::new --> P
+
+    P([Prompt]) --> L[LLM]
+    L --> C[SQL candidates]
+    C --> V[constraint_validator]:::new
+    V --> O([corrected SQL])
+
+    classDef new fill:#d4edda,stroke:#28a745,stroke-width:3px,color:#000
 ```
 
 | Node | Role |
@@ -223,6 +262,50 @@ Use `--provider` (and optionally `--model`) without creating a YAML file:
 uv run run/run_eval.py --provider openai --model gpt-4o --end -1
 uv run run/run_eval.py --provider swiss_ai --model Qwen/Qwen3.5-27B --end -1
 ```
+
+---
+
+## Setup: Fewshot Index
+
+Vector-based fewshot retrieval must be built offline before running evaluations with `--fewshot`. It embeds all training questions into ChromaDB and retrieves the top-K most similar examples for each test question.
+
+**Step 1 — Preprocess test data to eval JSON:**
+
+```shell
+uv run src/database_process/preprocess_test_data.py \
+    --test_xlsx /path/to/data/split_config_II_tiered/test_data.xlsx \
+    --out_dir data/data_preprocess
+```
+
+Outputs `data/data_preprocess/test_data_point.json` and `test_data_bbox.json` (752 rows each).
+
+| Flag | Default | Description |
+|---|---|---|
+| `--test_xlsx` | auto-detected | Path to `test_data.xlsx` |
+| `--out_dir` | `data/data_preprocess` | Output directory |
+| `--limit` | — | Restrict to first N rows per variant (for quick tests) |
+
+**Step 2 — Build ChromaDB index and generate `fewshot/questions.json`:**
+
+```shell
+uv run src/database_process/build_fewshot_index.py \
+    --train_xlsx /path/to/data/split_config_II_tiered/train_data.xlsx \
+    --eval_files data/data_preprocess/test_data_point.json \
+                 data/data_preprocess/test_data_bbox.json \
+    --top_k 3 --rebuild
+```
+
+Outputs `data/chroma_fewshot/` (persistent embedding index, 6016 documents — each training row indexed twice as point and bbox variants) and `data/fewshot/questions.json` (lookup used by the pipeline at inference time). At retrieval time, only the matching geo_mode variant is queried so the returned SQL always matches the target style.
+
+| Flag | Default | Description |
+|---|---|---|
+| `--train_xlsx` | auto-detected | Path to `train_data.xlsx` |
+| `--eval_files` | all `*.json` in `data/data_preprocess/` | Explicit list of eval JSON files to generate fewshot for |
+| `--top_k` | `3` | Number of similar training examples per test question |
+| `--model` | `all-mpnet-base-v2` | SentenceTransformer model |
+| `--rebuild` | off | Drop and recreate the ChromaDB collection (needed when training data changes) |
+
+> **Note:** `--rebuild` is only needed when `train_data.xlsx` changes. Subsequent runs reuse the existing ChromaDB index automatically.
 
 ---
 

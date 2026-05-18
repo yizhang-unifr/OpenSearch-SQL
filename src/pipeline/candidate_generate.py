@@ -29,7 +29,9 @@ def candidate_generate(task: Any, execution_history: List[Dict[str, Any]]) -> Di
     # Ablation flags – all default True so existing "full" runs are unchanged
     enable_entity_hint   = get_bool(config, "enable_entity_hint",   default=True)
     enable_semantic_hint = get_bool(config, "enable_semantic_hint", default=True)
-    enable_validator     = get_bool(config, "enable_validator",     default=True)
+    # Contracts are already injected into the generation prompt; post-hoc validation
+    # is redundant and adds one full LLM round-trip.  Opt-in via config if needed.
+    enable_validator     = get_bool(config, "enable_validator",     default=False)
 
     if fewshot_enabled and fewshot_path.exists():
         with open(fewshot_path) as f:

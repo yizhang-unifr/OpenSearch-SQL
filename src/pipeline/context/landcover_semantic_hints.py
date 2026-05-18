@@ -37,7 +37,12 @@ Question: {question}
 Return ONLY valid JSON (no prose): {{"mode": "<pattern name>"}}"""
 
 
+_mode_cache: dict[str, LandcoverSemanticMode] = {}
+
+
 def _classify_mode_llm(question: str, chat_model) -> LandcoverSemanticMode:
+    if question in _mode_cache:
+        return _mode_cache[question]
     prompt = _CLASSIFY_PROMPT.format(question=question)
     try:
         raw = chat_model.get_ans(prompt, temperature=0.0)
@@ -46,9 +51,11 @@ def _classify_mode_llm(question: str, chat_model) -> LandcoverSemanticMode:
         mode = data.get("mode", "")
         valid = LandcoverSemanticMode.__args__  # type: ignore[attr-defined]
         if mode in valid:
+            _mode_cache[question] = mode  # type: ignore[assignment]
             return mode  # type: ignore[return-value]
     except Exception as exc:
         logging.debug("landcover mode classification failed (%s); using generic", exc)
+    _mode_cache[question] = "generic_landcover"
     return "generic_landcover"
 
 
@@ -73,12 +80,17 @@ def build_landcover_semantic_hint(question: str, chat_model=None) -> str:
 # ── Array access fundamentals injected into every hint ────────────────────────
 
 _ARRAY_RULES = (
-    "landcover_upscaled.ranks is an int4[][] column: ranks[i][1]=level3_code, ranks[i][2]=pixel_count.\n"
+    "landcover_upscaled.ranks is an int4[][] column: ranks[i][1]=level3_code (integer), ranks[i][2]=pixel_count (integer).\n"
     "To iterate entries: FROM landcover_upscaled AS u, GENERATE_SUBSCRIPTS(u.ranks, 1) AS i\n"
     "  then access u.ranks[i][1] (code) and u.ranks[i][2] (count).\n"
     "Direct subscript ranks[1][1] is valid ONLY for the single dominant entry.\n"
-    "NEVER use UNNEST(ranks) — it flattens all integers into scalars.\n"
-    "NEVER join landcover_type on level1_label or level2_label — always join on level3_code.\n"
+    "NEVER use plain UNNEST(ranks) without WITH ORDINALITY — it flattens to individual scalars.\n"
+    "JOIN landcover_type ONLY on level3_code: landcover_type.level3_code = u.ranks[i][1]\n"
+    "  NEVER join on level3_label, level2_label, level1_label, or any other label column.\n"
+    "  level3_code is an integer; ranks[i][1] is an integer — no cast needed.\n"
+    "Label hierarchy: level1 (coarsest) → level2 → level3 (finest).\n"
+    "  Type-existence predicates (lakes, forests, etc.) should match level3_label — the finest level.\n"
+    "  level2_label is too coarse and may include or exclude unintended categories.\n"
 )
 
 
@@ -88,12 +100,20 @@ def _render_hint(mode: LandcoverSemanticMode) -> str:
     if mode == "membership_filter":
         return header + (
             "Paradigm: find grid coordinates WHERE a landcover type satisfies a predicate;\n"
-            "  then join those coordinates with a metric table and aggregate per (latitude, longitude).\n"
-            "Step 1: CTE — SELECT DISTINCT latitude, longitude from landcover_upscaled where type predicate holds\n"
-            "  (expand ranks, join landcover_type by level3_code, filter on landcover_type label).\n"
-            "Step 2: join the grid coordinates with the metric table on exact lat/lon equality;\n"
-            "  apply time filter; aggregate the metric; GROUP BY latitude, longitude.\n"
-            "Output: always include latitude and longitude alongside the aggregate — never a bare scalar.\n"
+            "  then join those coordinates with a metric table and aggregate per grid.\n"
+            "Step 1: CTE (type_grids) — SELECT DISTINCT latitude, longitude FROM landcover_upscaled\n"
+            "  where the type predicate holds: expand ALL ranks entries (not just [1][1]) with\n"
+            "  GENERATE_SUBSCRIPTS, JOIN landcover_type ON level3_code = ranks[i][1],\n"
+            "  filter with WHERE lt.level3_label ILIKE '%<type>%'.\n"
+            "  Use level3_label (finest granularity) — not level2_label — for specific type lookups\n"
+            "  (e.g. lakes, forests, urban fabric are level3 concepts).\n"
+            "  A grid may contain the target type as a non-dominant entry; scanning all ranks\n"
+            "  is required to avoid missing such grids.\n"
+            "Step 2: CTE (grid_stats) — JOIN type_grids with the metric table ON exact lat/lon equality\n"
+            "  (no ROUND in the JOIN); apply time filter; aggregate metric per grid;\n"
+            "  GROUP BY latitude, longitude.\n"
+            "Output: SELECT latitude, longitude, aggregate_value FROM grid_stats ORDER BY latitude, longitude.\n"
+            "  Return one row per qualifying grid — never collapse to a single aggregate.\n"
         )
 
     if mode == "aggregate_distribution":
@@ -101,10 +121,12 @@ def _render_hint(mode: LandcoverSemanticMode) -> str:
             "Paradigm: compute pixel-count share or percentage for each landcover type in the region.\n"
             "Step 1: CTE (type_counts) — SUM pixel counts per level3_code across all grids.\n"
             "Step 2: CTE (grand_total) — SUM all type counts for the denominator.\n"
-            "Step 3: join type_counts with landcover_type (by level3_code) and grand_total;\n"
-            "  compute percentage = ROUND(count / total * 100, 2).\n"
-            "Output must include all three hierarchy levels (code+label for level1, level2, level3),\n"
-            "  the raw pixel count, and the percentage; ORDER BY percentage DESC.\n"
+            "Step 3: join type_counts with landcover_type ON level3_code, CROSS JOIN grand_total;\n"
+            "  compute percentage = ROUND(CAST(count AS DECIMAL) / total * 100, 2).\n"
+            "REQUIRED output columns (all 8 — omitting any is wrong):\n"
+            "  level1_code, level1_label, level2_code, level2_label, level3_code, level3_label,\n"
+            "  total_count (raw pixel sum), percentage.\n"
+            "ORDER BY percentage DESC.\n"
         )
 
     if mode == "ranking_by_metric":
@@ -120,13 +142,21 @@ def _render_hint(mode: LandcoverSemanticMode) -> str:
 
     if mode == "group_comparison":
         return header + (
-            "Paradigm: compare an external metric across two or more landcover categories.\n"
-            "Step 1: CTEs — for each category, get the set of level2_codes matching its label.\n"
-            "Step 2: CTE — for each grid, determine its dominant category by summing pixel counts\n"
-            "  per level2_code (expand ranks, group by level2_code, ORDER BY SUM DESC LIMIT 1 per grid),\n"
-            "  then label the grid by which category it belongs to.\n"
-            "Step 3: join labeled grids with the metric table on exact lat/lon equality;\n"
-            "  aggregate the metric per category label; return one row per category.\n"
+            "Paradigm: compare an external metric between two landcover categories (e.g. forest vs urban).\n"
+            "Step 1: CTEs — for each category, SELECT DISTINCT level2_code WHERE level2_label ILIKE '%<name>%'.\n"
+            "Step 2: CTE (dominant_grids) — for each grid, find its single dominant level2_code:\n"
+            "  CROSS JOIN LATERAL (\n"
+            "    SELECT lt.level2_code, SUM(u.ranks[i][2]) AS total_count\n"
+            "    FROM GENERATE_SUBSCRIPTS(u.ranks, 1) AS i\n"
+            "    JOIN landcover_type lt ON lt.level3_code = u.ranks[i][1]\n"
+            "    GROUP BY lt.level2_code ORDER BY total_count DESC LIMIT 1\n"
+            "  ) AS dom\n"
+            "  Use CASE WHEN dom.level2_code IN (cat_A codes) THEN 'A' WHEN ... THEN 'B' ELSE 'Other'\n"
+            "  Filter: AND dom.level2_code IN (cat_A UNION cat_B codes) — exclude 'Other' grids.\n"
+            "Step 3: CTE — join dominant_grids with metric table on exact lat/lon equality;\n"
+            "  GROUP BY landcover_group, time period; compute AVG metric.\n"
+            "Output: pivot into one row — one column per category avg + difference column.\n"
+            "  Use CASE WHEN / conditional aggregation to pivot categories into columns.\n"
         )
 
     if mode == "list_inventory":
@@ -134,8 +164,9 @@ def _render_hint(mode: LandcoverSemanticMode) -> str:
             "Paradigm: enumerate all distinct landcover types present in a region with their aggregate pixel counts.\n"
             "Algorithm: expand ranks across all grids, SUM pixel counts per level3_code,\n"
             "  join with landcover_type to get all three hierarchy levels.\n"
-            "Output must include all hierarchy codes and labels (level1, level2, level3) plus the aggregate count;\n"
-            "  ORDER BY count DESC.\n"
+            "REQUIRED output columns (all 7 — omitting any is wrong):\n"
+            "  level1_code, level1_label, level2_code, level2_label, level3_code, level3_label, total_count.\n"
+            "ORDER BY total_count DESC.\n"
         )
 
     if mode == "dominant_lookup":

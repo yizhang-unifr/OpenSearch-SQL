@@ -12,6 +12,17 @@ from pathlib import Path
 
 from sentence_transformers import SentenceTransformer
 
+_bert_model_cache: dict = {}
+
+
+def _get_bert_model(model_name: str, device: str) -> SentenceTransformer:
+    key = (model_name, device)
+    if key not in _bert_model_cache:
+        _bert_model_cache[key] = SentenceTransformer(
+            model_name, device=device, local_files_only=True
+        )
+    return _bert_model_cache[key]
+
 from pipeline.utils import node_decorator, get_last_node_result, make_newprompt
 from pipeline.context.implicit_context_utils import build_implicit_context_block, get_implicit_context_payload, geo_is_meaningful
 from pipeline.context.landcover_semantic_hints import build_landcover_semantic_hint
@@ -77,11 +88,7 @@ def align_correct(task: Any, execution_history: List[Dict[str, Any]]) -> Dict[st
     fewshot_enabled = get_bool(config, "fewshot_enabled", default=True)
 
     prompts_template = db_check_prompts()
-    bert_model = SentenceTransformer(
-        config["bert_model"],
-        device=config["device"],
-        local_files_only=True,
-    )
+    bert_model = _get_bert_model(config["bert_model"], config["device"])
 
     if fewshot_enabled and fewshot_path.exists():
         with open(fewshot_path) as f:
