@@ -158,10 +158,12 @@ def make_llm_config(provider: str, model: str | None) -> str:
 
 
 def preflight_sentence_transformer(model_name: str):
+    # Pre-load the sentence-transformer model to ensure it's cached and available before running the main pipeline.
+    # Please use `uv run hf auth login` to authenticate if you haven't already, as the model may need to be downloaded on the first run.
     result = subprocess.run(
         ["uv", "run", "python", "-c",
          f"from sentence_transformers import SentenceTransformer; "
-         f"SentenceTransformer('{model_name}', device='cpu', local_files_only=True); "
+         f"SentenceTransformer('{model_name}', device='cpu'); "
          f"print('[preflight] sentence-transformer ready:', '{model_name}')"],
         cwd=_ROOT,
     )
@@ -268,16 +270,8 @@ def run(args, extra_env: dict | None = None):
 
     # Env
     env = {**os.environ, "LLM_CONFIG_PATH": llm_config}
-    env.setdefault("HF_HUB_OFFLINE", "1")
-    env.setdefault("TRANSFORMERS_OFFLINE", "1")
-    env.setdefault("HF_HOME", str(Path.home() / ".cache/huggingface"))
-    env.setdefault("SENTENCE_TRANSFORMERS_HOME", env["HF_HOME"])
     if extra_env:
         env.update(extra_env)
-    # Disable proxy
-    for var in ("HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY", "http_proxy", "https_proxy", "all_proxy"):
-        env.pop(var, None)
-    env["NO_PROXY"] = env["no_proxy"] = "*"
 
     preflight_sentence_transformer(args.bert_model)
 
