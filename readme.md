@@ -10,22 +10,61 @@ A comprehensive Text-to-SQL framework that achieved first place on [BIRD](https:
 
 ## Pipeline
 
+### Overall flowchart with domain extensions highlighted:
 ```mermaid
 flowchart TD
-    A([Input question]) --> B[generate_db_schema]
-    B --> C[extract_col_value]
-    C --> D[extract_query_noun]
-    D --> E[column_retrieve_and_other_info]
-    E --> F[implicit_context_enhance]:::enhanced
-    F --> G[candidate_generate]:::enhanced
-    G --> SA[sql_audit]:::enhanced
-    SA --> OPT[query_optimizer]:::enhanced
-    OPT --> H[align_correct]
-    H --> I[vote]
-    I --> J[evaluation]
-    J --> K([Result])
+    A([Input question])
 
-    classDef enhanced fill:#d4edda,stroke:#28a745,stroke-width:4px,color:#000
+    subgraph PRE [Preprocessing]
+        direction LR
+        p1[generate_db_schema] --> p2[extract_col_value] --> p3[extract_query_noun] --> p4[column_retrieve_and_other_info]
+    end
+
+    subgraph POST [Postprocessing]
+        direction LR
+        q1[align_correct] --> q2[vote] --> q3[evaluation]
+    end
+
+    subgraph LEGEND [Legend]
+        direction LR
+        L1[new node]:::new
+        L2[extended node]:::mod
+        L3[original node]
+    end
+
+    A --> p1
+    p4 --> F[implicit_context_enhance]:::new
+    F --> G[candidate_generate]:::mod
+    G --> H[query_optimizer]:::new
+    H --> q1
+    q3 --> Z([Result])
+
+    classDef new fill:#d4edda,stroke:#28a745,stroke-width:3px,color:#000
+    classDef mod fill:#fff3cd,stroke:#ffa500,stroke-width:3px,color:#000
+```
+
+### Detailed chart of enhanced `candidate_generate` node:
+
+```mermaid
+flowchart TD
+    subgraph LEGEND [Legend]
+        direction LR
+        L1[new injection]:::new
+        L2[original content]
+    end
+
+    A1[schema · columns · FK] --> P
+    A2[geo_context block]:::new --> P
+    A3[OGF block]:::new --> P
+    A4[entity hint]:::new --> P
+    A5[semantic hint]:::new --> P
+
+    P([Prompt]) --> L[LLM]
+    L --> C[SQL candidates]
+    C --> V[constraint_validator]:::new
+    V --> O([corrected SQL])
+
+    classDef new fill:#d4edda,stroke:#28a745,stroke-width:3px,color:#000
 ```
 
 | Node | Role |
