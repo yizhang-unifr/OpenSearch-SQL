@@ -37,7 +37,12 @@ Question: {question}
 Return ONLY valid JSON (no prose): {{"mode": "<pattern name>"}}"""
 
 
+_mode_cache: dict[str, LandcoverSemanticMode] = {}
+
+
 def _classify_mode_llm(question: str, chat_model) -> LandcoverSemanticMode:
+    if question in _mode_cache:
+        return _mode_cache[question]
     prompt = _CLASSIFY_PROMPT.format(question=question)
     try:
         raw = chat_model.get_ans(prompt, temperature=0.0)
@@ -46,9 +51,11 @@ def _classify_mode_llm(question: str, chat_model) -> LandcoverSemanticMode:
         mode = data.get("mode", "")
         valid = LandcoverSemanticMode.__args__  # type: ignore[attr-defined]
         if mode in valid:
+            _mode_cache[question] = mode  # type: ignore[assignment]
             return mode  # type: ignore[return-value]
     except Exception as exc:
         logging.debug("landcover mode classification failed (%s); using generic", exc)
+    _mode_cache[question] = "generic_landcover"
     return "generic_landcover"
 
 
