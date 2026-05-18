@@ -92,7 +92,7 @@ def candidate_generate(task: Any, execution_history: List[Dict[str, Any]]) -> Di
         )
 
     if enable_semantic_hint:
-        new_prompt += build_landcover_semantic_hint(question)
+        new_prompt += build_landcover_semantic_hint(question, chat_model=chat_model)
     if enable_entity_hint:
         new_prompt += build_landcover_entity_hint(question)
 

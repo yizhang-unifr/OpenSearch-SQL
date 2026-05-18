@@ -1,211 +1,155 @@
-"""Semantic prompt hints for landcover array-join patterns."""
+"""Semantic prompt hints for landcover array-join patterns.
+
+Classification is LLM-based (structured output) to avoid brittle keyword matching.
+Hints describe generic access paradigms, not specific SQL templates.
+"""
 
 from __future__ import annotations
 
+import json
+import logging
+import re
 from typing import Literal
 
+LandcoverSemanticMode = Literal[
+    "membership_filter",
+    "aggregate_distribution",
+    "ranking_by_metric",
+    "group_comparison",
+    "list_inventory",
+    "dominant_lookup",
+    "generic_landcover",
+]
 
-LandcoverSemanticMode = Literal["simple_filter", "dominant_direct", "dominance_aggregation", "ranking_by_metric", "comparison", "list_types", "generic_landcover"]
+_CLASSIFY_PROMPT = """\
+You are classifying a geospatial SQL question about landcover data stored as 2-D integer arrays.
+
+Available access patterns:
+- membership_filter: find grid locations containing a specific landcover type, then aggregate a metric per location
+- aggregate_distribution: compute the share/percentage/count of each landcover type across a region
+- ranking_by_metric: find the landcover type at the grid with the highest or lowest value of some external metric
+- group_comparison: compare an external metric between two or more landcover categories (e.g. forest vs urban)
+- list_inventory: enumerate all distinct landcover types in a region with their total pixel counts
+- dominant_lookup: find or check the single dominant (most-prevalent) landcover type at a location
+
+Question: {question}
+
+Return ONLY valid JSON (no prose): {{"mode": "<pattern name>"}}"""
 
 
-def build_landcover_semantic_hint(question: str) -> str:
-    q = (question or "").lower()
-    if not _is_landcover_question(q):
-        return ""
-    mode = _classify_mode(q)
-    return _render_hint(mode)
-
-
-def _is_landcover_question(q: str) -> bool:
-    keys = ("landcover", "forest", "water", "lake", "urban", "cropland", "dominant")
-    return any(k in q for k in keys)
-
-
-def _classify_mode(q: str) -> LandcoverSemanticMode:
-    # ranks is sorted by count descending: ranks[1][1]=dominant code, ranks[1][2]=dominant count.
-    #
-    # Six cases based on question semantics:
-    #   dominant_direct       — "dominant landcover is X / is urban" → ranks[1][1] directly
-    #   dominance_aggregation — "percentage/share/distribution" → GENERATE_SUBSCRIPTS + SUM
-    #   ranking_by_metric     — "landcover type at the highest/lowest [temperature]" → CTE pattern
-    #   comparison            — "compare ... between forest and urban" → CTE per group pattern
-    #   simple_filter         — "areas with forest", "includes lake" → GENERATE_SUBSCRIPTS + label
-    #   generic_landcover     — fallback
-    distribution_keys = ("percentage", "share", "proportion", "distribution", "each type", "all types")
-    dominant_keys = ("dominant",)
-    membership_keys = ("includes", "include", "with ", "contains", "having", "areas that")
-    comparison_keys = ("compare", "comparison", "difference between", "vs ")
-    forest_urban_keys = ("forest", "urban")
-    ranking_keys = ("highest", "lowest", "maximum", "minimum")
-    temperature_keys = ("temperature", "temp", "tmean", "tmax", "tmin")
-
-    has_dominant = any(k in q for k in dominant_keys)
-    has_distribution = any(k in q for k in distribution_keys)
-    has_comparison = any(k in q for k in comparison_keys)
-    has_forest_urban = any(k in q for k in forest_urban_keys)
-    has_ranking = any(k in q for k in ranking_keys)
-    has_temperature = any(k in q for k in temperature_keys)
-
-    # "compare ... between forest and urban" must be checked before dominant_direct
-    # because Q3/Q4 contain "dominant" but are comparison queries, not single-type lookups.
-    # "list the different landcover types" → return full hierarchy
-    if any(k in q for k in ("list", "what are", "different")) and any(k in q for k in ("landcover type", "land cover type", "landcover class")):
-        return "list_types"
-
-    if (has_comparison or "between" in q) and has_forest_urban:
-        return "comparison"
-    if has_dominant and not has_distribution:
-        return "dominant_direct"
-    if has_distribution or (has_dominant and has_distribution):
-        return "dominance_aggregation"
-    # "first level landcover type of the highest [metric] location" → CTE ranking pattern
-    if has_ranking and has_temperature and ("landcover" in q or "level" in q or "type" in q):
-        return "ranking_by_metric"
-    if any(k in q for k in ("top", "most")):
-        return "dominance_aggregation"
-    if any(k in q for k in membership_keys):
-        return "simple_filter"
-    if has_ranking or "first" in q:
-        return "simple_filter"
+def _classify_mode_llm(question: str, chat_model) -> LandcoverSemanticMode:
+    prompt = _CLASSIFY_PROMPT.format(question=question)
+    try:
+        raw = chat_model.get_ans(prompt, temperature=0.0)
+        cleaned = re.sub(r"```(?:json)?|```", "", raw).strip()
+        data = json.loads(cleaned)
+        mode = data.get("mode", "")
+        valid = LandcoverSemanticMode.__args__  # type: ignore[attr-defined]
+        if mode in valid:
+            return mode  # type: ignore[return-value]
+    except Exception as exc:
+        logging.debug("landcover mode classification failed (%s); using generic", exc)
     return "generic_landcover"
 
 
-# Injected into modes that need full array iteration (simple_filter, dominance_aggregation, generic).
-# NOT injected into dominant_direct mode where ranks[1][1] is intentionally correct.
-_NEVER_SUBSCRIPT = (
-    "NEVER use constant array subscript (ranks[1][1], ranks[1]) to iterate all entries.\n"
-    "Exception: ranks[1][1]/ranks[1][2] are correct ONLY when the question asks for the single dominant entry.\n"
-    "NEVER join landcover_type on level1_label or level2_label — always join on level3_code.\n"
-    "ALWAYS expand the ranks array with GENERATE_SUBSCRIPTS before joining when iterating all entries.\n"
-    "NEVER use UNNEST(ranks) — ranks is int4[][], UNNEST flattens all values to individual scalars, not (code, count) pairs.\n"
-)
+def _is_landcover_question(question: str) -> bool:
+    landcover_tables = ("landcover_upscaled", "landcover_type")
+    q = question.lower()
+    return any(t in q for t in landcover_tables) or any(
+        k in q for k in ("landcover", "land cover", "land-cover")
+    )
 
-# For dominant_direct mode: only the non-contradictory rules.
-_DOMINANT_NEVER = (
+
+def build_landcover_semantic_hint(question: str, chat_model=None) -> str:
+    if not _is_landcover_question(question):
+        return ""
+    if chat_model is not None:
+        mode = _classify_mode_llm(question, chat_model)
+    else:
+        mode = "generic_landcover"
+    return _render_hint(mode)
+
+
+# ── Array access fundamentals injected into every hint ────────────────────────
+
+_ARRAY_RULES = (
+    "landcover_upscaled.ranks is an int4[][] column: ranks[i][1]=level3_code, ranks[i][2]=pixel_count.\n"
+    "To iterate entries: FROM landcover_upscaled AS u, GENERATE_SUBSCRIPTS(u.ranks, 1) AS i\n"
+    "  then access u.ranks[i][1] (code) and u.ranks[i][2] (count).\n"
+    "Direct subscript ranks[1][1] is valid ONLY for the single dominant entry.\n"
+    "NEVER use UNNEST(ranks) — it flattens all integers into scalars.\n"
     "NEVER join landcover_type on level1_label or level2_label — always join on level3_code.\n"
-    "NEVER use UNNEST(ranks) — ranks is int4[][], UNNEST flattens all values to individual scalars.\n"
 )
 
 
 def _render_hint(mode: LandcoverSemanticMode) -> str:
-    common = (
-        "Do not join landcover_upscaled directly to landcover_type by latitude/longitude.\n"
-        "Treat ranks as array-encoded landcover entries and expand before joining landcover_type.\n"
-        f"{_NEVER_SUBSCRIPT}"
-    )
-    dominant_common = (
-        "Do not join landcover_upscaled directly to landcover_type by latitude/longitude.\n"
-        f"{_DOMINANT_NEVER}"
-    )
-    if mode == "list_types":
-        return (
-            "\n#LANDCOVER_SEMANTIC_HINT:\n"
-            "mode=list_types\n"
-            f"{common}"
-            "Return the FULL landcover hierarchy — all three levels — for each type present, with total pixel count.\n"
-            "Required SELECT columns: lt.level1_code, lt.level1_label, lt.level2_code, lt.level2_label, lt.level3_code, lt.level3_label, total_count\n"
-            "Aggregate SUM(u.ranks[i][2]) as total_count per level3_code; ORDER BY total_count DESC.\n"
-            "Recommended pattern:\n"
-            "SELECT lt.level1_code, lt.level1_label, lt.level2_code, lt.level2_label, lt.level3_code, lt.level3_label,\n"
-            "       lc.total_count\n"
-            "FROM (\n"
-            "  SELECT u.ranks[i][1] AS level3_code, SUM(u.ranks[i][2]) AS total_count\n"
-            "  FROM landcover_upscaled AS u, GENERATE_SUBSCRIPTS(u.ranks, 1) AS i\n"
-            "  WHERE <geo_filter>\n"
-            "  GROUP BY u.ranks[i][1]\n"
-            ") AS lc\n"
-            "JOIN landcover_type lt ON lt.level3_code = lc.level3_code\n"
-            "ORDER BY lc.total_count DESC\n"
-        )
-    if mode == "dominant_direct":
-        return (
-            "\n#LANDCOVER_SEMANTIC_HINT:\n"
-            "mode=dominant_direct\n"
-            f"{dominant_common}"
-            "ranks is sorted by count descending: ranks[1] = dominant (most prevalent) entry.\n"
-            "ranks[1][1] = dominant level3_code, ranks[1][2] = dominant pixel count.\n"
-            "For 'dominant landcover is X' queries, access ranks[1][1] directly — no array expansion needed.\n"
-            "Recommended pattern:\n"
-            "SELECT u.ranks[1][1] AS level3_code, u.ranks[1][2] AS total_count\n"
-            "FROM landcover_upscaled AS u\n"
-            "JOIN landcover_type lt ON lt.level3_code = u.ranks[1][1]\n"
-            "WHERE lt.level3_label ILIKE '%<type>%' AND ...\n"
-        )
-    if mode == "simple_filter":
-        return (
-            "\n#LANDCOVER_SEMANTIC_HINT:\n"
-            "mode=simple_filter\n"
-            f"{common}"
-            "Use membership semantics: existence of a landcover label/code in a grid.\n"
-            "Recommended pattern:\n"
-            "CROSS JOIN LATERAL GENERATE_SUBSCRIPTS(u.ranks, 1) AS i\n"
-            "JOIN landcover_type lt ON lt.level3_code = u.ranks[i][1]\n"
-            "u.ranks[i][1] = level3_code, u.ranks[i][2] = pixel count.\n"
-            "Apply label/code predicates on lt.* (for example ILIKE '%forest%' or ILIKE '%lake%').\n"
-        )
-    if mode == "dominance_aggregation":
-        return (
-            "\n#LANDCOVER_SEMANTIC_HINT:\n"
-            "mode=dominance_aggregation\n"
-            f"{common}"
-            "Use dominance/share semantics: aggregate pixel counts per level3_code, compute percentage.\n"
-            "Recommended pattern (percentage query):\n"
-            "WITH totals AS (\n"
-            "  SELECT u.ranks[i][1] AS level3_code, SUM(u.ranks[i][2]) AS total_count\n"
-            "  FROM landcover_upscaled AS u, GENERATE_SUBSCRIPTS(u.ranks, 1) AS i\n"
-            "  WHERE <geo_filter>\n"
-            "  GROUP BY u.ranks[i][1]\n"
-            "), grand_total AS (\n"
-            "  SELECT SUM(total_count) AS total_all FROM totals\n"
-            ")\n"
-            "SELECT lt.level1_code, lt.level1_label, lt.level2_code, lt.level2_label,\n"
-            "       lt.level3_code, lt.level3_label,\n"
-            "       t.total_count,\n"
-            "       ROUND(CAST(t.total_count AS DECIMAL) / gt.total_all * 100, 2) AS percentage\n"
-            "FROM totals t\n"
-            "CROSS JOIN grand_total gt\n"
-            "JOIN landcover_type lt ON lt.level3_code = t.level3_code\n"
-            "ORDER BY percentage DESC\n"
-        )
-    if mode == "ranking_by_metric":
-        return (
-            "\n#LANDCOVER_SEMANTIC_HINT:\n"
-            "mode=ranking_by_metric\n"
-            f"{common}"
-            "Query pattern: find the landcover type at the grid with the highest/lowest metric.\n"
-            "Use a CTE to decompose the problem into steps:\n"
-            "  Step 1 — CTE: filter the meteo table by time period AND geo filter, compute the metric per (lat, lon)\n"
-            "  Step 2 — find the extremal (lat, lon) using ORDER BY metric DESC/ASC LIMIT 1\n"
-            "  Step 3 — join that location with landcover_upscaled on exact lat/lon equality,\n"
-            "            expand ranks with GENERATE_SUBSCRIPTS, join landcover_type on level3_code\n"
-            "  Step 4 — return the landcover label (level1_label or as required)\n"
-            "Do NOT join meteo and landcover tables directly using ROUND() in the JOIN condition — this is slow.\n"
-            "Apply the geo filter (IN list) inside the meteo CTE, and join on exact latitude/longitude equality.\n"
-        )
-    if mode == "comparison":
-        return (
-            "\n#LANDCOVER_SEMANTIC_HINT:\n"
-            "mode=comparison\n"
-            f"{common}"
-            "Query pattern: compare a metric (e.g. temperature) between grid points classified as 'Forest' vs 'Urban'.\n"
-            "Use CTEs to decompose:\n"
-            "  Step 1 — CTE: get level2_codes for forest (level2_label ILIKE '%forest%')\n"
-            "  Step 2 — CTE: get level2_codes for urban  (level2_label ILIKE '%urban%')\n"
-            "  Step 3 — CTE: for each grid in geo_filter, determine the dominant level2 category\n"
-            "            by expanding ranks with GENERATE_SUBSCRIPTS, grouping by level2_code,\n"
-            "            ordering by SUM(ranks[i][2]) DESC LIMIT 1, then CASE WHEN the result\n"
-            "            matches forest/urban codes → label 'Forest'/'Urban'\n"
-            "  Step 4 — join labeled grids with the meteo table on exact lat/lon equality,\n"
-            "            aggregate the metric per group, return the comparison\n"
-            "Join meteo_tmean to dominant_grids on exact lat=lat AND lon=lon (no ROUND in JOIN).\n"
-        )
-    return (
-        "\n#LANDCOVER_SEMANTIC_HINT:\n"
-        "mode=generic_landcover\n"
-        f"{common}"
-        "Pick one of two GENERATE_SUBSCRIPTS-based templates:\n"
-        "  ranks is int4[][]: ranks[i][1]=level3_code, ranks[i][2]=count.\n"
-        "A) membership filter -> GENERATE_SUBSCRIPTS(u.ranks, 1) AS i + JOIN ON u.ranks[i][1] + label predicate on lt.*\n"
-        "B) dominance/share  -> GENERATE_SUBSCRIPTS(u.ranks, 1) AS i + SUM(u.ranks[i][2]) aggregation, ORDER BY count DESC\n"
-    )
+    header = f"\n#LANDCOVER_SEMANTIC_HINT (mode={mode}):\n{_ARRAY_RULES}"
 
+    if mode == "membership_filter":
+        return header + (
+            "Paradigm: find grid coordinates WHERE a landcover type satisfies a predicate;\n"
+            "  then join those coordinates with a metric table and aggregate per (latitude, longitude).\n"
+            "Step 1: CTE — SELECT DISTINCT latitude, longitude from landcover_upscaled where type predicate holds\n"
+            "  (expand ranks, join landcover_type by level3_code, filter on landcover_type label).\n"
+            "Step 2: join the grid coordinates with the metric table on exact lat/lon equality;\n"
+            "  apply time filter; aggregate the metric; GROUP BY latitude, longitude.\n"
+            "Output: always include latitude and longitude alongside the aggregate — never a bare scalar.\n"
+        )
+
+    if mode == "aggregate_distribution":
+        return header + (
+            "Paradigm: compute pixel-count share or percentage for each landcover type in the region.\n"
+            "Step 1: CTE (type_counts) — SUM pixel counts per level3_code across all grids.\n"
+            "Step 2: CTE (grand_total) — SUM all type counts for the denominator.\n"
+            "Step 3: join type_counts with landcover_type (by level3_code) and grand_total;\n"
+            "  compute percentage = ROUND(count / total * 100, 2).\n"
+            "Output must include all three hierarchy levels (code+label for level1, level2, level3),\n"
+            "  the raw pixel count, and the percentage; ORDER BY percentage DESC.\n"
+        )
+
+    if mode == "ranking_by_metric":
+        return header + (
+            "Paradigm: find the landcover type at the grid with the extreme value of an external metric.\n"
+            "Step 1: CTE — in the metric table, filter by region and time, aggregate metric per (lat, lon),\n"
+            "  then select the single extremal grid: ORDER BY metric DESC/ASC LIMIT 1.\n"
+            "Step 2: join that single grid's coordinates with landcover_upscaled on DIRECT lat/lon equality\n"
+            "  (no ROUND in the JOIN — both tables store coordinates at the same precision).\n"
+            "Step 3: expand ranks, join landcover_type, return the requested label.\n"
+            "Never join the metric and landcover tables in a single flat query — always rank first.\n"
+        )
+
+    if mode == "group_comparison":
+        return header + (
+            "Paradigm: compare an external metric across two or more landcover categories.\n"
+            "Step 1: CTEs — for each category, get the set of level2_codes matching its label.\n"
+            "Step 2: CTE — for each grid, determine its dominant category by summing pixel counts\n"
+            "  per level2_code (expand ranks, group by level2_code, ORDER BY SUM DESC LIMIT 1 per grid),\n"
+            "  then label the grid by which category it belongs to.\n"
+            "Step 3: join labeled grids with the metric table on exact lat/lon equality;\n"
+            "  aggregate the metric per category label; return one row per category.\n"
+        )
+
+    if mode == "list_inventory":
+        return header + (
+            "Paradigm: enumerate all distinct landcover types present in a region with their aggregate pixel counts.\n"
+            "Algorithm: expand ranks across all grids, SUM pixel counts per level3_code,\n"
+            "  join with landcover_type to get all three hierarchy levels.\n"
+            "Output must include all hierarchy codes and labels (level1, level2, level3) plus the aggregate count;\n"
+            "  ORDER BY count DESC.\n"
+        )
+
+    if mode == "dominant_lookup":
+        return header + (
+            "Paradigm: access the single most-prevalent landcover type at each grid directly.\n"
+            "ranks is sorted descending by pixel count: ranks[1][1] = dominant level3_code,\n"
+            "  ranks[1][2] = dominant pixel count.\n"
+            "Use direct subscript — no GENERATE_SUBSCRIPTS needed for dominant-only queries.\n"
+        )
+
+    # generic_landcover fallback
+    return header + (
+        "Choose the access pattern that fits the question semantics:\n"
+        "A) membership / existence: expand ranks, JOIN landcover_type on level3_code, filter by label predicate\n"
+        "B) aggregation / distribution: expand ranks, SUM(ranks[i][2]) per level3_code, GROUP BY code\n"
+        "C) dominant entry: ranks[1][1] is the most-prevalent level3_code — direct subscript only\n"
+    )

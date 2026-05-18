@@ -11,7 +11,7 @@ A comprehensive Text-to-SQL framework that achieved first place on [BIRD](https:
 ## Pipeline
 
 ```mermaid
-flowchart LR
+flowchart TD
     A([Input question]) --> B[generate_db_schema]
     B --> C[extract_col_value]
     C --> D[extract_query_noun]
@@ -19,7 +19,8 @@ flowchart LR
     E --> F[implicit_context_enhance]:::enhanced
     F --> G[candidate_generate]:::enhanced
     G --> SA[sql_audit]:::enhanced
-    SA --> H[align_correct]
+    SA --> OPT[query_optimizer]:::enhanced
+    OPT --> H[align_correct]
     H --> I[vote]
     I --> J[evaluation]
     J --> K([Result])
@@ -28,7 +29,7 @@ flowchart LR
 ```
 
 | Node | Role |
-|---|---|
+| --- | --- |
 | `generate_db_schema` | Embed schema columns with sentence-transformer |
 | `extract_col_value` | Identify relevant columns and values from the question |
 | `extract_query_noun` | Parse `#columns:` / `#values:` markers |
@@ -36,20 +37,22 @@ flowchart LR
 | **`implicit_context_enhance`** | **Inject geo context + ontology grounding** _(domain extension)_ |
 | **`candidate_generate`** | **Beam-search SQL candidates + entity/semantic hints** _(domain extension)_ |
 | **`sql_audit`** | **Constraint validation of generated SQL candidates** _(domain extension)_ |
+| **`query_optimizer`** | **Rewrite large lat/lon IN-lists to VALUES JOIN** _(domain extension, `full` only)_ |
 | `align_correct` | Style & function alignment across candidates |
 | `vote` | Self-consistency selection |
 | `evaluation` | Execution match (EX) scoring |
 
 **Ablation modes** — each mode incrementally enables the domain extensions:
 
-| Mode | Geo context | Ontology grounding | Entity hint | Semantic hint | SQL validator |
-|---|:---:|:---:|:---:|:---:|:---:|
-| `baseline` | | | | | |
-| `a1` | ✓ | | | | |
-| `a2` | ✓ | ✓ | | | |
-| `a3` | ✓ | ✓ | ✓ | | |
-| `a4` | ✓ | ✓ | ✓ | ✓ | |
-| `full` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Mode | Geo context | Ontology grounding | Entity hint | Semantic hint | SQL validator | Query optimizer |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| `baseline` | | | | | | |
+| `a1` | ✓ | | | | | |
+| `a2` | ✓ | ✓ | | | | |
+| `a3` | ✓ | ✓ | ✓ | | | |
+| `a4` | ✓ | ✓ | ✓ | ✓ | | |
+| `a5` | ✓ | ✓ | ✓ | ✓ | ✓ | |
+| `full` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ---
 
@@ -161,14 +164,15 @@ uv run run/run_ablation.py --skip-existing --end -1
 
 Each mode incrementally adds pipeline components:
 
-| Mode | Geo context | Ontology grounding | Entity hint | Semantic hint | SQL validator |
-|---|:---:|:---:|:---:|:---:|:---:|
-| `baseline` | | | | | |
-| `a1` | ✓ | | | | |
-| `a2` | ✓ | ✓ | | | |
-| `a3` | ✓ | ✓ | ✓ | | |
-| `a4` | ✓ | ✓ | ✓ | ✓ | |
-| `full` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Mode | Geo context | Ontology grounding | Entity hint | Semantic hint | SQL validator | Query optimizer |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| `baseline` | | | | | | |
+| `a1` | ✓ | | | | | |
+| `a2` | ✓ | ✓ | | | | |
+| `a3` | ✓ | ✓ | ✓ | | | |
+| `a4` | ✓ | ✓ | ✓ | ✓ | | |
+| `a5` | ✓ | ✓ | ✓ | ✓ | ✓ | |
+| `full` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ---
 

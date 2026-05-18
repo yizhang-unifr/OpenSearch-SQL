@@ -124,7 +124,14 @@ def align_correct(task: Any, execution_history: List[Dict[str, Any]]) -> Dict[st
     q_order = col_node["q_order"]
     question = cand_node["rewrite_question"]
 
-    SQLs = cand_node["SQL"]
+    # Use optimized SQL when query_optimizer ran successfully; fall back to candidate_generate.
+    opt_node = get_last_node_result(execution_history, "query_optimizer")
+    sql_source = (
+        opt_node
+        if opt_node and opt_node.get("status") == "success"
+        else cand_node
+    )
+    SQLs = sql_source["SQL"]
 
     db = task.db_id
     hint = task.evidence

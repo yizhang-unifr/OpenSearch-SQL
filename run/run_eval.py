@@ -33,15 +33,16 @@ _PROJECT_ROOT = _ROOT.parents[1]                      # ontology_retriever/
 _DB_PROCESS   = _ROOT / "src" / "database_process"
 _DEFAULT_CONFIG = str(_PROJECT_ROOT / "config" / "models.yaml")
 
-ABLATION_MODES = ("baseline", "a1", "a2", "a3", "a4", "full")
+ABLATION_MODES = ("baseline", "a1", "a2", "a3", "a4", "a5", "full")
 
 _FLAGS = {
-    "baseline": dict(geo="False", ogf="False", entity="False", semantic="False", validator="False"),
-    "a1":       dict(geo="True",  ogf="False", entity="False", semantic="False", validator="False"),
-    "a2":       dict(geo="True",  ogf="True",  entity="False", semantic="False", validator="False"),
-    "a3":       dict(geo="True",  ogf="True",  entity="True",  semantic="False", validator="False"),
-    "a4":       dict(geo="True",  ogf="True",  entity="True",  semantic="True",  validator="False"),
-    "full":     dict(geo="True",  ogf="True",  entity="True",  semantic="True",  validator="True"),
+    "baseline": dict(geo="False", ogf="False", entity="False", semantic="False", validator="False", optimizer="False"),
+    "a1":       dict(geo="True",  ogf="False", entity="False", semantic="False", validator="False", optimizer="False"),
+    "a2":       dict(geo="True",  ogf="True",  entity="False", semantic="False", validator="False", optimizer="False"),
+    "a3":       dict(geo="True",  ogf="True",  entity="True",  semantic="False", validator="False", optimizer="False"),
+    "a4":       dict(geo="True",  ogf="True",  entity="True",  semantic="True",  validator="False", optimizer="False"),
+    "a5":       dict(geo="True",  ogf="True",  entity="True",  semantic="True",  validator="True",  optimizer="False"),
+    "full":     dict(geo="True",  ogf="True",  entity="True",  semantic="True",  validator="True",  optimizer="True"),
 }
 
 
@@ -127,6 +128,10 @@ def build_pipeline_setup(
             "device": "cpu",
             "fewshot_enabled": fewshot_enabled,
             "align_methods": "style_align+function_align",
+        },
+        "query_optimizer": {
+            "engine": "llm_factory",
+            "temperature": 0.0,
         },
     }
     return json.dumps(setup)
@@ -233,10 +238,11 @@ def run(args, extra_env: dict | None = None):
     else:
         llm_config = args.llm_config or _DEFAULT_CONFIG
 
+    _opt_node = "+query_optimizer" if flags.get("optimizer") == "True" else ""
     pipeline_nodes = (
         "generate_db_schema+extract_col_value+extract_query_noun"
         "+column_retrieve_and_other_info+implicit_context_enhance"
-        "+candidate_generate+align_correct+vote+evaluation"
+        f"+candidate_generate{_opt_node}+align_correct+vote+evaluation"
     )
     pipeline_setup = build_pipeline_setup(
         flags, args.bert_model, fewshot_enabled,
@@ -247,7 +253,8 @@ def run(args, extra_env: dict | None = None):
 
     print(f"Ablation  : {args.ablation}")
     print(f"  geo={flags['geo']}, ogf={flags['ogf']}, entity={flags['entity']}, "
-          f"semantic={flags['semantic']}, validator={flags['validator']}")
+          f"semantic={flags['semantic']}, validator={flags['validator']}, "
+          f"optimizer={flags['optimizer']}")
     print(f"Dataset   : {data_mode}  (start={args.start}, end={args.end})")
     print(f"LLM config: {llm_config}")
     print(f"Fewshot   : {fewshot_enabled}  |  geo_anchor={args.geo_anchor}")

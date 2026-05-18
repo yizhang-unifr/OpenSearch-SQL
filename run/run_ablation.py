@@ -23,7 +23,7 @@ sys.path.insert(0, str(_ROOT / "run"))
 
 from run_eval import parse_args as _eval_parse_args, run as _eval_run, ABLATION_MODES
 
-ALL_MODES = list(ABLATION_MODES)   # baseline → a1 → a2 → a3 → a4 → full
+ALL_MODES = list(ABLATION_MODES)   # baseline → a1 → a2 → a3 → a4 → a5 → full
 
 
 def parse_args():
