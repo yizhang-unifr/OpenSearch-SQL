@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Literal
 
 
-LandcoverSemanticMode = Literal["simple_filter", "dominant_direct", "dominance_aggregation", "ranking_by_metric", "comparison", "generic_landcover"]
+LandcoverSemanticMode = Literal["simple_filter", "dominant_direct", "dominance_aggregation", "ranking_by_metric", "comparison", "list_types", "generic_landcover"]
 
 
 def build_landcover_semantic_hint(question: str) -> str:
@@ -48,6 +48,10 @@ def _classify_mode(q: str) -> LandcoverSemanticMode:
 
     # "compare ... between forest and urban" must be checked before dominant_direct
     # because Q3/Q4 contain "dominant" but are comparison queries, not single-type lookups.
+    # "list the different landcover types" → return full hierarchy
+    if any(k in q for k in ("list", "what are", "different")) and any(k in q for k in ("landcover type", "land cover type", "landcover class")):
+        return "list_types"
+
     if (has_comparison or "between" in q) and has_forest_urban:
         return "comparison"
     if has_dominant and not has_distribution:
@@ -93,6 +97,26 @@ def _render_hint(mode: LandcoverSemanticMode) -> str:
         "Do not join landcover_upscaled directly to landcover_type by latitude/longitude.\n"
         f"{_DOMINANT_NEVER}"
     )
+    if mode == "list_types":
+        return (
+            "\n#LANDCOVER_SEMANTIC_HINT:\n"
+            "mode=list_types\n"
+            f"{common}"
+            "Return the FULL landcover hierarchy — all three levels — for each type present, with total pixel count.\n"
+            "Required SELECT columns: lt.level1_code, lt.level1_label, lt.level2_code, lt.level2_label, lt.level3_code, lt.level3_label, total_count\n"
+            "Aggregate SUM(u.ranks[i][2]) as total_count per level3_code; ORDER BY total_count DESC.\n"
+            "Recommended pattern:\n"
+            "SELECT lt.level1_code, lt.level1_label, lt.level2_code, lt.level2_label, lt.level3_code, lt.level3_label,\n"
+            "       lc.total_count\n"
+            "FROM (\n"
+            "  SELECT u.ranks[i][1] AS level3_code, SUM(u.ranks[i][2]) AS total_count\n"
+            "  FROM landcover_upscaled AS u, GENERATE_SUBSCRIPTS(u.ranks, 1) AS i\n"
+            "  WHERE <geo_filter>\n"
+            "  GROUP BY u.ranks[i][1]\n"
+            ") AS lc\n"
+            "JOIN landcover_type lt ON lt.level3_code = lc.level3_code\n"
+            "ORDER BY lc.total_count DESC\n"
+        )
     if mode == "dominant_direct":
         return (
             "\n#LANDCOVER_SEMANTIC_HINT:\n"
@@ -124,13 +148,24 @@ def _render_hint(mode: LandcoverSemanticMode) -> str:
             "\n#LANDCOVER_SEMANTIC_HINT:\n"
             "mode=dominance_aggregation\n"
             f"{common}"
-            "Use dominance/share semantics: expand ranks, aggregate counts, then rank.\n"
-            "Recommended pattern:\n"
-            "CROSS JOIN LATERAL GENERATE_SUBSCRIPTS(u.ranks, 1) AS i\n"
-            "JOIN landcover_type lt ON lt.level3_code = u.ranks[i][1]\n"
-            "u.ranks[i][1] = level3_code, u.ranks[i][2] = pixel count.\n"
-            "Aggregate with SUM(u.ranks[i][2]) GROUP BY lt.level3_code and ORDER BY count DESC\n"
-            "to identify the dominant landcover type.\n"
+            "Use dominance/share semantics: aggregate pixel counts per level3_code, compute percentage.\n"
+            "Recommended pattern (percentage query):\n"
+            "WITH totals AS (\n"
+            "  SELECT u.ranks[i][1] AS level3_code, SUM(u.ranks[i][2]) AS total_count\n"
+            "  FROM landcover_upscaled AS u, GENERATE_SUBSCRIPTS(u.ranks, 1) AS i\n"
+            "  WHERE <geo_filter>\n"
+            "  GROUP BY u.ranks[i][1]\n"
+            "), grand_total AS (\n"
+            "  SELECT SUM(total_count) AS total_all FROM totals\n"
+            ")\n"
+            "SELECT lt.level1_code, lt.level1_label, lt.level2_code, lt.level2_label,\n"
+            "       lt.level3_code, lt.level3_label,\n"
+            "       t.total_count,\n"
+            "       ROUND(CAST(t.total_count AS DECIMAL) / gt.total_all * 100, 2) AS percentage\n"
+            "FROM totals t\n"
+            "CROSS JOIN grand_total gt\n"
+            "JOIN landcover_type lt ON lt.level3_code = t.level3_code\n"
+            "ORDER BY percentage DESC\n"
         )
     if mode == "ranking_by_metric":
         return (

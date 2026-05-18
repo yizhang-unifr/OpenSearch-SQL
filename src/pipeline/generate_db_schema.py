@@ -44,21 +44,19 @@ def generate_db_schema(task: Any, execution_history: Dict[str, Any]) -> Dict[str
     db = task.db_id
 
     existing_entry = data.get(db)
-    if existing_entry and len(existing_entry) >= 3:
-        all_info, db_col, column_contracts = existing_entry
-    elif existing_entry:
-        # Migrate old 2-element cache entries
-        all_info, db_col = existing_entry
-        column_contracts = _safe_build_contracts()
-        data[db] = [all_info, db_col, column_contracts]
-        with open(cache_file, "w") as f:
-            json.dump(data, f, indent=4, ensure_ascii=False)
+    if existing_entry:
+        # schema/embeddings are expensive (LLM + BERT); read from cache.
+        all_info = existing_entry[0]
+        db_col   = existing_entry[1]
     else:
         all_info, db_col = DB_info_agent.get_allinfo(db, bert_model)
-        column_contracts = _safe_build_contracts()
-        data[db] = [all_info, db_col, column_contracts]
-        with open(cache_file, "w") as f:
-            json.dump(data, f, indent=4, ensure_ascii=False)
+
+    # Contracts are a cheap DB metadata query — always rebuild so new rules are picked up.
+    column_contracts = _safe_build_contracts()
+
+    data[db] = [all_info, db_col, column_contracts]
+    with open(cache_file, "w") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
 
     response = {
         "db_list": all_info,

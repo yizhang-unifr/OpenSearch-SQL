@@ -10,6 +10,7 @@ from pipeline.context.landcover_semantic_hints import build_landcover_semantic_h
 from pipeline.context.landcover_entity_hint import build_landcover_entity_hint
 from pipeline.sql_audit.sql_candidate_parser import parse_sql_candidates
 from pipeline.sql_audit.constraint_validator import validate_sql_candidates
+from pipeline.sql_audit.column_contracts import format_contracts_for_prompt
 from pipeline.pipeline_manager import PipelineManager, get_bool
 from runner.database_manager import DatabaseManager
 from llm.model import model_chose
@@ -79,6 +80,17 @@ def candidate_generate(task: Any, execution_history: List[Dict[str, Any]]) -> Di
         q_order,
     )
     new_prompt += build_implicit_context_block(execution_history)
+
+    # Inject schema contracts (array syntax rules, coordinate precision) before generation.
+    schema_node = get_last_node_result(execution_history, "generate_db_schema")
+    column_contracts = schema_node.get("column_contracts", {}) if schema_node else {}
+    if column_contracts:
+        contracts_text = format_contracts_for_prompt(column_contracts)
+        new_prompt += (
+            "\n#SCHEMA_COLUMN_CONTRACTS (HARD RULES — violations will cause SQL errors):\n"
+            f"{contracts_text}\n"
+        )
+
     if enable_semantic_hint:
         new_prompt += build_landcover_semantic_hint(question)
     if enable_entity_hint:
@@ -108,14 +120,19 @@ def candidate_generate(task: Any, execution_history: List[Dict[str, Any]]) -> Di
         )
 
     implicit_payload = get_implicit_context_payload(execution_history)
-    schema_node = get_last_node_result(execution_history, "generate_db_schema")
-    column_contracts = schema_node.get("column_contracts", {}) if schema_node else {}
 
     if enable_validator and sql_candidates:
+        # Pass only array-type contracts to the validator; lat/lon precision rules are for
+        # generation only — passing them to the validator causes ROUND() to appear in JOIN
+        # conditions, breaking index use and causing timeouts.
+        validator_contracts = {
+            k: v for k, v in column_contracts.items()
+            if not k.startswith("*.")
+        }
         validated_candidates, validation_trace = validate_sql_candidates(
             chat_model,
             sql_candidates,
-            column_contracts,
+            validator_contracts,
             implicit_payload,
             question,
         )

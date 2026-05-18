@@ -31,30 +31,72 @@ def get_implicit_context_payload(execution_history: List[Dict[str, Any]]) -> Dic
     }
 
 
-def _condensed_geo_context(geo_context: Dict[str, Any]) -> Dict[str, Any]:
-    """Return a compact version of geo_context for prompt injection.
+def _geo_filter_block(geo_context: Dict[str, Any]) -> str:
+    """Render a mandatory spatial filter block for prompt injection.
 
-    When sql_filter is present it already encodes the full coordinate list,
-    so the raw points/bbox arrays are redundant and bloat the prompt significantly.
-    Keep only place + sql_filter in that case.
+    Uses the pre-built sql_filter when available.
+    Falls back to bbox or point-list construction when not.
+    Switches to a BETWEEN bbox expression when the point list exceeds the threshold,
+    to avoid bloating the prompt with hundreds of coordinate pairs.
     """
-    if geo_context.get("sql_filter"):
-        return {k: v for k, v in geo_context.items() if k not in ("points", "bbox")}
-    return geo_context
+    place = geo_context.get("place", "")
+    sql_filter = geo_context.get("sql_filter", "")
+    points = geo_context.get("points") or []
+    bbox = geo_context.get("bbox") or {}
+
+    if sql_filter:
+        filter_expr = sql_filter
+    elif bbox:
+        min_lat = bbox.get("min_lat") or bbox.get("lat_min")
+        max_lat = bbox.get("max_lat") or bbox.get("lat_max")
+        min_lon = bbox.get("min_lon") or bbox.get("lon_min")
+        max_lon = bbox.get("max_lon") or bbox.get("lon_max")
+        filter_expr = (
+            f"ROUND(CAST(<alias>.latitude  AS DECIMAL), 1) BETWEEN {min_lat} AND {max_lat} "
+            f"AND ROUND(CAST(<alias>.longitude AS DECIMAL), 1) BETWEEN {min_lon} AND {max_lon}"
+        )
+    elif points:
+        pairs = ", ".join(
+            f"({float(p['lat'])}, {float(p['lon'])})" for p in points
+        )
+        filter_expr = (
+            f"(ROUND(CAST(<alias>.latitude AS DECIMAL), 1), "
+            f"ROUND(CAST(<alias>.longitude AS DECIMAL), 1)) IN ({pairs})"
+        )
+    else:
+        return ""
+
+    return (
+        "\n#MANDATORY_SPATIAL_FILTER\n"
+        f"# Place: {place}\n"
+        "# This filter MUST appear in the WHERE clause of your SQL.\n"
+        "# Replace every <alias> with the actual table alias you use for the spatial table\n"
+        "# (e.g. if you alias landcover_upscaled as 'u', replace <alias> with 'u').\n"
+        "# latitude and longitude are stored at 1 decimal place — always use ROUND(..., 1).\n"
+        f"{filter_expr}\n"
+    )
 
 
 def build_implicit_context_block(execution_history: List[Dict[str, Any]]) -> str:
-    """Build prompt block containing GEO and ontology grounded function payloads."""
+    """Build prompt block containing mandatory spatial filter and ontology grounded function."""
     payload = get_implicit_context_payload(execution_history)
     geo_context = payload["geo_context"]
     ontology_grounded_function = payload["ontology_grounded_function"]
     if not geo_is_meaningful(geo_context) and not ontology_grounded_function:
         return ""
-    prompt_geo = _condensed_geo_context(geo_context)
-    return (
-        "\n#GEO_CONTEXT:\n"
-        f"{json.dumps(prompt_geo, ensure_ascii=False, indent=2)}\n"
-        "#ONTOLOGY_GROUNDED_FUNCTION:\n"
-        f"{json.dumps(ontology_grounded_function, ensure_ascii=False, indent=2)}\n"
-    )
+
+    parts: list[str] = []
+
+    if geo_is_meaningful(geo_context):
+        geo_block = _geo_filter_block(geo_context)
+        if geo_block:
+            parts.append(geo_block)
+
+    if ontology_grounded_function:
+        parts.append(
+            "\n#ONTOLOGY_GROUNDED_FUNCTION:\n"
+            f"{json.dumps(ontology_grounded_function, ensure_ascii=False, indent=2)}\n"
+        )
+
+    return "".join(parts)
 
