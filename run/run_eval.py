@@ -33,16 +33,24 @@ _PROJECT_ROOT = _ROOT.parents[1]                      # ontology_retriever/
 _DB_PROCESS   = _ROOT / "src" / "database_process"
 _DEFAULT_CONFIG = str(_PROJECT_ROOT / "config" / "models.yaml")
 
-ABLATION_MODES = ("baseline", "a1", "a2", "a3", "a4", "a5", "full")
+ABLATION_MODES = ("baseline", "geo", "ogf", "hints", "full", "a1", "a2", "a3", "a4", "a5")
+DEFAULT_ABLATION_MODES = ("baseline", "geo", "ogf", "hints", "full")
 
 _FLAGS = {
+    # ── Canonical 5-level ablation ────────────────────────────────────────────
+    # Each step adds one complete contribution; OGF and validator are always
+    # paired because the validator enforces OGF's unit constraints in SQL.
     "baseline": dict(geo="False", ogf="False", entity="False", semantic="False", validator="False", optimizer="False"),
+    "geo":      dict(geo="True",  ogf="False", entity="False", semantic="False", validator="False", optimizer="False"),
+    "ogf":      dict(geo="True",  ogf="True",  entity="False", semantic="False", validator="True",  optimizer="False"),
+    "hints":    dict(geo="True",  ogf="True",  entity="True",  semantic="True",  validator="True",  optimizer="False"),
+    "full":     dict(geo="True",  ogf="True",  entity="True",  semantic="True",  validator="True",  optimizer="True"),
+    # ── Legacy fine-grained modes (kept for reference) ───────────────────────
     "a1":       dict(geo="True",  ogf="False", entity="False", semantic="False", validator="False", optimizer="False"),
     "a2":       dict(geo="True",  ogf="True",  entity="False", semantic="False", validator="False", optimizer="False"),
     "a3":       dict(geo="True",  ogf="True",  entity="True",  semantic="False", validator="False", optimizer="False"),
     "a4":       dict(geo="True",  ogf="True",  entity="True",  semantic="True",  validator="False", optimizer="False"),
     "a5":       dict(geo="True",  ogf="True",  entity="True",  semantic="True",  validator="True",  optimizer="False"),
-    "full":     dict(geo="True",  ogf="True",  entity="True",  semantic="True",  validator="True",  optimizer="True"),
 }
 
 

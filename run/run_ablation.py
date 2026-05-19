@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
-"""Run the full ablation suite (baseline → a1 → a2 → a3 → a4 → full) sequentially.
+"""Run the full ablation suite sequentially.
+
+Canonical 5-level ablation: baseline → geo → ogf → hints → full
+Legacy fine-grained modes (a1–a5) are still available via --modes.
 
 All flags from run_eval.py are accepted and forwarded to each mode run,
 except --ablation (which is iterated automatically).
 
 Examples:
-  uv run run/run_ablation.py                                   # all modes, landcover10
-  uv run run/run_ablation.py --dataset thesaly_sample          # different dataset
-  uv run run/run_ablation.py --modes a3,a4,full                # subset of modes
-  uv run run/run_ablation.py --provider swiss_ai --end -1      # Swiss AI, all questions
+  uv run run/run_ablation.py                                        # canonical 5-level ablation
+  uv run run/run_ablation.py --modes baseline,geo,ogf,hints,full   # explicit canonical modes
+  uv run run/run_ablation.py --modes a1,a2,a3,a4,a5,full          # legacy fine-grained modes
+  uv run run/run_ablation.py --provider swiss_ai --end -1          # Swiss AI, all questions
   uv run run/run_ablation.py --skip-existing --export-xlsx
 """
 
@@ -21,9 +24,9 @@ from pathlib import Path
 _ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(_ROOT / "run"))
 
-from run_eval import parse_args as _eval_parse_args, run as _eval_run, ABLATION_MODES
+from run_eval import parse_args as _eval_parse_args, run as _eval_run, ABLATION_MODES, DEFAULT_ABLATION_MODES
 
-ALL_MODES = list(ABLATION_MODES)   # baseline → a1 → a2 → a3 → a4 → a5 → full
+ALL_MODES = list(ABLATION_MODES)
 
 
 def parse_args():
@@ -32,9 +35,10 @@ def parse_args():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
-    p.add_argument("--modes", default=",".join(ALL_MODES),
-                   help=f"Comma-separated modes to run (default: all). "
-                        f"Choices: {', '.join(ALL_MODES)}")
+    p.add_argument("--modes", default=",".join(DEFAULT_ABLATION_MODES),
+                   help=f"Comma-separated modes to run "
+                        f"(default: canonical 5-level — {', '.join(DEFAULT_ABLATION_MODES)}). "
+                        f"All valid choices: {', '.join(ALL_MODES)}")
 
     # Forward all run_eval flags (except --ablation which we override per mode)
     p.add_argument("--dataset",      default="landcover10")

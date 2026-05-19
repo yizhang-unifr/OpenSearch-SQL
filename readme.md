@@ -81,17 +81,17 @@ flowchart TD
 | `vote` | Self-consistency selection |
 | `evaluation` | Execution match (EX) scoring |
 
-**Ablation modes** — each mode incrementally enables the domain extensions:
+**Ablation modes** — each step adds one complete contribution. OGF and validator are always paired: OGF discovers unit semantics, validator enforces them in SQL.
 
-| Mode | Geo context | Ontology grounding | Entity hint | Semantic hint | SQL validator | Query optimizer |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| `baseline` | | | | | | |
-| `a1` | ✓ | | | | | |
-| `a2` | ✓ | ✓ | | | | |
-| `a3` | ✓ | ✓ | ✓ | | | |
-| `a4` | ✓ | ✓ | ✓ | ✓ | | |
-| `a5` | ✓ | ✓ | ✓ | ✓ | ✓ | |
-| `full` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Mode | Geo context | OGF + Validator | Entity + Semantic hints | Query optimizer |
+| --- | :---: | :---: | :---: | :---: |
+| `baseline` | | | | |
+| `geo` | ✓ | | | |
+| `ogf` | ✓ | ✓ | | |
+| `hints` | ✓ | ✓ | ✓ | |
+| `full` | ✓ | ✓ | ✓ | ✓ |
+
+Legacy fine-grained modes (`a1`–`a5`) are still available for detailed analysis.
 
 ---
 
@@ -141,77 +141,102 @@ Output: `data/emb/meteo.pkl.gz` and `data/emb/meteo_value.pkl.gz`
 
 ## Running Evaluations
 
+All commands run from `src/OpenSearch-SQL/`.
+
 ### Single configuration — `run_eval.py`
 
+Runs one ablation mode on one dataset and optionally exports results to XLSX.
+
 ```shell
-# Default: dataset=landcover10, ablation=full, end=1 (first question only)
-uv run run/run_eval.py
+# Quick smoke-test: first question only, full pipeline
+uv run run/run_eval.py \
+    --dataset data/data_preprocess/test_data_point.json \
+    --ablation full --fewshot --geo-anchor points --end 1
 
-# Run all questions with Swiss AI provider
-uv run run/run_eval.py --dataset landcover10 --ablation full --end -1 --provider swiss_ai
+# Full test set, few-shot, export XLSX when done
+uv run run/run_eval.py \
+    --dataset data/data_preprocess/test_data_point.json \
+    --ablation full --fewshot --geo-anchor points \
+    --end -1 --export-xlsx
 
-# Custom YAML config
-uv run run/run_eval.py --llm-config config/models.yaml --dataset landcover10 --end -1
+# Zero-shot baseline, Swiss AI provider
+uv run run/run_eval.py \
+    --dataset data/data_preprocess/test_data_point.json \
+    --ablation baseline --provider swiss_ai \
+    --geo-anchor points --end -1 --export-xlsx
+
+# Bbox variant with few-shot
+uv run run/run_eval.py \
+    --dataset data/data_preprocess/test_data_bbox.json \
+    --ablation full --fewshot --geo-anchor bbox \
+    --end -1 --export-xlsx
 
 # Dry-run: print resolved config without executing
 uv run run/run_eval.py --dry-run
 ```
 
-**Key flags:**
+**Flags:**
 
 | Flag | Default | Description |
 |---|---|---|
-| `--dataset` | `landcover10` | Dataset name or path (see below) |
-| `--ablation` | `full` | Ablation mode (see table below) |
-| `--start` / `--end` | `0` / `1` | Question index range; `-1` = all |
-| `--llm-config` | `config/models.yaml` | Path to LLM YAML config |
-| `--provider` | — | Quick provider override (no YAML needed) |
-| `--model` | — | Model name (used with `--provider`) |
-| `--n-candidates` | `5` | SQL candidates per question |
-| `--temperature` | `0.7` | Sampling temperature |
-| `--fewshot` | off | Enable few-shot examples |
-| `--geo-anchor` | `points` | Geo anchor mode (`points` or `bbox`) |
-| `--export-xlsx` | off | Export results to XLSX after run |
-| `--skip-existing` | off | Skip if result directory already exists |
-| `--dry-run` | off | Print config without running |
-| `--bert-model` | `all-mpnet-base-v2` | Sentence-transformer model |
+| `--dataset` | `landcover10` | Dataset name or path. Name only → `src/database_process/<name>.json`; relative path → relative to `src/OpenSearch-SQL/`; absolute path → used as-is |
+| `--ablation` | `full` | Ablation mode. Canonical: `baseline`, `geo`, `ogf`, `hints`, `full`. Legacy: `a1`–`a5` |
+| `--start` / `--end` | `0` / `1` | Question index range (0-based, exclusive end). `-1` runs all questions |
+| `--fewshot` | off | Enable few-shot retrieval. Requires `data/fewshot/questions.json` (see Setup: Fewshot Index) |
+| `--geo-anchor` | `points` | Geo anchor style. `points` = point IN-list SQL; `bbox` = bounding-box lat/lon range SQL. Must match the dataset variant |
+| `--provider` | — | LLM provider shorthand: `openai`, `swiss_ai`, `bedrock`, `ollama`, `anthropic`. Overrides `models.yaml` |
+| `--model` | — | Model name, used together with `--provider` |
+| `--llm-config` | `config/models.yaml` | Path to LLM YAML config file |
+| `--n-candidates` | `5` | Number of SQL candidates generated per question (beam width) |
+| `--temperature` | `0.7` | Sampling temperature for candidate generation |
+| `--export-xlsx` | off | Export a multi-sheet XLSX report to the run directory after completion |
+| `--skip-existing` | off | Skip a run if its result directory already exists (safe for resuming interrupted jobs) |
+| `--bert-model` | `all-mpnet-base-v2` | SentenceTransformer model used for schema linking |
+| `--dry-run` | off | Print the fully resolved config and pipeline graph without executing |
 
-**Dataset resolution** (`--dataset`):
-- Name only (e.g. `landcover10`) → `src/database_process/landcover10.json`
-- Relative path (e.g. `data/data_preprocess/my.json`) → relative to `src/OpenSearch-SQL/`
-- Absolute path → used as-is
+### Multiple configurations — `run_ablation.py`
 
-### Full ablation suite — `run_ablation.py`
-
-Runs all ablation modes sequentially, forwarding all `run_eval.py` flags:
+Runs multiple ablation modes sequentially on the same dataset. All `run_eval.py` flags are accepted and forwarded to each mode.
 
 ```shell
-# All modes, default dataset
-uv run run/run_ablation.py
+# Canonical 5-level ablation, point dataset, few-shot, export XLSX per mode
+uv run run/run_ablation.py \
+    --dataset data/data_preprocess/test_data_point.json \
+    --fewshot --geo-anchor points \
+    --end -1 --export-xlsx --skip-existing
 
-# Specific modes only
-uv run run/run_ablation.py --modes a3,a4,full
+# Bbox variant
+uv run run/run_ablation.py \
+    --dataset data/data_preprocess/test_data_bbox.json \
+    --fewshot --geo-anchor bbox \
+    --end -1 --export-xlsx --skip-existing
 
-# Swiss AI, all questions
-uv run run/run_ablation.py --provider swiss_ai --end -1 --export-xlsx
+# Run only specific modes
+uv run run/run_ablation.py \
+    --modes baseline,ogf,full \
+    --dataset data/data_preprocess/test_data_point.json \
+    --fewshot --geo-anchor points --end -1 --export-xlsx
 
-# With skip-existing to resume interrupted runs
-uv run run/run_ablation.py --skip-existing --end -1
+# Zero-shot run (no --fewshot)
+uv run run/run_ablation.py \
+    --dataset data/data_preprocess/test_data_point.json \
+    --geo-anchor points --end -1 --export-xlsx --skip-existing
+
+# Dry-run to preview all modes
+uv run run/run_ablation.py --dry-run
 ```
 
-### Ablation modes
+**Additional flag:**
 
-Each mode incrementally adds pipeline components:
+| Flag | Default | Description |
+| --- | --- | --- |
+| `--modes` | `baseline,geo,ogf,hints,full` | Comma-separated list of ablation modes to run in order. Use legacy `a1`–`a5` for fine-grained analysis |
 
-| Mode | Geo context | Ontology grounding | Entity hint | Semantic hint | SQL validator | Query optimizer |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| `baseline` | | | | | | |
-| `a1` | ✓ | | | | | |
-| `a2` | ✓ | ✓ | | | | |
-| `a3` | ✓ | ✓ | ✓ | | | |
-| `a4` | ✓ | ✓ | ✓ | ✓ | | |
-| `a5` | ✓ | ✓ | ✓ | ✓ | ✓ | |
-| `full` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+**XLSX output location** — each mode writes its report to:
+
+```text
+results/<dataset_name>/<no_few_shot|with_few_shot>/<mode>/<pipe_hash>/<timestamp>/results_<ts>.xlsx
+```
 
 ---
 

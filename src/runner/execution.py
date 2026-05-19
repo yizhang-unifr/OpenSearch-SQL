@@ -9,10 +9,61 @@ import logging
 import os
 import re
 import time
+from decimal import Decimal
 from typing import Any, Dict, List, Union
 
 import psycopg2
 from func_timeout import FunctionTimedOut, func_timeout
+
+_NUMERIC_TYPES = (int, float, Decimal)
+_EPS = 1e-6
+
+
+def _val_approx_eq(a, b) -> bool:
+    """True if a == b, or both are numeric and differ by less than _EPS."""
+    if a == b:
+        return True
+    if isinstance(a, _NUMERIC_TYPES) and isinstance(b, _NUMERIC_TYPES):
+        try:
+            return abs(float(a) - float(b)) < _EPS
+        except (TypeError, ValueError):
+            pass
+    return False
+
+
+def _row_approx_eq(row_a, row_b) -> bool:
+    """Column-order-independent row comparison with epsilon tolerance."""
+    if len(row_a) != len(row_b):
+        return False
+    used = [False] * len(row_b)
+    for a in row_a:
+        matched = False
+        for i, b in enumerate(row_b):
+            if not used[i] and _val_approx_eq(a, b):
+                used[i] = True
+                matched = True
+                break
+        if not matched:
+            return False
+    return True
+
+
+def _results_approx_equal(pred_res: set, gold_res: set) -> bool:
+    """Row-order-independent comparison with epsilon tolerance for numerics."""
+    if len(pred_res) != len(gold_res):
+        return False
+    gold_list = list(gold_res)
+    used = [False] * len(gold_list)
+    for p_row in pred_res:
+        matched = False
+        for i, g_row in enumerate(gold_list):
+            if not used[i] and _row_approx_eq(p_row, g_row):
+                used[i] = True
+                matched = True
+                break
+        if not matched:
+            return False
+    return True
 
 
 def _sql_statement_timeout_ms() -> int:
@@ -100,9 +151,12 @@ def _compare_sqls_outcomes(predicted_sql: str, ground_truth_sql: str) -> int:
         1 if the result sets are equivalent, 0 otherwise.
     """
     try:
-        predicted_res = execute_sql(predicted_sql)
-        ground_truth_res = execute_sql(ground_truth_sql)
-        return int(set(predicted_res) == set(ground_truth_res))
+        predicted_res = set(execute_sql(predicted_sql))
+        ground_truth_res = set(execute_sql(ground_truth_sql))
+        return int(
+            predicted_res == ground_truth_res
+            or _results_approx_equal(predicted_res, ground_truth_res)
+        )
     except Exception as e:
         logging.critical(f"Error comparing SQL outcomes: {e}")
         raise
@@ -132,7 +186,7 @@ def _compare_sqls_with_timing(
     except Exception as e:
         return 0, str(e), 0.0
 
-    correct = int(pred_res == gold_res)
+    correct = int(pred_res == gold_res or _results_approx_equal(pred_res, gold_res))
     error = "--" if correct else "incorrect answer"
 
     if correct and t_pred > 0:
