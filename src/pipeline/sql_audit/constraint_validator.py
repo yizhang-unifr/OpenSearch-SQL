@@ -35,6 +35,11 @@ Instructions:
 - If no violations: return the SQL unchanged, "changed": false, "issues": [].
 - If violations found: rewrite to fix them, "changed": true, list each fix in "issues".
 - Do NOT alter anything that is not a constraint violation.
+- Unit conversions (e.g. subtracting 273.15 for Kelvin→Celsius) MUST ONLY be applied \
+to the measurement column itself (e.g. tmean, tmin, tmax, windspeedmax, tp, sdmax) \
+inside SELECT expressions or numeric comparisons against physical thresholds. \
+NEVER apply any unit conversion to temporal filter values such as \
+EXTRACT(YEAR/MONTH/WEEK/DAY FROM ...), date literals, or any non-measurement column.
 
 Return ONLY a valid JSON array — no prose, no markdown fences:
 [
