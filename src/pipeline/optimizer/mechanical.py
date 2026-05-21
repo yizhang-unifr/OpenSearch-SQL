@@ -27,78 +27,95 @@ _SAFE_PRECEDING_WORDS = frozenset({"where", "and", "or", "on", "having", "join"}
 
 
 def mechanical_optimize(sql: str) -> tuple[str, bool]:
-    """Rewrite large ROUND(CAST(lat/lon)) IN (...) as a VALUES subquery.
+    """Rewrite all large ROUND(CAST(lat/lon)) IN (...) predicates as VALUES subqueries.
 
     Returns (new_sql, was_transformed).  When no matching pattern is found,
     the pairs list is empty, or the IN predicate is inside a CASE WHEN
     expression, returns (original_sql, False).
+
+    Processes all occurrences left-to-right (each rewrite shifts positions, so
+    we restart the search on the updated SQL after each substitution).
     """
-    m = _ROUND_IN_RE.search(sql)
-    if not m:
-        return sql, False
+    current = sql
+    transformed = False
+    search_pos = 0
 
-    # Guard: skip when the IN predicate is inside a CASE WHEN expression.
-    # In that context, converting to IN (SELECT FROM VALUES) forces PostgreSQL
-    # to require the outer lat/lon columns in GROUP BY, breaking the query.
-    prefix_word = _LAST_WORD_RE.search(sql[: m.start()].rstrip())
-    if prefix_word and prefix_word.group(1).lower() not in _SAFE_PRECEDING_WORDS:
-        return sql, False
+    while True:
+        m = _ROUND_IN_RE.search(current, search_pos)
+        if not m:
+            break
 
-    # Walk depth to find the closing ')' of the IN list
-    start = m.end() - 1  # position of the opening '(' of IN (...)
-    depth = 0
-    end = start
-    for i in range(start, len(sql)):
-        if sql[i] == "(":
-            depth += 1
-        elif sql[i] == ")":
-            depth -= 1
-            if depth == 0:
-                end = i + 1
-                break
+        # Guard: skip when the IN predicate is inside a CASE WHEN expression.
+        prefix_word = _LAST_WORD_RE.search(current[: m.start()].rstrip())
+        if prefix_word and prefix_word.group(1).lower() not in _SAFE_PRECEDING_WORDS:
+            search_pos = m.end()
+            continue
 
-    in_body = sql[start:end]
-    pairs = _PAIR_RE.findall(in_body)
-    if not pairs:
-        return sql, False
+        # Walk depth to find the closing ')' of the IN list
+        start = m.end() - 1  # position of the opening '(' of IN (...)
+        depth = 0
+        end = start
+        for i in range(start, len(current)):
+            if current[i] == "(":
+                depth += 1
+            elif current[i] == ")":
+                depth -= 1
+                if depth == 0:
+                    end = i + 1
+                    break
 
-    # Build VALUES clause: (lat::numeric, lon::numeric), ...
-    values_rows = ", ".join(f"({lat}::numeric, {lon}::numeric)" for lat, lon in pairs)
-    new_in = f"(SELECT rlat, rlon FROM (VALUES {values_rows}) AS _geo_pts(rlat, rlon))"
+        in_body = current[start:end]
+        pairs = _PAIR_RE.findall(in_body)
+        if not pairs:
+            # Already rewritten (VALUES subquery) or empty — skip this match
+            search_pos = m.end()
+            continue
 
-    new_sql = sql[:start] + new_in + sql[end:]
-    return new_sql, True
+        values_rows = ", ".join(f"({lat}::numeric, {lon}::numeric)" for lat, lon in pairs)
+        new_in = f"(SELECT rlat, rlon FROM (VALUES {values_rows}) AS _geo_pts(rlat, rlon))"
+
+        current = current[:start] + new_in + current[end:]
+        transformed = True
+        search_pos = 0  # positions shifted; restart scan from beginning
+
+    return current, transformed
 
 
 def verify_mechanical_transform(original: str, rewritten: str) -> bool:
     """Lightweight Python-side equivalence check (no LLM).
 
     Verifies that the rewritten SQL has the same coordinate pairs as the
-    original IN-list by comparing extracted pairs from both sides.
+    original IN-lists (all occurrences) by comparing extracted pair multisets.
     """
     original_pairs = _extract_in_pairs(original)
     rewritten_pairs = _extract_values_pairs(rewritten)
-    return set(original_pairs) == set(rewritten_pairs)
+    return sorted(original_pairs) == sorted(rewritten_pairs)
 
 
 # ── Internal helpers ──────────────────────────────────────────────────────────
 
 def _extract_in_pairs(sql: str) -> list[tuple[str, str]]:
-    m = _ROUND_IN_RE.search(sql)
-    if not m:
-        return []
-    start = m.end() - 1
-    depth = 0
-    end = start
-    for i in range(start, len(sql)):
-        if sql[i] == "(":
-            depth += 1
-        elif sql[i] == ")":
-            depth -= 1
-            if depth == 0:
-                end = i + 1
-                break
-    return _PAIR_RE.findall(sql[start:end])
+    """Extract all coordinate pairs from all ROUND...IN(...) occurrences."""
+    all_pairs: list[tuple[str, str]] = []
+    pos = 0
+    while True:
+        m = _ROUND_IN_RE.search(sql, pos)
+        if not m:
+            break
+        start = m.end() - 1
+        depth = 0
+        end = start
+        for i in range(start, len(sql)):
+            if sql[i] == "(":
+                depth += 1
+            elif sql[i] == ")":
+                depth -= 1
+                if depth == 0:
+                    end = i + 1
+                    break
+        all_pairs.extend(_PAIR_RE.findall(sql[start:end]))
+        pos = end
+    return all_pairs
 
 
 _VALUES_PAIR_RE = re.compile(

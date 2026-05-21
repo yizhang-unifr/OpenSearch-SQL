@@ -24,6 +24,7 @@ from pipeline.pipeline_manager import PipelineManager
 
 from .detector import extract_points, needs_optimization, POINT_COUNT_THRESHOLD, _ROUND_IN_RE
 from .mechanical import mechanical_optimize, verify_mechanical_transform
+from .extract_rewriter import rewrite_extract_to_range, verify_extract_rewrite
 
 # Dedicated JSONL log for mechanical-transform failures.
 # Written to the project root (cwd at run time) so it accumulates across runs
@@ -176,6 +177,27 @@ def query_optimizer(task: Any, execution_history: list[dict]) -> dict:
             optimized_candidates.append(sql)
             optimizer_trace.append({"candidate_index": i, "triggered": False})
 
+    # ── Pass 2: EXTRACT → time range (applied to every candidate) ──────────
+    final_candidates: list[str] = []
+    for i, sql in enumerate(optimized_candidates):
+        rewritten, transformed = rewrite_extract_to_range(sql)
+        if transformed:
+            if verify_extract_rewrite(sql, rewritten):
+                final_candidates.append(rewritten)
+                optimizer_trace[i]["extract_rewrite"] = True
+                logging.info(
+                    "query_optimizer: candidate %d — EXTRACT rewrite applied", i
+                )
+            else:
+                final_candidates.append(sql)
+                optimizer_trace[i]["extract_rewrite"] = False
+                optimizer_trace[i]["extract_rewrite_verify_failed"] = True
+                logging.warning(
+                    "query_optimizer: candidate %d — EXTRACT rewrite verify failed, keeping original", i
+                )
+        else:
+            final_candidates.append(sql)
+
     logging.info(
         "query_optimizer: done — triggered=%s/%d candidates",
         sum(1 for e in optimizer_trace if e["triggered"]),
@@ -183,6 +205,6 @@ def query_optimizer(task: Any, execution_history: list[dict]) -> dict:
     )
 
     return {
-        "SQL": optimized_candidates,
+        "SQL": final_candidates,
         "optimizer_trace": optimizer_trace,
     }

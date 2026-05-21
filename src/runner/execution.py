@@ -232,6 +232,49 @@ def compare_sqls(
     return {"exec_res": res, "exec_err": error, "ves": ves}
 
 
+def compare_with_cached_gold(
+    predicted_sql: str,
+    gold_set: frozenset,
+    t_gold: float,
+    meta_time_out: int = 600,
+) -> Dict[str, Union[int, str, float]]:
+    """Compare predicted SQL against a pre-computed gold result set.
+
+    Executes only the *predicted* SQL; the gold result comes from the cache.
+    Uses the cached gold execution time for VES computation.
+
+    Args:
+        predicted_sql: SQL to evaluate.
+        gold_set: Frozenset of gold result tuples from the cache.
+        t_gold: Gold SQL execution time in seconds (from cache).
+        meta_time_out: Timeout for executing predicted SQL (default 600 s).
+
+    Returns:
+        Dict with 'exec_res', 'exec_err', and 'ves'.
+    """
+    import math
+
+    try:
+        pred_res, t_pred = func_timeout(meta_time_out, sql_exec, args=(predicted_sql,))
+    except FunctionTimedOut:
+        return {"exec_res": 0, "exec_err": "timeout", "ves": 0.0}
+    except Exception as e:
+        return {"exec_res": 0, "exec_err": str(e), "ves": 0.0}
+
+    correct = int(pred_res == gold_set or _results_approx_equal(pred_res, gold_set))
+    error = "--" if correct else "incorrect answer"
+
+    if correct and t_pred > 0 and t_gold > 0:
+        ratio = min(t_gold / t_pred, 1.0)
+        ves = math.sqrt(ratio)
+    elif correct:
+        ves = 1.0
+    else:
+        ves = 0.0
+
+    return {"exec_res": correct, "exec_err": error, "ves": ves}
+
+
 def validate_sql_query(sql: str, max_returned_rows: int = 30) -> Dict[str, Any]:
     """Validate an SQL query by executing it.
 
