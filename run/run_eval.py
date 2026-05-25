@@ -247,6 +247,9 @@ def run(args, extra_env: dict | None = None):
         llm_config = tmp_config
     else:
         llm_config = args.llm_config or _DEFAULT_CONFIG
+    # Resolve to absolute path — subprocess runs from _ROOT (src/OpenSearch-SQL/),
+    # so relative paths would resolve incorrectly inside the child process.
+    llm_config = str(Path(llm_config).resolve())
 
     _opt_node = "+query_optimizer" if flags.get("optimizer") == "True" else ""
     pipeline_nodes = (
