@@ -19,7 +19,7 @@ def _get_bert_model(model_name: str, device: str) -> SentenceTransformer:
     key = (model_name, device)
     if key not in _bert_model_cache:
         _bert_model_cache[key] = SentenceTransformer(
-            model_name, device=device, local_files_only=True
+            model_name, device=device
         )
     return _bert_model_cache[key]
 

@@ -33,7 +33,6 @@ def column_retrieve_and_other_info(task: Any, execution_history: Dict[str, Any])
     bert_model = SentenceTransformer(
         config["bert_model"],
         device=config["device"],
-        local_files_only=True,
     )
 
     all_db_col = get_last_node_result(execution_history, "generate_db_schema")["db_col_dic"]
