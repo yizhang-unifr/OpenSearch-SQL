@@ -6,8 +6,8 @@ rewrites it to a VALUES-based subquery using a pure-Python mechanical transform
 (no LLM calls, saves ~180 s per query).  Falls back to the original SQL if the
 mechanical transform fails verification.
 
-This package is fully self-contained and does NOT read from any upstream
-context nodes (geo_context, implicit_context, etc.).
+Core rewrite logic lives in src/optimizer/ (shared with DAIL-SQL).
+This module owns only the OpenSearch-SQL pipeline node wiring.
 """
 
 from __future__ import annotations
@@ -15,16 +15,23 @@ from __future__ import annotations
 import json
 import logging
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+# Ensure project root is on sys.path so src.optimizer is importable.
+_PROJECT_ROOT = Path(__file__).resolve().parents[5]  # …/ontology_retriever/
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
 from pipeline.utils import node_decorator, get_last_node_result
 from pipeline.pipeline_manager import PipelineManager
 
-from .detector import extract_points, needs_optimization, POINT_COUNT_THRESHOLD, _ROUND_IN_RE
-from .mechanical import mechanical_optimize, verify_mechanical_transform
-from .extract_rewriter import rewrite_extract_to_range, verify_extract_rewrite
+from src.optimizer.detector import extract_points, needs_optimization, POINT_COUNT_THRESHOLD, _ROUND_IN_RE
+from src.optimizer.mechanical import mechanical_optimize, verify_mechanical_transform
+from src.optimizer.extract_rewriter import rewrite_extract_to_range, verify_extract_rewrite
+from src.optimizer.elevation_rewriter import rewrite_elevation_join, verify_elevation_rewrite
 
 # Dedicated JSONL log for mechanical-transform failures.
 # Written to the project root (cwd at run time) so it accumulates across runs
@@ -197,6 +204,19 @@ def query_optimizer(task: Any, execution_history: list[dict]) -> dict:
                 )
         else:
             final_candidates.append(sql)
+
+    # ── Pass 3 disabled — eligible_cells rewrite is correct but not used in inference.
+    # pass3_candidates: list[str] = []
+    # for i, sql in enumerate(final_candidates):
+    #     rewritten, transformed = rewrite_elevation_join(sql)
+    #     if transformed:
+    #         if verify_elevation_rewrite(sql, rewritten):
+    #             pass3_candidates.append(rewritten)
+    #             optimizer_trace[i]["elevation_rewrite"] = True
+    #         else:
+    #             pass3_candidates.append(sql)
+    #     else:
+    #         pass3_candidates.append(sql)
 
     logging.info(
         "query_optimizer: done — triggered=%s/%d candidates",
