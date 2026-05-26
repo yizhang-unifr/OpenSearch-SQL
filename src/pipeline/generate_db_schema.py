@@ -28,7 +28,6 @@ def generate_db_schema(task: Any, execution_history: Dict[str, Any]) -> Dict[str
     bert_model = SentenceTransformer(
         config["bert_model"],
         device=config["device"],
-        local_files_only=True,
     )
     chat_model = model_chose(node_name, config["engine"])
     cache_file = paths.db_schema_cache
