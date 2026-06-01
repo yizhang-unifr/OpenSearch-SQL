@@ -79,18 +79,18 @@ def evaluation(task: Any, execution_history: Dict[str, Any]) -> Dict[str, Any]:
 
     ground_truth_sql = task.SQL
     q_id             = task.question_id
+    question         = getattr(task, "question", "") or ""
 
     # ------------------------------------------------------------------
-    # Gold result: cache or live execution
+    # Gold result: cache lookup by question text (stable across resamples)
     # ------------------------------------------------------------------
-    use_cache = _gold_cache is not None and _gold_cache.has(q_id)
-    cached_entry = _gold_cache.get_entry(q_id) if use_cache else None
-    gold_cache_ok = use_cache and cached_entry is not None and cached_entry.get("status") == "success"
+    cached_entry  = _gold_cache.get_entry_by_question(question) if _gold_cache is not None else None
+    gold_cache_ok = cached_entry is not None and cached_entry.get("status") == "success"
 
     if gold_cache_ok:
         gold_result = cached_entry["result"]   # list of lists, JSON-serialisable
-        gold_set    = _gold_cache.get_gold_set(q_id)
-        t_gold      = _gold_cache.get_duration(q_id) or 0.0
+        gold_set    = _gold_cache.get_gold_set_by_question(question)
+        t_gold      = _gold_cache.get_duration_by_question(question) or 0.0
     else:
         gold_result = None
         gold_set    = None

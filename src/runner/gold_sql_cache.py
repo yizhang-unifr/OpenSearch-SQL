@@ -38,11 +38,17 @@ File format
 from __future__ import annotations
 
 import json
+import re
 import threading
 from pathlib import Path
 from typing import Any, Optional
 
 from cachetools import LRUCache
+
+
+def _norm_question(s: str) -> str:
+    """Normalise question text for cache lookup (lowercase, collapse whitespace)."""
+    return re.sub(r"\s+", " ", s.strip()).lower()
 
 
 class GoldSqlCache:
@@ -58,6 +64,7 @@ class GoldSqlCache:
         self._path = cache_path
         self._metadata: dict = {}
         self._raw: dict[str, dict] = {}          # str(question_id) -> entry
+        self._by_question: dict[str, dict] = {}  # normalised question  -> entry
         self._lru: LRUCache = LRUCache(maxsize=lru_maxsize)
         self._lock = threading.Lock()
 
@@ -73,6 +80,12 @@ class GoldSqlCache:
             data = json.load(f)
         self._metadata = data.get("metadata", {})
         self._raw = data.get("results", {})
+        # Build question-text index (primary lookup — immune to question_id reshuffling)
+        self._by_question = {
+            _norm_question(e.get("question", "")): e
+            for e in self._raw.values()
+            if e.get("question")
+        }
 
     # ------------------------------------------------------------------
     # Public API
@@ -85,37 +98,67 @@ class GoldSqlCache:
     def has(self, question_id: int) -> bool:
         return str(question_id) in self._raw
 
+    def has_question(self, question: str) -> bool:
+        return _norm_question(question) in self._by_question
+
     def get_entry(self, question_id: int) -> Optional[dict]:
         """Return the raw cache entry for *question_id*, or None."""
         return self._raw.get(str(question_id))
 
-    def get_gold_set(self, question_id: int) -> Optional[frozenset]:
-        """Return a frozenset of gold result tuples (LRU-cached conversion).
+    def get_entry_by_question(self, question: str) -> Optional[dict]:
+        """Return the raw cache entry matching *question* text, or None."""
+        return self._by_question.get(_norm_question(question))
 
-        Returns None if question_id is absent or the cached status is 'error'.
-        """
-        key = str(question_id)
+    def _entry_to_frozenset(self, entry: dict) -> Optional[frozenset]:
+        """Convert a cache entry's result list to a frozenset (LRU-cached)."""
+        lru_key = id(entry)  # entries are immutable dicts; id is a stable proxy
         with self._lock:
-            if key in self._lru:
-                return self._lru[key]
-
-        entry = self._raw.get(key)
-        if entry is None or entry.get("status") != "success":
-            return None
+            if lru_key in self._lru:
+                return self._lru[lru_key]
         result = entry.get("result")
         if result is None:
             return None
-
         gold_set = frozenset(
             tuple(row) if not isinstance(row, tuple) else row
             for row in result
         )
         with self._lock:
-            self._lru[key] = gold_set
+            self._lru[lru_key] = gold_set
         return gold_set
 
+    def get_gold_set_by_question(self, question: str) -> Optional[frozenset]:
+        """Look up gold result by question text (immune to question_id reshuffling).
+
+        Returns None if the question is not cached or its status is 'error'.
+        Prefer this over get_gold_set() — question text is stable across resamples.
+        """
+        entry = self._by_question.get(_norm_question(question))
+        if entry is None or entry.get("status") != "success":
+            return None
+        return self._entry_to_frozenset(entry)
+
+    def get_duration_by_question(self, question: str) -> Optional[float]:
+        """Return gold SQL execution time in seconds for *question*, or None."""
+        entry = self._by_question.get(_norm_question(question))
+        if entry and entry.get("status") == "success":
+            return entry.get("duration_s")
+        return None
+
+    # -- legacy question_id-based API (kept for backward compat) ---------------
+
+    def get_gold_set(self, question_id: int) -> Optional[frozenset]:
+        """Return a frozenset of gold result tuples by question_id (legacy).
+
+        Prefer get_gold_set_by_question() — question_id is fragile across resamples.
+        """
+        key = str(question_id)
+        entry = self._raw.get(key)
+        if entry is None or entry.get("status") != "success":
+            return None
+        return self._entry_to_frozenset(entry)
+
     def get_duration(self, question_id: int) -> Optional[float]:
-        """Return gold SQL execution time in seconds, or None."""
+        """Return gold SQL execution time in seconds by question_id (legacy)."""
         entry = self._raw.get(str(question_id))
         if entry and entry.get("status") == "success":
             return entry.get("duration_s")
