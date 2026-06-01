@@ -62,12 +62,14 @@ def _load_run(run_dir: Path) -> List[Dict[str, Any]]:
         with json_file.open(encoding="utf-8") as f:
             nodes: List[Dict] = json.load(f)
 
-        record = {"q_id": q_id, "db_id": db_id, "nodes": {}, "timings": {}}
+        record = {"q_id": q_id, "db_id": db_id, "nodes": {}, "timings": {}, "gen_stats": None}
         for node in nodes:
             nt = node.get("node_type", "")
             record["nodes"][nt] = node
             if "duration_s" in node:
                 record["timings"][nt] = node["duration_s"]
+            if nt == "candidate_generate" and node.get("generation_stats"):
+                record["gen_stats"] = node["generation_stats"]
 
         records.append(record)
 
@@ -149,6 +151,12 @@ def build_summary_sheet(wb: openpyxl.Workbook, records: List[Dict]):
         headers += [f"{label} | Correct", f"{label} | VES", f"{label} | Error"]
     for pn in PIPELINE_NODES:
         headers.append(f"⏱ {pn} (s)")
+    # candidate_generate per-phase LLM stats
+    headers += [
+        "CG calls",
+        "CG total (ms)", "CG min (ms)", "CG max (ms)", "CG avg (ms)",
+        "CG in tok", "CG out tok",
+    ]
 
     _write_header(ws, headers)
 
@@ -181,6 +189,15 @@ def build_summary_sheet(wb: openpyxl.Workbook, records: List[Dict]):
 
         for pn in PIPELINE_NODES:
             _w(rec["timings"].get(pn, ""))
+
+        gs = rec.get("gen_stats") or {}
+        _w(gs.get("n_calls", ""))
+        _w(gs.get("total_duration_ms", ""))
+        _w(gs.get("min_duration_ms", ""))
+        _w(gs.get("max_duration_ms", ""))
+        _w(gs.get("avg_duration_ms", ""))
+        _w(gs.get("total_input_tokens", ""))
+        _w(gs.get("total_output_tokens", ""))
 
     _set_col_widths(ws, {1: 6, 2: 8, 3: 45, **{c: 12 for c in range(4, len(headers) + 1)}})
     ws.freeze_panes = "D2"
@@ -336,6 +353,40 @@ def build_review_sheet(wb: openpyxl.Workbook, records: List[Dict]):
     ws.freeze_panes = "C2"
 
 
+def build_llm_calls_sheet(wb: openpyxl.Workbook, records: List[Dict]):
+    """Sheet – one row per individual candidate_generate LLM call.
+
+    Breaks the per-phase generation_stats down to per-call duration + token counts.
+    """
+    ws = wb.create_sheet("LLM Calls")
+
+    headers = ["Q_ID", "DB", "Call #", "Duration (ms)", "Input tokens", "Output tokens"]
+    _write_header(ws, headers)
+
+    row = 2
+    for rec in records:
+        gs = rec.get("gen_stats") or {}
+        durs = gs.get("per_call_duration_ms") or []
+        ins  = gs.get("input_tokens") or []
+        outs = gs.get("output_tokens") or []
+        n = max(len(durs), len(ins), len(outs))
+        for i in range(n):
+            values = [
+                rec["q_id"],
+                rec["db_id"],
+                i + 1,
+                durs[i] if i < len(durs) else "",
+                ins[i] if i < len(ins) else "",
+                outs[i] if i < len(outs) else "",
+            ]
+            for col, val in enumerate(values, 1):
+                ws.cell(row=row, column=col, value=val).alignment = _TOP
+            row += 1
+
+    _set_col_widths(ws, {1: 6, 2: 8, 3: 8, 4: 14, 5: 14, 6: 14})
+    ws.freeze_panes = "A2"
+
+
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
@@ -352,6 +403,7 @@ def export(run_dir: Path, output_path: Optional[Path] = None) -> Path:
     build_sql_sheet(wb, records)
     build_timing_sheet(wb, records)
     build_review_sheet(wb, records)
+    build_llm_calls_sheet(wb, records)
 
     if output_path is None:
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")

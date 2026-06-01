@@ -108,6 +108,9 @@ def candidate_generate(task: Any, execution_history: List[Dict[str, Any]]) -> Di
         n=config.get("n", 1),
         single=single,
     )
+    # Capture per-phase timing/token stats from the generation call immediately,
+    # before any later get_ans() call (e.g. the validator) overwrites _last_stats.
+    generation_stats = getattr(chat_model, "_last_stats", None)
 
     raw_candidates = [SQL] if isinstance(SQL, str) else list(SQL)
     parsed_candidates = parse_sql_candidates(raw_candidates)
@@ -150,6 +153,7 @@ def candidate_generate(task: Any, execution_history: List[Dict[str, Any]]) -> Di
         "validation_trace": validation_trace,
         # legacy key kept for XLSX export compatibility
         "plugin_trace": validation_trace,
+        "generation_stats": generation_stats,
     }
 
 

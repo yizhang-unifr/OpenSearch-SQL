@@ -123,6 +123,75 @@ except (ModuleNotFoundError, ImportError) as e:
 from runner.logger import Logger
 from llm.prompts import prompts_fewshot_parse
 
+
+# ---------------------------------------------------------------------------
+# Token-usage extraction + per-phase stats helpers
+# ---------------------------------------------------------------------------
+
+
+def _extract_usage(msg: Any) -> dict:
+    """Best-effort token counts from a LangChain response message.
+
+    Returns ``{"input_tokens", "output_tokens", "total_tokens"}`` with ``None``
+    for any value the backend did not provide. Handles the langchain standard
+    ``usage_metadata`` (bedrock/openai/anthropic) plus OpenAI ``token_usage`` and
+    Ollama ``prompt_eval_count``/``eval_count`` fallbacks.
+    """
+    out = {"input_tokens": None, "output_tokens": None, "total_tokens": None}
+
+    um = getattr(msg, "usage_metadata", None)
+    if isinstance(um, dict) and um:
+        out["input_tokens"] = um.get("input_tokens")
+        out["output_tokens"] = um.get("output_tokens")
+        out["total_tokens"] = um.get("total_tokens")
+
+    if out["input_tokens"] is None or out["output_tokens"] is None:
+        rm = getattr(msg, "response_metadata", None) or {}
+        tu = rm.get("token_usage") or rm.get("usage") or {}
+        if tu:
+            out["input_tokens"] = out["input_tokens"] or tu.get(
+                "prompt_tokens", tu.get("input_tokens")
+            )
+            out["output_tokens"] = out["output_tokens"] or tu.get(
+                "completion_tokens", tu.get("output_tokens")
+            )
+            out["total_tokens"] = out["total_tokens"] or tu.get("total_tokens")
+        # Ollama-style counts live directly on response_metadata
+        if out["input_tokens"] is None and "prompt_eval_count" in rm:
+            out["input_tokens"] = rm.get("prompt_eval_count")
+        if out["output_tokens"] is None and "eval_count" in rm:
+            out["output_tokens"] = rm.get("eval_count")
+
+    if (
+        out["total_tokens"] is None
+        and out["input_tokens"] is not None
+        and out["output_tokens"] is not None
+    ):
+        out["total_tokens"] = out["input_tokens"] + out["output_tokens"]
+    return out
+
+
+def _build_stats(per_call: list[dict], total_duration_ms: float) -> dict:
+    """Aggregate per-call dicts into one generation-phase stats blob.
+
+    Each ``per_call`` dict carries ``duration_ms``/``input_tokens``/``output_tokens``.
+    """
+    durs = [c.get("duration_ms") for c in per_call if c.get("duration_ms") is not None]
+    ins = [c.get("input_tokens") for c in per_call]
+    outs = [c.get("output_tokens") for c in per_call]
+    return {
+        "n_calls": len(per_call),
+        "total_duration_ms": total_duration_ms,
+        "per_call_duration_ms": [c.get("duration_ms") for c in per_call],
+        "min_duration_ms": min(durs) if durs else None,
+        "max_duration_ms": max(durs) if durs else None,
+        "avg_duration_ms": round(sum(durs) / len(durs), 1) if durs else None,
+        "input_tokens": ins,
+        "output_tokens": outs,
+        "total_input_tokens": sum(t for t in ins if t is not None),
+        "total_output_tokens": sum(t for t in outs if t is not None),
+    }
+
 # ---------------------------------------------------------------------------
 # Global LLM config path – override via set_llm_config_path() or
 # the LLM_CONFIG_PATH environment variable.
@@ -281,6 +350,7 @@ class LLMFactoryAdapter(req):
         n: int = 1,
         single: bool = True,
         debug: bool = False,
+        return_stats: bool = False,
         **kwargs,
     ):
         """Generate a response from the LLM.
@@ -293,10 +363,14 @@ class LLMFactoryAdapter(req):
             single:      When *True* (and n==1) return a plain ``str``.
                          When *False* return ``[{"message": {"content": ...}}, ...]``.
             debug:       Print the prompt if *True*.
+            return_stats: When *True*, return ``(payload, stats)`` where *stats* is the
+                         per-phase timing/token blob (see ``_build_stats``). The same
+                         blob is always stored on ``self._last_stats`` regardless.
             **kwargs:    Extra arguments (silently ignored for compatibility).
 
         Returns:
             ``str`` when *single* and *n == 1*, otherwise a list of choice dicts.
+            If *return_stats* is set, a ``(payload, stats)`` tuple instead.
         """
         if debug:
             print(messages)
@@ -312,35 +386,74 @@ class LLMFactoryAdapter(req):
         max_retries = int(os.environ.get("LLM_MAX_RETRIES", "2"))
         last_error = None
 
+        def _ret(payload, stats):
+            self._last_stats = stats
+            return (payload, stats) if return_stats else payload
+
         for attempt in range(1, max_retries + 1):
             try:
                 _t0 = time.time()
                 if n == 1 or single:
                     result = llm.invoke(chat_msgs)
                     duration_ms = round((time.time() - _t0) * 1000, 1)
+                    usage = _extract_usage(result)
                     thinking, response_clean = self._parse_thinking(result.content)
+                    call_info = {**model_info, **usage}
                     if thinking:
-                        model_info["thinking"] = thinking
+                        call_info["thinking"] = thinking
                     if self.step != "prepare_train_queries":
-                        self.log_record(messages, response_clean, duration_ms=duration_ms, model_info=model_info)
-                    return response_clean
+                        self.log_record(
+                            messages,
+                            response_clean,
+                            duration_ms=duration_ms,
+                            model_info=call_info,
+                        )
+                    stats = _build_stats(
+                        [{"duration_ms": duration_ms, **usage}], duration_ms
+                    )
+                    return _ret(response_clean, stats)
                 else:
                     choices = self._generate_n(llm, chat_msgs, n)
-                    duration_ms = round((time.time() - _t0) * 1000, 1)
+                    total_ms = round((time.time() - _t0) * 1000, 1)
                     for c in choices:
                         thinking, answer = self._parse_thinking(c["message"]["content"])
                         c["message"]["content"] = answer
                         if thinking:
                             c["thinking"] = thinking
                     if self.step != "prepare_train_queries":
-                        full_output = [c["message"]["content"] for c in choices]
-                        self.log_record(
-                            messages,
-                            json.dumps(full_output, ensure_ascii=False),
-                            duration_ms=duration_ms,
-                            model_info=model_info,
-                        )
-                    return choices
+                        # one call-log file per choice (per-call duration + tokens)
+                        for c in choices:
+                            ci = {
+                                **model_info,
+                                "input_tokens": c.get("input_tokens"),
+                                "output_tokens": c.get("output_tokens"),
+                                "total_tokens": c.get("total_tokens"),
+                            }
+                            if c.get("thinking"):
+                                ci["thinking"] = c["thinking"]
+                            try:
+                                Logger().log_llm_call(
+                                    self.step,
+                                    messages,
+                                    c["message"]["content"],
+                                    duration_ms=c.get("duration_ms"),
+                                    model_info=ci,
+                                )
+                            except (ValueError, AttributeError):
+                                pass
+                        # conversation .log written once (combined)
+                        try:
+                            logger = Logger()
+                            logger.log_conversation(messages, "Human", self.step)
+                            logger.log_conversation(
+                                [c["message"]["content"] for c in choices],
+                                "AI",
+                                self.step,
+                            )
+                        except (ValueError, AttributeError):
+                            pass
+                    stats = _build_stats(choices, total_ms)
+                    return _ret(choices, stats)
 
             except Exception as e:
                 last_error = e
@@ -350,16 +463,30 @@ class LLMFactoryAdapter(req):
 
         # Exhausted retries
         print(f"LLM failed after {max_retries} attempts. Last error: {last_error}")
+        empty_stats = _build_stats([], 0.0)
         if n == 1 or single:
-            return ""
-        return [{"message": {"content": ""}} for _ in range(n)]
+            return _ret("", empty_stats)
+        return _ret([{"message": {"content": ""}} for _ in range(n)], empty_stats)
 
     def _generate_n(self, llm, chat_msgs, n: int):
-        """Generate *n* completions concurrently."""
+        """Generate *n* completions concurrently, timing each call individually.
+
+        Each returned choice carries its own ``duration_ms`` and token counts so the
+        caller can record per-call stats alongside the concurrent wall-clock total.
+        """
 
         def _invoke(_):
+            _t0 = time.time()
             result = llm.invoke(chat_msgs)
-            return {"message": {"content": result.content}}
+            duration_ms = round((time.time() - _t0) * 1000, 1)
+            usage = _extract_usage(result)
+            return {
+                "message": {"content": result.content},
+                "duration_ms": duration_ms,
+                "input_tokens": usage["input_tokens"],
+                "output_tokens": usage["output_tokens"],
+                "total_tokens": usage["total_tokens"],
+            }
 
         # Use threads for I/O-bound LLM calls
         workers = min(n, 8)
