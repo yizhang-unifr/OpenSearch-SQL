@@ -11,7 +11,7 @@ Usage (run from src/OpenSearch-SQL/):
 
 Options:
     --data_dir       Root data directory                  (default: data)
-    --train_xlsx     Path to training Excel file          (default: <data_dir>/../split_config_II_tiered/train_data.xlsx)
+    --train_xlsx     Path to training Excel file          (default: <project_root>/data/split_config_III_tiered/train_data.xlsx)
     --chroma_dir     Path for ChromaDB storage            (default: <data_dir>/chroma_fewshot)
     --top_k          Number of similar examples to inject (default: 3)
     --model          SentenceTransformer model name       (default: all-mpnet-base-v2)
@@ -180,11 +180,12 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(argv)
 
     data_dir = Path(args.data_dir)
+    _project_root = Path(__file__).resolve().parents[4]
     if args.train_xlsx:
         train_xlsx = Path(args.train_xlsx)
     else:
-        candidate = data_dir / "split_config_II_tiered" / "train_data.xlsx"
-        train_xlsx = candidate if candidate.exists() else data_dir.parent / "split_config_II_tiered" / "train_data.xlsx"
+        candidate = _project_root / "data" / "split_config_III_tiered" / "train_data.xlsx"
+        train_xlsx = candidate if candidate.exists() else data_dir.parent / "split_config_III_tiered" / "train_data.xlsx"
     chroma_dir = Path(args.chroma_dir) if args.chroma_dir else data_dir / "chroma_fewshot"
     eval_dir = data_dir / "data_preprocess"
     fewshot_dir = data_dir / "fewshot"

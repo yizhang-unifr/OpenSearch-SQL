@@ -297,27 +297,28 @@ Vector-based fewshot retrieval must be built offline before running evaluations 
 **Step 1 — Preprocess test data to eval JSON:**
 
 ```shell
+# No flags needed — defaults to split_config_III_tiered
+uv run src/database_process/preprocess_test_data.py
+
+# Explicit split
 uv run src/database_process/preprocess_test_data.py \
-    --test_xlsx /path/to/data/split_config_II_tiered/test_data.xlsx \
-    --out_dir data/data_preprocess
+    --split split_config_III_tiered
 ```
 
 Outputs `data/data_preprocess/test_data_point.json` and `test_data_bbox.json` (752 rows each).
 
 | Flag | Default | Description |
 |---|---|---|
-| `--test_xlsx` | auto-detected | Path to `test_data.xlsx` |
+| `--split` | `split_config_III_tiered` | Split config name under `../../data/` |
+| `--test_xlsx` | auto-detected | Explicit path to `test_data.xlsx` (overrides `--split`) |
 | `--out_dir` | `data/data_preprocess` | Output directory |
 | `--limit` | — | Restrict to first N rows per variant (for quick tests) |
 
 **Step 2 — Build ChromaDB index and generate `fewshot/questions.json`:**
 
 ```shell
-uv run src/database_process/build_fewshot_index.py \
-    --train_xlsx /path/to/data/split_config_II_tiered/train_data.xlsx \
-    --eval_files data/data_preprocess/test_data_point.json \
-                 data/data_preprocess/test_data_bbox.json \
-    --top_k 3 --rebuild
+# No flags needed — train_xlsx defaults to split_config_III_tiered, eval_files auto-detected
+uv run src/database_process/build_fewshot_index.py --rebuild
 ```
 
 Outputs `data/chroma_fewshot/` (persistent embedding index, 6016 documents — each training row indexed twice as point and bbox variants) and `data/fewshot/questions.json` (lookup used by the pipeline at inference time). At retrieval time, only the matching geo_mode variant is queried so the returned SQL always matches the target style.
