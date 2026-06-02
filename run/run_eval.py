@@ -66,14 +66,11 @@ def resolve_dataset(name: str) -> tuple[str, str]:
     if p.is_absolute():
         return p.stem, str(p.parent.parent)
 
-    # Name only (no directory separator, no .json) — look in database_process/
+    # Name only (no directory separator, no .json) — resolve from project root.
+    # Use an absolute path so the subprocess (cwd=src/OpenSearch-SQL/) doesn't
+    # accidentally pick up a stale copy inside src/OpenSearch-SQL/data/.
     if "/" not in name and "\\" not in name and not name.endswith(".json"):
-        candidate = _DB_PROCESS / f"{name}.json"
-        if candidate.exists():
-            # data_preprocess/ is inside the db_root_path "data" dir
-            return name, "data"
-        # Still pass through — main.py will give the real error
-        return name, "data"
+        return name, str(_PROJECT_ROOT / "data")
 
     # Relative or relative-with-extension
     full = (_ROOT / p) if not p.is_absolute() else p
