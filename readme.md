@@ -139,6 +139,51 @@ Output: `data/emb/meteo.pkl.gz` and `data/emb/meteo_value.pkl.gz`
 
 ---
 
+## Setup: Fewshot Index
+
+Vector-based fewshot retrieval must be built offline before running evaluations with `--fewshot`. It embeds all training questions into ChromaDB and retrieves the top-K most similar examples for each test question.
+
+**Step 1 — Preprocess test data to eval JSON:**
+
+```shell
+# No flags needed — defaults to split_config_III_tiered
+uv run src/database_process/preprocess_test_data.py
+
+# Explicit split
+uv run src/database_process/preprocess_test_data.py \
+    --split split_config_III_tiered
+```
+
+Outputs `data/data_preprocess/test_data_point.json` and `test_data_bbox.json` (752 rows each).
+
+| Flag | Default | Description |
+|---|---|---|
+| `--split` | `split_config_III_tiered` | Split config name under `../../data/` |
+| `--test_xlsx` | auto-detected | Explicit path to `test_data.xlsx` (overrides `--split`) |
+| `--out_dir` | `data/data_preprocess` | Output directory |
+| `--limit` | — | Restrict to first N rows per variant (for quick tests) |
+
+**Step 2 — Build ChromaDB index and generate `fewshot/questions.json`:**
+
+```shell
+# No flags needed — train_xlsx defaults to split_config_III_tiered, eval_files auto-detected
+uv run src/database_process/build_fewshot_index.py --rebuild
+```
+
+Outputs `data/chroma_fewshot/` (persistent embedding index, 6016 documents — each training row indexed twice as point and bbox variants) and `data/fewshot/questions.json` (lookup used by the pipeline at inference time). At retrieval time, only the matching geo_mode variant is queried so the returned SQL always matches the target style.
+
+| Flag | Default | Description |
+|---|---|---|
+| `--train_xlsx` | auto-detected | Path to `train_data.xlsx` |
+| `--eval_files` | all `*.json` in `data/data_preprocess/` | Explicit list of eval JSON files to generate fewshot for |
+| `--top_k` | `3` | Number of similar training examples per test question |
+| `--model` | `all-mpnet-base-v2` | SentenceTransformer model |
+| `--rebuild` | off | Drop and recreate the ChromaDB collection (needed when training data changes) |
+
+> **Note:** `--rebuild` is only needed when `train_data.xlsx` changes. Subsequent runs reuse the existing ChromaDB index automatically.
+
+---
+
 ## Running Evaluations
 
 All commands run from `src/OpenSearch-SQL/`.
@@ -287,89 +332,4 @@ Use `--provider` (and optionally `--model`) without creating a YAML file:
 uv run run/run_eval.py --provider openai --model gpt-4o --end -1
 uv run run/run_eval.py --provider swiss_ai --model Qwen/Qwen3.5-27B --end -1
 ```
-
----
-
-## Setup: Fewshot Index
-
-Vector-based fewshot retrieval must be built offline before running evaluations with `--fewshot`. It embeds all training questions into ChromaDB and retrieves the top-K most similar examples for each test question.
-
-**Step 1 — Preprocess test data to eval JSON:**
-
-```shell
-# No flags needed — defaults to split_config_III_tiered
-uv run src/database_process/preprocess_test_data.py
-
-# Explicit split
-uv run src/database_process/preprocess_test_data.py \
-    --split split_config_III_tiered
-```
-
-Outputs `data/data_preprocess/test_data_point.json` and `test_data_bbox.json` (752 rows each).
-
-| Flag | Default | Description |
-|---|---|---|
-| `--split` | `split_config_III_tiered` | Split config name under `../../data/` |
-| `--test_xlsx` | auto-detected | Explicit path to `test_data.xlsx` (overrides `--split`) |
-| `--out_dir` | `data/data_preprocess` | Output directory |
-| `--limit` | — | Restrict to first N rows per variant (for quick tests) |
-
-**Step 2 — Build ChromaDB index and generate `fewshot/questions.json`:**
-
-```shell
-# No flags needed — train_xlsx defaults to split_config_III_tiered, eval_files auto-detected
-uv run src/database_process/build_fewshot_index.py --rebuild
-```
-
-Outputs `data/chroma_fewshot/` (persistent embedding index, 6016 documents — each training row indexed twice as point and bbox variants) and `data/fewshot/questions.json` (lookup used by the pipeline at inference time). At retrieval time, only the matching geo_mode variant is queried so the returned SQL always matches the target style.
-
-| Flag | Default | Description |
-|---|---|---|
-| `--train_xlsx` | auto-detected | Path to `train_data.xlsx` |
-| `--eval_files` | all `*.json` in `data/data_preprocess/` | Explicit list of eval JSON files to generate fewshot for |
-| `--top_k` | `3` | Number of similar training examples per test question |
-| `--model` | `all-mpnet-base-v2` | SentenceTransformer model |
-| `--rebuild` | off | Drop and recreate the ChromaDB collection (needed when training data changes) |
-
-> **Note:** `--rebuild` is only needed when `train_data.xlsx` changes. Subsequent runs reuse the existing ChromaDB index automatically.
-
----
-
-## Dataset Sampling
-
-Prepare a stratified sample from an XLSX file into pipeline-ready JSON:
-
-```shell
-# Sample 2 questions per category, both point and bbox variants
-uv run src/database_process/sample_dataset.py \
-    --input-file Thessaly_NOA.xlsx \
-    --output-file thesaly_sample \
-    --mode both
-
-# Point only, 3 samples per category
-uv run src/database_process/sample_dataset.py \
-    --input-file Thessaly_NOA.xlsx \
-    --output-file heat_wave_point \
-    --mode point --n 3
-```
-
-Output files are written to `src/OpenSearch-SQL/data/data_preprocess/`:
-- `{output-file}_point.json`
-- `{output-file}_bbox.json`
-
-**Input file resolution:** filename only → `data/` (project root); relative path → relative to cwd; absolute → used as-is.
-
-**Flags:**
-
-| Flag | Default | Description |
-|---|---|---|
-| `--input-file` | required | XLSX filename or path |
-| `--output-file` | required | Output stem (suffix `_point`/`_bbox` added) |
-| `--mode` | `both` | `point`, `bbox`, or `both` |
-| `--n` | `2` | Samples per category |
-| `--seed` | `42` | Random seed |
-| `--question-col` | `question_generated` | Question column name |
-| `--category-col` | `category` | Category column name |
-| `--point-sql-col` | `point_sql` | Point SQL column name |
-| `--bbox-sql-col` | `bbox_sql` | Bbox SQL column name |
 
