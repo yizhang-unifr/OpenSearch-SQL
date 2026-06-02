@@ -43,7 +43,12 @@ def generate_db_schema(task: Any, execution_history: Dict[str, Any]) -> Dict[str
     db = task.db_id
 
     existing_entry = data.get(db)
-    if existing_entry:
+    cache_ok = (
+        existing_entry is not None
+        and "</think>" not in existing_entry[0]
+        and "Thinking Process" not in existing_entry[0]
+    )
+    if cache_ok:
         # schema/embeddings are expensive (LLM + BERT); read from cache.
         all_info = existing_entry[0]
         db_col   = existing_entry[1]

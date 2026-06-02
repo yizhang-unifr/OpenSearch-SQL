@@ -262,10 +262,10 @@ temperature: 0.0
 
 ### Swiss AI (Qwen3 on CSCS vLLM)
 
-Copy `config/models_swiss.yaml` or pass `--provider swiss_ai`:
+Copy `config/models_swiss_qwen3_5_27B.yaml` or pass `--provider swiss_ai`:
 
 ```yaml
-# config/models_swiss.yaml
+# config/models_swiss_qwen3_5_27B.yaml
 provider: swiss_ai
 model: "Qwen/Qwen3.5-27B"
 temperature: 0.0
@@ -274,7 +274,7 @@ use_structured_output: true  # use JSON format for extract_col_value
 ```
 
 ```shell
-uv run run/run_eval.py --llm-config config/models_swiss.yaml --dataset landcover10 --end -1
+uv run run/run_eval.py --llm-config config/models_swiss_qwen3_5_27B.yaml --dataset landcover10 --end -1
 # or shorthand:
 uv run run/run_eval.py --provider swiss_ai --end -1
 ```

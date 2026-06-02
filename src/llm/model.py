@@ -293,21 +293,33 @@ class LLMFactoryAdapter(req):
 
     @staticmethod
     def _parse_thinking(text: str) -> tuple[str, str]:
-        """Strip <think>...</think> reasoning from model output.
+        """Strip thinking/reasoning blocks from model output.
 
-        Several models emit chain-of-thought inside <think> tags before their
-        actual answer (Qwen3, DeepSeek-R1, QwQ, and others). This function
-        splits the two so the pipeline always receives clean structured output
-        while the reasoning block is preserved in the call log for inspection.
+        Handles three formats emitted by different backends:
+
+        Case 1 — standard ``<think>…</think>`` block (Qwen3, DeepSeek-R1, QwQ):
+            The opening and closing tags are both present; content between them
+            is the reasoning; content after is the answer.
+
+        Case 2 — closing ``</think>`` only, no opening tag (Llama 3.x via Swiss AI,
+            some Qwen3 variants): The model outputs raw reasoning prose ending with
+            ``</think>``; the actual answer follows immediately after.
+
+        Case 3 — no tags at all: no-op, returns ("", original_text).
 
         Returns (thinking_content, final_answer) as stripped strings.
-        If no <think> block is present the function is a no-op:
-        returns ("", original_text).
         """
         import re
+        # Case 1: standard <think>...</think>
         match = re.search(r"<think>(.*?)</think>\s*(.*)", text, re.DOTALL)
         if match:
             return match.group(1).strip(), match.group(2).strip()
+        # Case 2: closing </think> only (Llama / some Qwen3 via Swiss AI)
+        if "</think>" in text:
+            idx = text.rfind("</think>")
+            thinking = text[:idx].strip()
+            answer = text[idx + len("</think>"):].strip()
+            return thinking, answer
         return "", text
 
     def _get_llm(self, temperature: float | None = None):
@@ -324,10 +336,10 @@ class LLMFactoryAdapter(req):
     def _build_messages(self, prompt_text: str):
         """Build LangChain message objects from a plain-text prompt.
 
-        When enable_thinking is false (the default), appends /no_think to the
-        system message. This is the reliable cross-backend control token for
-        models that support chain-of-thought reasoning (Qwen3, QwQ, etc.),
-        and is a no-op for models that don't recognise it.
+        When enable_thinking is false (the default):
+        - Appends /no_think to the system message (Qwen3/QwQ backends).
+        - Appends a direct-answer instruction to the human message (Llama and
+          other models that have no hard thinking switch).
         """
         from langchain_core.messages import HumanMessage, SystemMessage
 
@@ -335,9 +347,13 @@ class LLMFactoryAdapter(req):
         enable_thinking = self._base_config.get("enable_thinking", False)
         system_content = system_base if enable_thinking else f"{system_base} /no_think"
 
+        user_content = prompt_text
+        if not enable_thinking:
+            user_content = prompt_text + "\nAnswer directly, without thinking through the process."
+
         return [
             SystemMessage(content=system_content),
-            HumanMessage(content=prompt_text),
+            HumanMessage(content=user_content),
         ]
 
     # -- public API (same signature the rest of the codebase expects) -------
@@ -398,9 +414,13 @@ class LLMFactoryAdapter(req):
                     duration_ms = round((time.time() - _t0) * 1000, 1)
                     usage = _extract_usage(result)
                     thinking, response_clean = self._parse_thinking(result.content)
+                    enable_thinking = self._base_config.get("enable_thinking", False)
                     call_info = {**model_info, **usage}
                     if thinking:
-                        call_info["thinking"] = thinking
+                        if enable_thinking:
+                            call_info["thinking"] = thinking
+                        else:
+                            call_info["unexpected_thinking"] = thinking
                     if self.step != "prepare_train_queries":
                         self.log_record(
                             messages,
@@ -415,11 +435,15 @@ class LLMFactoryAdapter(req):
                 else:
                     choices = self._generate_n(llm, chat_msgs, n)
                     total_ms = round((time.time() - _t0) * 1000, 1)
+                    enable_thinking = self._base_config.get("enable_thinking", False)
                     for c in choices:
                         thinking, answer = self._parse_thinking(c["message"]["content"])
                         c["message"]["content"] = answer
                         if thinking:
-                            c["thinking"] = thinking
+                            if enable_thinking:
+                                c["thinking"] = thinking
+                            else:
+                                c["unexpected_thinking"] = thinking
                     if self.step != "prepare_train_queries":
                         # one call-log file per choice (per-call duration + tokens)
                         for c in choices:
@@ -431,6 +455,8 @@ class LLMFactoryAdapter(req):
                             }
                             if c.get("thinking"):
                                 ci["thinking"] = c["thinking"]
+                            if c.get("unexpected_thinking"):
+                                ci["unexpected_thinking"] = c["unexpected_thinking"]
                             try:
                                 Logger().log_llm_call(
                                     self.step,
