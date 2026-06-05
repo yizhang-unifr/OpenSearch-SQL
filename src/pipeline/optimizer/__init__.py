@@ -184,26 +184,19 @@ def query_optimizer(task: Any, execution_history: list[dict]) -> dict:
             optimized_candidates.append(sql)
             optimizer_trace.append({"candidate_index": i, "triggered": False})
 
-    # ── Pass 2: EXTRACT → time range (applied to every candidate) ──────────
-    final_candidates: list[str] = []
-    for i, sql in enumerate(optimized_candidates):
-        rewritten, transformed = rewrite_extract_to_range(sql)
-        if transformed:
-            if verify_extract_rewrite(sql, rewritten):
-                final_candidates.append(rewritten)
-                optimizer_trace[i]["extract_rewrite"] = True
-                logging.info(
-                    "query_optimizer: candidate %d — EXTRACT rewrite applied", i
-                )
-            else:
-                final_candidates.append(sql)
-                optimizer_trace[i]["extract_rewrite"] = False
-                optimizer_trace[i]["extract_rewrite_verify_failed"] = True
-                logging.warning(
-                    "query_optimizer: candidate %d — EXTRACT rewrite verify failed, keeping original", i
-                )
-        else:
-            final_candidates.append(sql)
+    # ── Pass 2 disabled ──────────────────────────────────────────────────────
+    # era5_land2 has a function-based composite index idx_tmean_round_latlon_ym
+    # covering (ROUND(lat,1), ROUND(lon,1), EXTRACT(YEAR), EXTRACT(MONTH)).
+    # Rewriting EXTRACT(YEAR)=N to a raw-time range loses the YEAR index component,
+    # raising planner cost from ~97 to ~17,847 (180x worse).
+    # for i, sql in enumerate(optimized_candidates):
+    #     rewritten, transformed = rewrite_extract_to_range(sql)
+    #     if transformed and verify_extract_rewrite(sql, rewritten):
+    #         final_candidates.append(rewritten)
+    #         optimizer_trace[i]["extract_rewrite"] = True
+    #     else:
+    #         final_candidates.append(sql)
+    final_candidates: list[str] = list(optimized_candidates)
 
     # ── Pass 3 disabled — eligible_cells rewrite is correct but not used in inference.
     # pass3_candidates: list[str] = []
