@@ -72,8 +72,8 @@ def resolve_dataset(name: str) -> tuple[str, str]:
     if "/" not in name and "\\" not in name and not name.endswith(".json"):
         return name, str(_PROJECT_ROOT / "data")
 
-    # Relative or relative-with-extension
-    full = (_ROOT / p) if not p.is_absolute() else p
+    # Relative or relative-with-extension — resolve from project root
+    full = (_PROJECT_ROOT / p) if not p.is_absolute() else p
     stem = full.stem
     # db_root_path is parent of data_preprocess/
     db_root = str(full.parent.parent)
