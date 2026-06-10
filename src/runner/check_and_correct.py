@@ -484,7 +484,7 @@ Return only the new SQL:
 def get_sql_ans(SQL):
     """Execute SQL against PostgreSQL, return (result_set, time_cost)."""
     try:
-        _exec_timeout = int(os.environ.get("SQL_EXEC_TIMEOUT", "30"))
+        _exec_timeout = int(os.environ.get("SQL_EXEC_TIMEOUT", "120"))
         ans, time_cost = func_timeout(_exec_timeout, sql_exec, args=(SQL,))
     except FunctionTimedOut:
         ans, time_cost = [], 100000

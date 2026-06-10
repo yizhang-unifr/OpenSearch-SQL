@@ -151,6 +151,13 @@ def align_correct(task: Any, execution_history: List[Dict[str, Any]]) -> Dict[st
         question_key = task.raw_question.strip().lower()
         fewshot = df_fewshot.get("by_question", {}).get(question_key, {}).get("prompt", "")
 
+    fewshot_k = int(config.get("fewshot_k", 3))
+    if fewshot and fewshot_k < 3:
+        import re as _re
+        _header = _re.match(r'(/\* Some SQL examples.*?\*/\n)', fewshot, _re.DOTALL)
+        _blocks  = _re.findall(r'(/\* Answer the following:.*?\*/)', fewshot, _re.DOTALL)
+        fewshot  = (_header.group(1) if _header else "") + "\n".join(_blocks[:fewshot_k])
+
     values = [f"{x[0]}: '{x[1]}'" for x in L_values]
     key_col_des = "#Values in Database:\n" + "\n".join(values)
 

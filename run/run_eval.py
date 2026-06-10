@@ -87,6 +87,7 @@ def build_pipeline_setup(
     geo_anchor: str,
     n_candidates: int,
     temperature: float,
+    fewshot_k: int = 3,
 ) -> str:
     setup = {
         "generate_db_schema": {
@@ -122,6 +123,7 @@ def build_pipeline_setup(
             "return_question": "True",
             "single": "False",
             "fewshot_enabled": fewshot_enabled,
+            "fewshot_k": fewshot_k,
             "enable_entity_hint":   flags["entity"],
             "enable_semantic_hint": flags["semantic"],
             "enable_validator":     flags["validator"],
@@ -132,6 +134,7 @@ def build_pipeline_setup(
             "bert_model": bert_model,
             "device": "cpu",
             "fewshot_enabled": fewshot_enabled,
+            "fewshot_k": fewshot_k,
             "align_methods": "style_align+function_align",
         },
         "query_optimizer": {
@@ -184,8 +187,8 @@ def parse_args(argv=None):
     )
 
     # Dataset
-    p.add_argument("--dataset", default="landcover10",
-                   help="Dataset name or path (default: landcover10)")
+    p.add_argument("--dataset", default="test_data_point",
+                   help="Dataset name or path (default: test_data_point)")
     p.add_argument("--start", type=int, default=0,
                    help="First question index (default: 0)")
     p.add_argument("--end", type=int, default=1,
@@ -213,6 +216,8 @@ def parse_args(argv=None):
     # Features
     p.add_argument("--fewshot", action="store_true", default=False,
                    help="Enable few-shot examples (default: off)")
+    p.add_argument("--fewshot-k", type=int, default=3,
+                   help="Number of few-shot examples to inject (default: 3)")
     p.add_argument("--geo-anchor", default="points", choices=["points", "bbox"],
                    help="Geo anchor mode (default: points)")
 
@@ -257,6 +262,7 @@ def run(args, extra_env: dict | None = None):
     pipeline_setup = build_pipeline_setup(
         flags, args.bert_model, fewshot_enabled,
         args.geo_anchor, args.n_candidates, args.temperature,
+        fewshot_k=args.fewshot_k,
     )
 
     end = str(args.end) if args.end != -1 else str(10_000)
@@ -290,7 +296,7 @@ def run(args, extra_env: dict | None = None):
         "--pipeline_nodes",  pipeline_nodes,
         "--pipeline_setup",  pipeline_setup,
         "--ablation_mode",   args.ablation,
-        "--fewshot_mode",    "with_few_shot" if args.fewshot else "no_few_shot",
+        "--fewshot_mode",    f"with_few_shot_k{args.fewshot_k}" if args.fewshot else "no_few_shot",
         "--start",           str(args.start),
         "--end",             end,
     ]
@@ -303,7 +309,7 @@ def run(args, extra_env: dict | None = None):
         return rc
 
     if args.export_xlsx:
-        fewshot_label = "with_few_shot" if args.fewshot else "no_few_shot"
+        fewshot_label = f"with_few_shot_k{args.fewshot_k}" if args.fewshot else "no_few_shot"
         results_root = _ROOT / "results" / data_mode / fewshot_label / args.ablation
         print("Exporting XLSX...")
         subprocess.run(

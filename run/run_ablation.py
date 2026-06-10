@@ -41,7 +41,7 @@ def parse_args():
                         f"All valid choices: {', '.join(ALL_MODES)}")
 
     # Forward all run_eval flags (except --ablation which we override per mode)
-    p.add_argument("--dataset",      default="landcover10")
+    p.add_argument("--dataset",      default="test_data_point")
     p.add_argument("--start",        type=int, default=0)
     p.add_argument("--end",          type=int, default=-1,
                    help="Default -1 (all questions) for ablation runs")
@@ -52,6 +52,8 @@ def parse_args():
     p.add_argument("--n-candidates", type=int, default=5)
     p.add_argument("--temperature",  type=float, default=0.7)
     p.add_argument("--fewshot",      action="store_true", default=False)
+    p.add_argument("--fewshot-k",    type=int, default=3,
+                   help="Number of few-shot examples to inject (default: 3)")
     p.add_argument("--geo-anchor",   default="points", choices=["points", "bbox"])
     p.add_argument("--export-xlsx",  action="store_true")
     p.add_argument("--skip-existing",action="store_true")
@@ -91,6 +93,7 @@ def main():
             n_candidates=args.n_candidates,
             temperature=args.temperature,
             fewshot=args.fewshot,
+            fewshot_k=args.fewshot_k,
             geo_anchor=args.geo_anchor,
             export_xlsx=args.export_xlsx,
             skip_existing=args.skip_existing,

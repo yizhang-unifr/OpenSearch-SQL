@@ -71,6 +71,13 @@ def candidate_generate(task: Any, execution_history: List[Dict[str, Any]]) -> Di
         question_key = (task.raw_question if hasattr(task, "raw_question") else question).strip().lower()
         fewshot = df_fewshot.get("by_question", {}).get(question_key, {}).get("prompt", "")
 
+    fewshot_k = int(config.get("fewshot_k", 3))
+    if fewshot and fewshot_k < 3:
+        import re as _re
+        _header = _re.match(r'(/\* Some SQL examples.*?\*/\n)', fewshot, _re.DOTALL)
+        _blocks  = _re.findall(r'(/\* Answer the following:.*?\*/)', fewshot, _re.DOTALL)
+        fewshot  = (_header.group(1) if _header else "") + "\n".join(_blocks[:fewshot_k])
+
     prompts_template = db_check_prompts()
     new_prompt = make_newprompt(
         prompts_template.new_prompt,

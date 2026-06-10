@@ -228,6 +228,7 @@ uv run run/run_eval.py --dry-run
 | `--ablation` | `full` | Ablation mode. Canonical: `baseline`, `geo`, `ogf`, `hints`, `full`. Legacy: `a1`–`a5` |
 | `--start` / `--end` | `0` / `1` | Question index range (0-based, exclusive end). `-1` runs all questions |
 | `--fewshot` | off | Enable few-shot retrieval. Requires `data/fewshot/questions.json` (see Setup: Fewshot Index) |
+| `--fewshot-k` | `3` | Number of few-shot examples injected per question. Only used when `--fewshot` is set |
 | `--geo-anchor` | `points` | Geo anchor style. `points` = point IN-list SQL; `bbox` = bounding-box lat/lon range SQL. Must match the dataset variant |
 | `--provider` | — | LLM provider shorthand: `openai`, `swiss_ai`, `bedrock`, `ollama`, `anthropic`. Overrides `models.yaml` |
 | `--model` | — | Model name, used together with `--provider` |
