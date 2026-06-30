@@ -232,6 +232,8 @@ def parse_args(argv=None):
                    help="Print resolved config without running")
     p.add_argument("--bert-model", default="all-mpnet-base-v2",
                    help="Sentence-transformer model name (default: all-mpnet-base-v2)")
+    p.add_argument("--num-workers", type=int, default=None,
+                   help="Parallel workers (default: main.py default of 3; use 1 for clean single-threaded DB timing)")
 
     return p.parse_args(argv)
 
@@ -289,6 +291,12 @@ def run(args, extra_env: dict | None = None):
 
     preflight_sentence_transformer(args.bert_model)
 
+    # Tag bbox runs with a "_bbox" fewshot-mode suffix so their result dirs stay
+    # separate from the default points runs (the output path has no geo_anchor).
+    fewshot_mode = f"with_few_shot_k{args.fewshot_k}" if args.fewshot else "no_few_shot"
+    if args.geo_anchor == "bbox":
+        fewshot_mode += "_bbox"
+
     cmd = [
         "uv", "run", "python", "-u", "src/main.py",
         "--data_mode",       data_mode,
@@ -296,10 +304,12 @@ def run(args, extra_env: dict | None = None):
         "--pipeline_nodes",  pipeline_nodes,
         "--pipeline_setup",  pipeline_setup,
         "--ablation_mode",   args.ablation,
-        "--fewshot_mode",    f"with_few_shot_k{args.fewshot_k}" if args.fewshot else "no_few_shot",
+        "--fewshot_mode",    fewshot_mode,
         "--start",           str(args.start),
         "--end",             end,
     ]
+    if args.num_workers is not None:
+        cmd += ["--num_workers", str(args.num_workers)]
     rc = subprocess.run(cmd, cwd=_ROOT, env=env).returncode
 
     if tmp_config:

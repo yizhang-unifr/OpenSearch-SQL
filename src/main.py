@@ -39,7 +39,13 @@ def main(args):
     dataset = load_dataset(db_json)
 
     run_manager = RunManager(args)
-    run_manager.initialize_tasks(args.start, args.end, dataset)
+    if hasattr(args, 'qids') and args.qids:
+        # Filter dataset to only include specified question IDs
+        qid_set = set(int(q) for q in args.qids.split(',') if q.strip())
+        filtered_dataset = [d for d in dataset if d.get("question_id") in qid_set]
+        run_manager.initialize_tasks(0, len(filtered_dataset), filtered_dataset)
+    else:
+        run_manager.initialize_tasks(args.start, args.end, dataset)
     run_manager.run_tasks()
     run_manager.generate_sql_files()
 
@@ -56,6 +62,8 @@ if __name__ == "__main__":
     args_parser.add_argument("--log_level", type=str, default="warning", help="Logging level")
     args_parser.add_argument("--start", type=int, default=0, help="Start index (inclusive)")
     args_parser.add_argument("--end", type=int, default=-1, help="End index (exclusive, -1=all)")
+    args_parser.add_argument("--qids", type=str, default=None, help="Comma-separated question IDs to run (overrides start/end)")
+    args_parser.add_argument("--num_workers", type=int, default=3, help="Number of parallel workers (default: 3)")
     args_parser.add_argument("--ablation_mode", type=str, default="full", help="Ablation mode label for run output grouping")
     args_parser.add_argument("--fewshot_mode", type=str, default="with_few_shot", help="Few-shot mode label for run output grouping")
     args = args_parser.parse_args()

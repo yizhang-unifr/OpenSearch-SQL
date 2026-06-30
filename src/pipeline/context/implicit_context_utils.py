@@ -47,10 +47,13 @@ def _geo_filter_block(geo_context: Dict[str, Any]) -> str:
     if sql_filter:
         filter_expr = sql_filter
     elif bbox:
-        min_lat = bbox.get("min_lat") or bbox.get("lat_min")
-        max_lat = bbox.get("max_lat") or bbox.get("lat_max")
-        min_lon = bbox.get("min_lon") or bbox.get("lon_min")
-        max_lon = bbox.get("max_lon") or bbox.get("lon_max")
+        min_lat = bbox.get("min_lat") or bbox.get("lat_min") or bbox.get("minlat")
+        max_lat = bbox.get("max_lat") or bbox.get("lat_max") or bbox.get("maxlat")
+        min_lon = bbox.get("min_lon") or bbox.get("lon_min") or bbox.get("minlon")
+        max_lon = bbox.get("max_lon") or bbox.get("lon_max") or bbox.get("maxlon")
+        # Round raw bbox corners to 1 decimal place to match the gold SQL cache's
+        # convention (and the DB's actual storage grid resolution).
+        min_lat, max_lat, min_lon, max_lon = (round(float(v), 1) for v in (min_lat, max_lat, min_lon, max_lon))
         filter_expr = (
             f"ROUND(CAST(<alias>.latitude  AS DECIMAL), 1) BETWEEN {min_lat} AND {max_lat} "
             f"AND ROUND(CAST(<alias>.longitude AS DECIMAL), 1) BETWEEN {min_lon} AND {max_lon}"

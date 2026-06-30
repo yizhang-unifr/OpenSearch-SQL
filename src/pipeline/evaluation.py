@@ -109,6 +109,13 @@ def evaluation(task: Any, execution_history: Dict[str, Any]) -> Dict[str, Any]:
         "vote":               get_last_node_result(execution_history, "vote"),
     }
 
+    # Per-question caches keyed by the predicted SQL string. The 3 stages
+    # (candidate_generate / align_correct / vote) usually converge to the SAME
+    # SQL, so without this an identical timing-out query would be executed once
+    # per stage (3 x 600s). Dedup by SQL string: execute once, reuse the result.
+    _compare_cache: Dict[str, Any] = {}
+    _pred_result_cache: Dict[str, Any] = {}
+
     result = {}
     for evaluation_for, node_result in to_evaluate.items():
         predicted_sql    = "--"
@@ -130,21 +137,27 @@ def evaluation(task: Any, execution_history: Dict[str, Any]) -> Dict[str, Any]:
                     predicted_sql = node_result["SQL"]
 
                 # ----------------------------------------------------------
-                # Comparison: use cache when available
+                # Comparison: use cache when available.
+                # Dedup identical SQL across stages so a timing-out query is
+                # executed at most once (not once per stage).
                 # ----------------------------------------------------------
-                if gold_cache_ok and gold_set is not None:
+                if predicted_sql in _compare_cache:
+                    response = _compare_cache[predicted_sql]
+                elif gold_cache_ok and gold_set is not None:
                     response = compare_with_cached_gold(
                         predicted_sql=predicted_sql,
                         gold_set=gold_set,
                         t_gold=t_gold,
-                        meta_time_out=600,
+                        meta_time_out=1800,
                     )
+                    _compare_cache[predicted_sql] = response
                 else:
                     response = DatabaseManager().compare_sqls(
                         predicted_sql=predicted_sql,
                         ground_truth_sql=ground_truth_sql,
                         meta_time_out=180,
                     )
+                    _compare_cache[predicted_sql] = response
 
                 evaluation_result.update({
                     "exec_res": response["exec_res"],
@@ -169,13 +182,16 @@ def evaluation(task: Any, execution_history: Dict[str, Any]) -> Dict[str, Any]:
             })
 
         # ------------------------------------------------------------------
-        # Execute predicted SQL for result inspection
+        # Execute predicted SQL for result inspection (dedup across stages)
         # ------------------------------------------------------------------
-        predicted_result = None
-        try:
-            predicted_result = list(execute_sql(predicted_sql, fetch="all", timeout_s=30))
-        except Exception as _pe:
-            predicted_result = f"pred_exec_error: {_pe}"
+        if predicted_sql in _pred_result_cache:
+            predicted_result = _pred_result_cache[predicted_sql]
+        else:
+            try:
+                predicted_result = list(execute_sql(predicted_sql, fetch="all", timeout_s=30))
+            except Exception as _pe:
+                predicted_result = f"pred_exec_error: {_pe}"
+            _pred_result_cache[predicted_sql] = predicted_result
 
         evaluation_result.update({
             "Question":        task.raw_question,

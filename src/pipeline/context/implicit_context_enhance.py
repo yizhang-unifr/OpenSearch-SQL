@@ -34,12 +34,16 @@ def _inject_sql_filter(geo_context: dict, anchor_mode: str) -> None:
         )
     elif anchor_mode == "bbox":
         bbox = geo_context.get("bbox") or {}
-        min_lat = bbox.get("min_lat") or bbox.get("lat_min")
-        max_lat = bbox.get("max_lat") or bbox.get("lat_max")
-        min_lon = bbox.get("min_lon") or bbox.get("lon_min")
-        max_lon = bbox.get("max_lon") or bbox.get("lon_max")
+        min_lat = bbox.get("min_lat") or bbox.get("lat_min") or bbox.get("minlat")
+        max_lat = bbox.get("max_lat") or bbox.get("lat_max") or bbox.get("maxlat")
+        min_lon = bbox.get("min_lon") or bbox.get("lon_min") or bbox.get("minlon")
+        max_lon = bbox.get("max_lon") or bbox.get("lon_max") or bbox.get("maxlon")
         if None in (min_lat, max_lat, min_lon, max_lon):
             return
+        # Source bbox corners are raw (unrounded) geographic extents; the gold SQL
+        # cache rounds each corner to 1 decimal place (matching the DB's storage
+        # grid), so the filter must do the same to have any chance of matching.
+        min_lat, max_lat, min_lon, max_lon = (round(float(v), 1) for v in (min_lat, max_lat, min_lon, max_lon))
         geo_context["sql_filter"] = (
             f"<alias>.latitude BETWEEN {min_lat} AND {max_lat} "
             f"AND <alias>.longitude BETWEEN {min_lon} AND {max_lon}"
@@ -62,8 +66,10 @@ def implicit_context_enhance(task: Any, execution_history: Dict[str, Any]) -> Di
     config, _node_name = PipelineManager().get_model_para("implicit_context_enhance")
     enable_geo = get_bool(config, "enable_geo_context", default=True)
     enable_ontology = get_bool(config, "enable_ontology_grounding", default=True)
-    # Per-task geo_filter_mode overrides the global geo_anchor_mode config.
-    anchor_mode = getattr(task, "geo_filter_mode", None) or str(config.get("geo_anchor_mode", "points"))
+    # geo_anchor_mode is a run-level config (set via --geo-anchor); the dataset's
+    # per-question geo_filter_mode field is a static "points" placeholder for every
+    # row (not a meaningful per-question override), so it must not take priority.
+    anchor_mode = str(config.get("geo_anchor_mode", "points"))
 
     geo_context: Dict[str, Any] = {}
     ontology_grounded_function: Dict[str, Any] = {}

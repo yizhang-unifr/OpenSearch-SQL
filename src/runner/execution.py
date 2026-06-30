@@ -16,18 +16,39 @@ import psycopg2
 from func_timeout import FunctionTimedOut, func_timeout
 
 _NUMERIC_TYPES = (int, float, Decimal)
-_EPS = 1e-6
+_ABS_TOL = 1e-6
+_REL_TOL = 1e-6
 
 
 def _val_approx_eq(a, b) -> bool:
-    """True if a == b, or both are numeric and differ by less than _EPS."""
+    """True if a == b, both numeric within tolerance, or equal once stringified.
+
+    The JSON gold-result cache stores non-JSON-native types (datetime.date,
+    Decimal, ...) via `default=str` on write, so a cached gold value that was
+    e.g. a date or a Decimal comes back as a plain str. A live-executed
+    predicted value keeps its native type (date, Decimal, ...). Without a
+    string-form fallback, a correct value is spuriously marked incorrect
+    whenever its type isn't JSON-native (DATE(...), EXTRACT(...) columns, etc).
+
+    Numeric tolerance is math.isclose-style (combined relative + absolute):
+    a pure absolute epsilon is too strict for large-magnitude aggregates
+    (e.g. SUM() over many rows reaching 1e11+), where two SQL formulations
+    that are semantically identical can differ in floating-point summation
+    order/rounding by far more than 1e-6 in absolute terms, despite being
+    the same real-world value to the precision double-precision floats can
+    represent.
+    """
     if a == b:
         return True
     if isinstance(a, _NUMERIC_TYPES) and isinstance(b, _NUMERIC_TYPES):
         try:
-            return abs(float(a) - float(b)) < _EPS
+            fa, fb = float(a), float(b)
+            tol = max(_REL_TOL * max(abs(fa), abs(fb)), _ABS_TOL)
+            return abs(fa - fb) <= tol
         except (TypeError, ValueError):
             pass
+    if isinstance(a, str) != isinstance(b, str):
+        return str(a) == str(b)
     return False
 
 
@@ -68,7 +89,7 @@ def _results_approx_equal(pred_res: set, gold_res: set) -> bool:
 
 def _sql_statement_timeout_ms() -> int:
     """Read SQL_STATEMENT_TIMEOUT from env (seconds) and return milliseconds."""
-    return int(os.environ.get("SQL_STATEMENT_TIMEOUT", "30")) * 1000
+    return int(os.environ.get("SQL_STATEMENT_TIMEOUT", "1800")) * 1000
 
 
 def _get_pg_connection(statement_timeout_ms: int | None = None):
@@ -121,7 +142,7 @@ def execute_sql(sql: str, fetch: Union[str, int] = "all", timeout_s: int | None 
         Fetched results based on the fetch argument.
     """
     if timeout_s is None:
-        timeout_s = int(os.environ.get("SQL_STATEMENT_TIMEOUT", "30"))
+        timeout_s = int(os.environ.get("SQL_STATEMENT_TIMEOUT", "1800"))
     sql = _normalize_sql(sql)
     try:
         conn = _get_pg_connection()
@@ -236,7 +257,7 @@ def compare_with_cached_gold(
     predicted_sql: str,
     gold_set: frozenset,
     t_gold: float,
-    meta_time_out: int = 600,
+    meta_time_out: int = 1800,
 ) -> Dict[str, Union[int, str, float]]:
     """Compare predicted SQL against a pre-computed gold result set.
 

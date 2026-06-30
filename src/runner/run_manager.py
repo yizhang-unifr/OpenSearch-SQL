@@ -19,6 +19,7 @@ class RunManager:
 
     def __init__(self, args: Any):
         self.args = args
+        self.num_workers = getattr(args, 'num_workers', NUM_WORKERS)
         self.result_directory = self.get_result_directory()
         self.statistics_manager = StatisticsManager(self.result_directory)
         self.tasks: List[Task] = []
@@ -69,7 +70,8 @@ class RunManager:
 
     @staticmethod
     def _normalize_dataset_label(dataset_stem: str, fewshot_mode: str) -> str:
-        if fewshot_mode in {"with_few_shot", "no_few_shot"}:
+        # Accept any fewshot_mode that starts with a known prefix directly
+        if fewshot_mode.startswith("with_few_shot") or fewshot_mode == "no_few_shot":
             return fewshot_mode
         label_map = {
             "data": "with_few_shot",
